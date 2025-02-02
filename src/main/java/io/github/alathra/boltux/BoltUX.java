@@ -1,0 +1,171 @@
+package io.github.alathra.boltux;
+
+import com.github.milkdrinkers.colorparser.ColorParser;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.PacketEventsAPI;
+import io.github.alathra.boltux.command.CommandHandler;
+import io.github.alathra.boltux.config.ConfigHandler;
+import io.github.alathra.boltux.hook.BStatsHook;
+import io.github.alathra.boltux.hook.PAPIHook;
+import io.github.alathra.boltux.hook.VaultHook;
+import io.github.alathra.boltux.listener.ListenerHandler;
+import io.github.alathra.boltux.translation.TranslationManager;
+import io.github.alathra.boltux.updatechecker.UpdateChecker;
+import io.github.alathra.boltux.utility.Logger;
+
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.popcraft.bolt.BoltAPI;
+
+/**
+ * Main class.
+ */
+public class BoltUX extends JavaPlugin {
+    private static BoltUX instance;
+    private ConfigHandler configHandler;
+    private TranslationManager translationManager;
+    private CommandHandler commandHandler;
+    private ListenerHandler listenerHandler;
+    private UpdateChecker updateChecker;
+
+    // Hooks
+    private static BStatsHook bStatsHook;
+    private static VaultHook vaultHook;
+    private static PAPIHook papiHook;
+
+    // Internal
+    private static BoltAPI boltAPI;
+    private static PacketEventsAPI<?> packetEventsAPI;
+
+    /**
+     * Gets plugin instance.
+     *
+     * @return the plugin instance
+     */
+    public static BoltUX getInstance() {
+        return instance;
+    }
+
+    @Override
+    public void onLoad() {
+        instance = this;
+        configHandler = new ConfigHandler(instance);
+        translationManager = new TranslationManager(instance);
+        commandHandler = new CommandHandler(instance);
+        listenerHandler = new ListenerHandler(instance);
+        updateChecker = new UpdateChecker();
+        bStatsHook = new BStatsHook(instance);
+        vaultHook = new VaultHook(instance);
+        papiHook = new PAPIHook(instance);
+
+        configHandler.onLoad();
+        translationManager.onLoad();
+        commandHandler.onLoad();
+        listenerHandler.onLoad();
+        updateChecker.onLoad();
+        bStatsHook.onLoad();
+        vaultHook.onLoad();
+        papiHook.onLoad();
+
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+        PacketEvents.getAPI().load();
+    }
+
+    @Override
+    public void onEnable() {
+        configHandler.onEnable();
+        translationManager.onEnable();
+        commandHandler.onEnable();
+        listenerHandler.onEnable();
+        updateChecker.onEnable();
+        bStatsHook.onEnable();
+        vaultHook.onEnable();
+        papiHook.onEnable();
+
+        PacketEvents.getAPI().init();
+        packetEventsAPI = PacketEvents.getAPI();
+        packetEventsAPI.getSettings().checkForUpdates(false).debug(false);
+
+        boltAPI = Bukkit.getServer().getServicesManager().load(BoltAPI.class);
+
+        if (vaultHook.isHookLoaded()) {
+            Logger.get().info(ColorParser.of("<green>Vault has been found on this server. Vault support enabled.").build());
+        } else {
+            Logger.get().warn(ColorParser.of("<yellow>Vault is not installed on this server. Vault support has been disabled.").build());
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        configHandler.onDisable();
+        translationManager.onDisable();
+        commandHandler.onDisable();
+        listenerHandler.onDisable();
+        updateChecker.onDisable();
+        bStatsHook.onDisable();
+        vaultHook.onDisable();
+        papiHook.onDisable();
+
+        PacketEvents.getAPI().terminate();
+    }
+
+    public PacketEventsAPI<?> getPacketEventsAPI() {
+        return packetEventsAPI;
+    }
+
+    public BoltAPI getBoltAPI() {
+        return boltAPI;
+    }
+
+    /**
+     * Gets config handler.
+     *
+     * @return the config handler
+     */
+    @NotNull
+    public ConfigHandler getConfigHandler() {
+        return configHandler;
+    }
+
+    /**
+     * Gets config handler.
+     *
+     * @return the translation handler
+     */
+    @NotNull
+    public TranslationManager getTranslationManager() {
+        return translationManager;
+    }
+
+    /**
+     * Gets update checker.
+     *
+     * @return the update checker
+     */
+    @NotNull
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
+    }
+
+    /**
+     * Gets bStats hook.
+     *
+     * @return the bStats hook
+     */
+    @NotNull
+    public static BStatsHook getBStatsHook() {
+        return bStatsHook;
+    }
+
+    /**
+     * Gets vault hook.
+     *
+     * @return the vault hook
+     */
+    @NotNull
+    public static VaultHook getVaultHook() {
+        return vaultHook;
+    }
+}

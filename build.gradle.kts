@@ -1,4 +1,3 @@
-import org.jooq.meta.jaxb.Logging
 import java.time.Instant
 
 plugins {
@@ -7,9 +6,6 @@ plugins {
     alias(libs.plugins.shadow) // Shades and relocates dependencies, see https://gradleup.com/shadow/
     alias(libs.plugins.run.paper) // Built in test server using runServer and runMojangMappedServer tasks
     alias(libs.plugins.plugin.yml) // Automatic plugin.yml generation
-    //alias(libs.plugins.paperweight) // Used to develop internal plugins using Mojang mappings, See https://github.com/PaperMC/paperweight
-    alias(libs.plugins.flyway) // Database migrations
-    alias(libs.plugins.jooq) // Database ORM
 
     eclipse
     idea
@@ -43,13 +39,14 @@ repositories {
             includeGroup("com.github.MilkBowl") // VaultAPI
         }
     }
+
+    maven("https://repo.codemc.io/repository/maven-public/") // Bolt
 }
 
 dependencies {
     // Core dependencies
     compileOnly(libs.annotations)
     annotationProcessor(libs.annotations)
-    //paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT") // Use instead of the `paper-api` entry if developing plugins using Mojang mappings
     compileOnly(libs.paper.api)
     implementation(libs.morepaperlib)
 
@@ -66,51 +63,20 @@ dependencies {
     }
 
     // Plugin dependencies
+    compileOnly(libs.bolt)
     implementation(libs.bstats)
     compileOnly(libs.vault)
-    compileOnly(libs.packetevents)
+    implementation(libs.packetevents)
     compileOnly(libs.placeholderapi) {
         exclude("me.clip.placeholderapi.libs", "kyori")
     }
 
-    // Database dependencies - Core
-    implementation(libs.hikaricp)
-    library(libs.bundles.flyway)
-    library(libs.jooq)
-    jooqCodegen(libs.h2)
-
-    // Database dependencies - JDBC drivers
-    library(libs.bundles.jdbcdrivers)
-
-    // Testing - Core
-    testImplementation(libs.annotations)
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.bundles.junit)
-    testRuntimeOnly(libs.slf4j)
-    testImplementation(platform(libs.testcontainers.bom))
-    testImplementation(libs.bundles.testcontainers)
-
-    // Testing - Database dependencies
-    testImplementation(libs.hikaricp)
-    testImplementation(libs.bundles.flyway)
-    testImplementation(libs.jooq)
-
-    // Testing - JDBC drivers
-    testImplementation(libs.bundles.jdbcdrivers)
 }
 
 tasks {
-    // NOTE: Use when developing plugins using Mojang mappings
-//    assemble {
-//        dependsOn(reobfJar)
-//    }
 
     build {
         dependsOn(shadowJar)
-    }
-
-    jooqCodegen {
-        dependsOn(flywayMigrate)
     }
 
     compileJava {
@@ -120,8 +86,6 @@ tasks {
         // See https://openjdk.java.net/jeps/247 for more information.
         options.release.set(21)
         options.compilerArgs.addAll(arrayListOf("-Xlint:all", "-Xlint:-processing", "-Xdiags:verbose"))
-
-        dependsOn(jooqCodegen) // Generate jOOQ sources before compilation
     }
 
     javadoc {
@@ -152,12 +116,8 @@ tasks {
         reloc("com.github.milkdrinkers.colorparser", "colorparser")
         reloc("dev.jorel.commandapi", "commandapi")
         reloc("dev.triumphteam.gui", "gui")
-        reloc("com.zaxxer.hikari", "hikaricp")
         reloc("org.bstats", "bstats")
-
-        mergeServiceFiles {
-            setPath("META-INF/services/org.flywaydb.core.extensibility.Plugin") // Fix Flyway overriding its own files
-        }
+        reloc("com.github.retrooper", "packetevents")
 
         minimize()
     }
@@ -169,7 +129,7 @@ tasks {
 
     runServer {
         // Configure the Minecraft version for our task.
-        minecraftVersion("1.21")
+        minecraftVersion("1.21.4")
 
         // IntelliJ IDEA debugger setup: https://docs.papermc.io/paper/dev/debugging#using-a-remote-debugger
         jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-DPaper.IgnoreJavaVersion=true", "-Dcom.mojang.eula.agree=true", "-DIReallyKnowWhatIAmDoingISwear", "-Dpaper.playerconnection.keepalive=6000")
@@ -178,20 +138,12 @@ tasks {
 
         // Automatically install dependencies
         downloadPlugins {
-//            modrinth("carbon", "2.1.0-beta.21")
-//            github("jpenilla", "MiniMOTD", "v2.0.13", "minimotd-bukkit-2.0.13.jar")
-//            hangar("squaremap", "1.2.0")
-//            url("https://download.luckperms.net/1515/bukkit/loader/LuckPerms-Bukkit-5.4.102.jar")
+            modrinth
             github("MilkBowl", "Vault", "1.7.3", "Vault.jar")
             github("retrooper", "packetevents", "v2.5.0", "packetevents-spigot-2.5.0.jar")
             github("PlaceholderAPI", "PlaceholderAPI", "2.11.4", "PlaceholderAPI-2.11.4.jar")
         }
     }
-}
-
-tasks.named<Jar>("sourcesJar") { // Required for sources jar generation with jOOQ
-    dependsOn(tasks.jooqCodegen)
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
@@ -203,56 +155,14 @@ bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
     prefix = project.name
     version = "${project.version}"
     description = "${project.description}"
-    authors = listOf("GITHUB_USERNAME")
+    authors = listOf("ShermansWorld")
     contributors = listOf()
     apiVersion = "1.21"
 
     // Misc properties
     load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
-    depend = listOf()
+    depend = listOf("Bolt")
     softDepend = listOf("PacketEvents", "Vault", "PlaceholderAPI")
-}
-
-flyway {
-    url = "jdbc:h2:${project.layout.buildDirectory.get()}/generated/flyway/db;AUTO_SERVER=TRUE;MODE=MySQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE;IGNORECASE=TRUE"
-    user = "sa"
-    password = ""
-    schemas = listOf("PUBLIC").toTypedArray()
-    placeholders = mapOf( // Substitute placeholders for flyway
-        "tablePrefix" to "",
-    )
-    validateMigrationNaming = true
-    baselineOnMigrate = true
-    cleanDisabled = false
-    locations = arrayOf(
-        "filesystem:src/main/resources/db/migration",
-        "classpath:${mainPackage.replace(".", "/")}/database/migration/migrations"
-    )
-}
-
-jooq {
-    configuration {
-        logging = Logging.ERROR
-        jdbc {
-            driver = "org.h2.Driver"
-            url = flyway.url
-            user = flyway.user
-            password = flyway.password
-        }
-        generator {
-            database {
-                name = "org.jooq.meta.h2.H2Database"
-                includes = ".*"
-                excludes = "(flyway_schema_history)|(?i:information_schema\\..*)|(?i:system_lobs\\..*)"  // Exclude database specific files
-                inputSchema = "PUBLIC"
-                schemaVersionProvider = "SELECT :schema_name || '_' || MAX(\"version\") FROM \"flyway_schema_history\"" // Grab version from Flyway
-            }
-            target {
-                packageName = "${mainPackage}.database.schema"
-                withClean(true)
-            }
-        }
-    }
 }
 
 fun applyCustomVersion() {
