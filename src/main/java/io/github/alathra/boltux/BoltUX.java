@@ -5,9 +5,7 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import io.github.alathra.boltux.command.CommandHandler;
 import io.github.alathra.boltux.config.ConfigHandler;
-import io.github.alathra.boltux.hook.BStatsHook;
-import io.github.alathra.boltux.hook.PAPIHook;
-import io.github.alathra.boltux.hook.VaultHook;
+import io.github.alathra.boltux.hook.*;
 import io.github.alathra.boltux.listener.ListenerHandler;
 import io.github.alathra.boltux.translation.TranslationManager;
 import io.github.alathra.boltux.updatechecker.UpdateChecker;
@@ -34,6 +32,9 @@ public class BoltUX extends JavaPlugin {
     private static BStatsHook bStatsHook;
     private static VaultHook vaultHook;
     private static PAPIHook papiHook;
+    private static ItemsAdderHook itemsAdderHook;
+    private static NexoHook nexoHook;
+    private static OraxenHook oraxenHook;
 
     // Internal
     private static BoltAPI boltAPI;
@@ -59,6 +60,9 @@ public class BoltUX extends JavaPlugin {
         bStatsHook = new BStatsHook(instance);
         vaultHook = new VaultHook(instance);
         papiHook = new PAPIHook(instance);
+        itemsAdderHook = new ItemsAdderHook(instance);
+        nexoHook = new NexoHook(instance);
+        oraxenHook = new OraxenHook(instance);
 
         configHandler.onLoad();
         translationManager.onLoad();
@@ -68,6 +72,9 @@ public class BoltUX extends JavaPlugin {
         bStatsHook.onLoad();
         vaultHook.onLoad();
         papiHook.onLoad();
+        itemsAdderHook.onLoad();
+        nexoHook.onLoad();
+        oraxenHook.onLoad();
 
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
         PacketEvents.getAPI().load();
@@ -83,6 +90,9 @@ public class BoltUX extends JavaPlugin {
         bStatsHook.onEnable();
         vaultHook.onEnable();
         papiHook.onEnable();
+        itemsAdderHook.onEnable();
+        nexoHook.onEnable();
+        oraxenHook.onEnable();
 
         PacketEvents.getAPI().init();
         packetEventsAPI = PacketEvents.getAPI();
@@ -94,6 +104,18 @@ public class BoltUX extends JavaPlugin {
             Logger.get().info(ColorParser.of("<green>Vault has been found on this server. Vault support enabled.").build());
         } else {
             Logger.get().warn(ColorParser.of("<yellow>Vault is not installed on this server. Vault support has been disabled.").build());
+        }
+
+        if (itemsAdderHook.isHookLoaded()) {
+            Logger.get().info(ColorParser.of("<green>ItemsAdder has been found on this server. ItemsAdder support enabled.").build());
+        }
+
+        if (nexoHook.isHookLoaded()) {
+            Logger.get().info(ColorParser.of("<green>Nexo has been found on this server. Nexo support enabled.").build());
+        }
+
+        if (oraxenHook.isHookLoaded()) {
+            Logger.get().info(ColorParser.of("<green>Oraxen has been found on this server. Oraxen support enabled.").build());
         }
     }
 
@@ -107,6 +129,9 @@ public class BoltUX extends JavaPlugin {
         bStatsHook.onDisable();
         vaultHook.onDisable();
         papiHook.onDisable();
+        itemsAdderHook.onDisable();
+        nexoHook.onDisable();
+        oraxenHook.onDisable();
 
         PacketEvents.getAPI().terminate();
     }
@@ -129,43 +154,38 @@ public class BoltUX extends JavaPlugin {
         return configHandler;
     }
 
-    /**
-     * Gets config handler.
-     *
-     * @return the translation handler
-     */
     @NotNull
     public TranslationManager getTranslationManager() {
         return translationManager;
     }
 
-    /**
-     * Gets update checker.
-     *
-     * @return the update checker
-     */
     @NotNull
     public UpdateChecker getUpdateChecker() {
         return updateChecker;
     }
 
-    /**
-     * Gets bStats hook.
-     *
-     * @return the bStats hook
-     */
     @NotNull
     public static BStatsHook getBStatsHook() {
         return bStatsHook;
     }
 
-    /**
-     * Gets vault hook.
-     *
-     * @return the vault hook
-     */
     @NotNull
     public static VaultHook getVaultHook() {
         return vaultHook;
+    }
+
+    @NotNull
+    public static ItemsAdderHook getItemsAdderHook() {
+        return itemsAdderHook;
+    }
+
+    @NotNull
+    public static NexoHook getNexoHook() {
+        return nexoHook;
+    }
+
+    @NotNull
+    public static OraxenHook getOraxenHook() {
+        return oraxenHook;
     }
 }

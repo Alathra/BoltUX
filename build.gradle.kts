@@ -39,8 +39,12 @@ repositories {
             includeGroup("com.github.MilkBowl") // VaultAPI
         }
     }
-
     maven("https://repo.codemc.io/repository/maven-public/") // Bolt
+    maven("https://maven.devs.beer/") // ItemsAdderAPI
+    maven("https://repo.nexomc.com/releases") // Nexo
+    maven("https://repo.oraxen.com/releases") // Oraxen
+
+
 }
 
 dependencies {
@@ -70,6 +74,9 @@ dependencies {
     compileOnly(libs.placeholderapi) {
         exclude("me.clip.placeholderapi.libs", "kyori")
     }
+    compileOnly(libs.itemsadder)
+    compileOnly(libs.nexo)
+    compileOnly(libs.oraxen)
 
 }
 
@@ -162,7 +169,7 @@ bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
     // Misc properties
     load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
     depend = listOf("Bolt")
-    softDepend = listOf("PacketEvents", "Vault", "PlaceholderAPI")
+    softDepend = listOf("Vault", "PlaceholderAPI", "ItemsAdder", "Nexo", "Oraxen")
 }
 
 fun applyCustomVersion() {

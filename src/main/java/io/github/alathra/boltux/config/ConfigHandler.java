@@ -27,6 +27,7 @@ public class ConfigHandler implements Reloadable {
     @Override
     public void onLoad() {
         cfg = new Config("config", plugin.getDataFolder().getPath(), plugin.getResource("config.yml")); // Create a config file from the template in our resources folder
+        Settings.init(plugin);
     }
 
     @Override

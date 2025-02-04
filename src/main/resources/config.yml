@@ -6,3 +6,9 @@ update-checker:
 
 # Translation, specify the language file to use, for example `en-US` which will load `/translations/en-US.yml`
 translation: "en-US"
+
+LockItem:
+  # Possible entries are "ItemsAdder", "Nexo", "Oraxen" or "None". Leave blank or use "None" to use the default lock item
+  itemPlugin: ""
+  # The identifier of the custom lock item. Only applicable if using an item plugin defined above
+  customLockItemID: ""
