@@ -17,7 +17,7 @@ commandapi-annotations = { module = "dev.jorel:commandapi-annotations", version.
 triumph-gui = "dev.triumphteam:triumph-gui:3.1.11"
 
 # Plugin dependencies
-bolt = "org.popcraft:bolt-bukkit:1.1.33"
+bolt = "org.popcraft:bolt-bukkit:1.1.35"
 bstats = "org.bstats:bstats-bukkit:3.1.0"
 vault = "com.github.MilkBowl:VaultAPI:1.7.1"
 packetevents = "com.github.retrooper:packetevents-spigot:2.7.0"
