@@ -1,16 +1,11 @@
-package io.github.alathra.boltux.core;
+package io.github.alathra.boltux.api;
 
-import com.github.milkdrinkers.colorparser.ColorParser;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.config.Settings;
-import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
-
-public class BoltUXItems {
+public class BoltUXAPI {
 
     /**
      * Get the lock item
@@ -41,16 +36,23 @@ public class BoltUXItems {
     }
 
     /**
+     * Get if the provided ItemStack is a lock
+     * @return If the ItemStack consists of lock items
+     */
+    public static boolean isLockItem(ItemStack itemStack) {
+        return itemStack.isSimilar(getLockItem());
+    }
+
+    /**
      * Get the default lock item
      * @return The default (native) lock item if no item plugin is specified
      */
     private static ItemStack getDefaultLockItem() {
-        ItemStack lockItem = new ItemStack(Material.IRON_INGOT);
+        ItemStack lockItem = new ItemStack(Settings.getDefaultLockItemMaterial());
         ItemMeta lockMeta = lockItem.getItemMeta();
-        lockMeta.displayName(ColorParser.of("<gray>Iron Lock").build());
-        lockMeta.lore(List.of(
-            ColorParser.of("<yellow>Shift-Right Click on a container or door to use").build().decoration(TextDecoration.ITALIC, false)
-        ));
+        lockMeta.displayName(Settings.getDefaultLockItemDisplayName());
+        lockMeta.lore(Settings.getDefaultLockItemLore());
+        lockMeta.setCustomModelData(Settings.getDefaultLockItemCustomModelData());
         lockItem.setItemMeta(lockMeta);
         return lockItem;
     }

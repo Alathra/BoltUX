@@ -12,3 +12,12 @@ LockItem:
   itemPlugin: ""
   # The identifier of the custom lock item. Only applicable if using an item plugin defined above
   customLockItemID: ""
+  # The default lock item if no item plugin is specified
+  # Uses MiniMessage color formats
+  DefaultLockItem:
+    material: IRON_INGOT
+    customModelData: 8792
+    displayName: "<gray><b>Iron Lock</b></gray>"
+    lore:
+    - "<yellow>Shift-Right Click to Use</yellow>"
+    - "<yellow>Lockable Things: Containers, Doors, Gates, Trapdoors</yellow>"

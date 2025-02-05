@@ -145,10 +145,9 @@ tasks {
 
         // Automatically install dependencies
         downloadPlugins {
-            modrinth
+            modrinth("Bolt", "1.1.31")
             github("MilkBowl", "Vault", "1.7.3", "Vault.jar")
-            github("retrooper", "packetevents", "v2.5.0", "packetevents-spigot-2.5.0.jar")
-            github("PlaceholderAPI", "PlaceholderAPI", "2.11.4", "PlaceholderAPI-2.11.4.jar")
+            hangar("PlaceholderAPI", "2.11.6")
         }
     }
 }
