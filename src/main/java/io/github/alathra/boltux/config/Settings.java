@@ -18,6 +18,13 @@ public class Settings {
         Settings.plugin = plugin;
     }
 
+    /**
+     * @return The time in seconds a locked block/entity glows for when interact is denied
+     */
+    public static int getGlowBlockTime() {
+        return plugin.getConfigHandler().getConfig().getOrDefault("GeneralSettings.blockGlowTime", 5);
+    }
+
     public static ItemPlugin getItemPlugin() {
         // Default to empty String, no plugin
         String itemPluginString = plugin.getConfigHandler().getConfig().getOrDefault("LockItem.itemPlugin", "");

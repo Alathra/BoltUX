@@ -7,6 +7,10 @@ update-checker:
 # Translation, specify the language file to use, for example `en-US` which will load `/translations/en-US.yml`
 translation: "en-US"
 
+GeneralSettings:
+  # Amount of seconds the block glow effect lasts when the use of a locked item is denied
+  blockGlowTime: 5
+
 LockItem:
   # Possible entries are "ItemsAdder", "Nexo", "Oraxen" or "None". Leave blank or use "None" to use the default lock item
   itemPlugin: ""

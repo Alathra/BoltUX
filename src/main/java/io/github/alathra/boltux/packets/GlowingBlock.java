@@ -2,6 +2,8 @@ package io.github.alathra.boltux.packets;
 
 import com.destroystokyo.paper.MaterialTags;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
+import io.github.alathra.boltux.BoltUX;
+import io.github.alathra.boltux.config.Settings;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import me.tofaa.entitylib.meta.mobs.cuboid.SlimeMeta;
 import me.tofaa.entitylib.wrapper.WrapperEntity;
@@ -31,7 +33,13 @@ public class GlowingBlock {
         entities = new ArrayList<>();
     }
 
-    public void place() {
+    public void glow(NamedTextColor color) {
+        placeEntities();
+        setGlowColor(color);
+        Bukkit.getScheduler().runTaskLater(BoltUX.getInstance(), this::removeEntities, Settings.getGlowBlockTime() * 20L);
+    }
+
+    private void placeEntities() {
         // Corrects offset since slimes do not spawn at the center of the block
         Location location = block.getLocation().add(0.5, 0.0,0.5);
         int numEntities = 1;
@@ -43,19 +51,22 @@ public class GlowingBlock {
             numEntities = 2;
         }
         for (int i = 0; i < numEntities; i++) {
+            // Slimes are block-shaped
+            // Slimes are used instead of shulkers because shulkers collision cannot be disabled
             WrapperEntity entity = new WrapperEntity(EntityTypes.SLIME);
             SlimeMeta slimeMeta = (SlimeMeta) entity.getEntityMeta();
             slimeMeta.setGlowing(true);
             slimeMeta.setInvisible(true);
+            // Medium slime is the size of a block
             slimeMeta.setSize(2);
             entity.addViewer(player.getUniqueId());
+            // Place a second entity 1 block up for doors
             entity.spawn(SpigotConversionUtil.fromBukkitLocation(location.add(0.0, i, 0.0)));
             entities.add(entity);
         }
-        setGlowColor(NamedTextColor.RED);
     }
 
-    public void remove() {
+    public void removeEntities() {
         for (WrapperEntity entity : entities) {
             if (entity == null)
                 return;
@@ -65,7 +76,7 @@ public class GlowingBlock {
         }
     }
 
-    public void setGlowColor(NamedTextColor color) {
+    private void setGlowColor(NamedTextColor color) {
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard scoreboard = manager.getMainScoreboard();
         String teamName = "boltux_color_" + color.examinableName();

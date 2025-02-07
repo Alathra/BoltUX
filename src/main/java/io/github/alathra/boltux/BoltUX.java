@@ -18,7 +18,7 @@ import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.popcraft.bolt.BoltAPI;
+import org.popcraft.bolt.BoltPlugin;
 
 /**
  * Main class.
@@ -40,7 +40,7 @@ public class BoltUX extends JavaPlugin {
     private static OraxenHook oraxenHook;
 
     // Internal
-    private static BoltAPI boltAPI;
+    private static BoltPlugin boltPlugin;
     private static PacketEventsAPI<?> packetEventsAPI;
 
     /**
@@ -87,8 +87,6 @@ public class BoltUX extends JavaPlugin {
     public void onEnable() {
         configHandler.onEnable();
         translationManager.onEnable();
-        commandHandler.onEnable();
-        listenerHandler.onEnable();
         updateChecker.onEnable();
         bStatsHook.onEnable();
         vaultHook.onEnable();
@@ -106,7 +104,7 @@ public class BoltUX extends JavaPlugin {
             .usePlatformLogger();
         EntityLib.init(platform, settings);
 
-        boltAPI = Bukkit.getServer().getServicesManager().load(BoltAPI.class);
+        boltPlugin = (BoltPlugin) Bukkit.getServer().getPluginManager().getPlugin("Bolt");
 
         if (vaultHook.isHookLoaded()) {
             Logger.get().info(ColorParser.of("<green>Vault has been found on this server. Vault support enabled.").build());
@@ -125,6 +123,9 @@ public class BoltUX extends JavaPlugin {
         if (oraxenHook.isHookLoaded()) {
             Logger.get().info(ColorParser.of("<green>Oraxen has been found on this server. Oraxen support enabled.").build());
         }
+
+        commandHandler.onEnable();
+        listenerHandler.onEnable();
     }
 
     @Override
@@ -144,8 +145,8 @@ public class BoltUX extends JavaPlugin {
         PacketEvents.getAPI().terminate();
     }
 
-    public BoltAPI getBoltAPI() {
-        return boltAPI;
+    public static BoltPlugin getBoltPlugin() {
+        return boltPlugin;
     }
 
     /**
