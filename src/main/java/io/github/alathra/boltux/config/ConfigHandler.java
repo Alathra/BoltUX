@@ -13,7 +13,6 @@ import javax.inject.Singleton;
 public class ConfigHandler implements Reloadable {
     private final BoltUX plugin;
     private Config cfg;
-    private Config databaseCfg;
 
     /**
      * Instantiates a new Config handler.
@@ -47,12 +46,4 @@ public class ConfigHandler implements Reloadable {
         return cfg;
     }
 
-    /**
-     * Gets database config object.
-     *
-     * @return the config object
-     */
-    public Config getDatabaseConfig() {
-        return databaseCfg;
-    }
 }

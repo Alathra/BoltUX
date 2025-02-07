@@ -34,6 +34,7 @@ repositories {
             includeGroup("com.github.retrooper") // PacketEvents
         }
     }
+    maven("https://maven.evokegames.gg/snapshots") // EntityLib
     maven("https://jitpack.io/") {
         content {
             includeGroup("com.github.MilkBowl") // VaultAPI
@@ -71,6 +72,7 @@ dependencies {
     implementation(libs.bstats)
     compileOnly(libs.vault)
     implementation(libs.packetevents)
+    implementation(libs.entitylib)
     compileOnly(libs.placeholderapi) {
         exclude("me.clip.placeholderapi.libs", "kyori")
     }
@@ -125,6 +127,7 @@ tasks {
         reloc("dev.triumphteam.gui", "gui")
         reloc("org.bstats", "bstats")
         reloc("com.github.retrooper", "packetevents")
+        reloc("me.tofaa.entitylib", "entitylib")
 
         minimize()
     }

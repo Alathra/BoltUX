@@ -24,6 +24,7 @@ public class ListenerHandler implements Reloadable {
 
     @Override
     public void onEnable() {
+        plugin.getServer().getPluginManager().registerEvents(new LockableRightClickListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new UpdateCheckListener(), plugin);
         if (BoltUX.getVaultHook().isHookLoaded())
             plugin.getServer().getPluginManager().registerEvents(new VaultListener(), plugin);

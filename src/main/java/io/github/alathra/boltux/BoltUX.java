@@ -12,6 +12,9 @@ import io.github.alathra.boltux.updatechecker.UpdateChecker;
 import io.github.alathra.boltux.utility.Logger;
 
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
+import me.tofaa.entitylib.APIConfig;
+import me.tofaa.entitylib.EntityLib;
+import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -96,7 +99,12 @@ public class BoltUX extends JavaPlugin {
 
         PacketEvents.getAPI().init();
         packetEventsAPI = PacketEvents.getAPI();
-        packetEventsAPI.getSettings().checkForUpdates(false).debug(false);
+        SpigotEntityLibPlatform platform = new SpigotEntityLibPlatform(this);
+        APIConfig settings = new APIConfig(PacketEvents.getAPI())
+            .tickTickables()
+            .trackPlatformEntities()
+            .usePlatformLogger();
+        EntityLib.init(platform, settings);
 
         boltAPI = Bukkit.getServer().getServicesManager().load(BoltAPI.class);
 
@@ -134,10 +142,6 @@ public class BoltUX extends JavaPlugin {
         oraxenHook.onDisable();
 
         PacketEvents.getAPI().terminate();
-    }
-
-    public PacketEventsAPI<?> getPacketEventsAPI() {
-        return packetEventsAPI;
     }
 
     public BoltAPI getBoltAPI() {
