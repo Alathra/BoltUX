@@ -24,11 +24,15 @@ public class ListenerHandler implements Reloadable {
 
     @Override
     public void onEnable() {
+        // Template listeners
         plugin.getServer().getPluginManager().registerEvents(new UpdateCheckListener(), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new ProtectedBlockBreakListener(), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new ProtectedBlockRightClickListener(), plugin);
         if (BoltUX.getVaultHook().isHookLoaded())
             plugin.getServer().getPluginManager().registerEvents(new VaultListener(), plugin);
+        // BoltUX specific
+        plugin.getServer().getPluginManager().registerEvents(new ProtectedBlockBreakListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ProtectedBlockInteractListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ProtectedEntityDamageListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ProtectedEntityInteractListener(), plugin);
     }
 
     @Override

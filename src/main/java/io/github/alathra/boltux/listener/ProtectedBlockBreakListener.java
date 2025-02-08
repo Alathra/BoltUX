@@ -32,13 +32,19 @@ public class ProtectedBlockBreakListener implements Listener {
         Player player = event.getPlayer();
         Material material = block.getType();
         BlockProtection protection = boltPlugin.loadProtection(block);
+        if (protection == null) {
+            return;
+        }
         if (protection.getOwner().equals(player.getUniqueId())) {
             return;
         }
 
-        boolean canBreak = false;
-        if (MaterialGroups.inventoryBlocks.contains(material) || MaterialGroups.interactableBlocks.contains(material)) {
-            canBreak = boltPlugin.canAccess(protection, player.getUniqueId(), Permission.DESTROY);
+        boolean canBreak = true;
+        if (MaterialGroups.containerBlocks.contains(material)
+            || MaterialGroups.interactableBlocks.contains(material)
+            || MaterialGroups.otherBlocks.contains(material)
+        ) {
+            canBreak = boltPlugin.canAccess(protection, player, Permission.DESTROY);
         }
 
         // Display red glowing block if player does not have access

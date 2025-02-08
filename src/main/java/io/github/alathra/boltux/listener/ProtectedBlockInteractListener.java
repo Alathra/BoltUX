@@ -1,6 +1,5 @@
 package io.github.alathra.boltux.listener;
 
-import com.destroystokyo.paper.MaterialTags;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.core.MaterialGroups;
 import io.github.alathra.boltux.packets.GlowingBlock;
@@ -8,6 +7,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -17,11 +17,11 @@ import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.BlockProtection;
 import org.popcraft.bolt.util.Permission;
 
-public class ProtectedBlockRightClickListener implements Listener {
+public class ProtectedBlockInteractListener implements Listener {
 
     private final BoltPlugin boltPlugin;
 
-    public ProtectedBlockRightClickListener() {
+    public ProtectedBlockInteractListener() {
         boltPlugin = BoltUX.getBoltPlugin();
     }
 
@@ -46,6 +46,9 @@ public class ProtectedBlockRightClickListener implements Listener {
         Player player = event.getPlayer();
         Material material = block.getType();
         BlockProtection protection = boltPlugin.loadProtection(block);
+        if (protection == null) {
+            return;
+        }
 
         // Determine if player is protection owner
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
@@ -54,11 +57,13 @@ public class ProtectedBlockRightClickListener implements Listener {
             return;
         }
 
-        boolean canAccess = false;
-        if (MaterialGroups.inventoryBlocks.contains(material)) {
-            canAccess = boltPlugin.canAccess(protection, player.getUniqueId(), Permission.INTERACT, Permission.OPEN);
+        boolean canAccess = true;
+        if (MaterialGroups.containerBlocks.contains(material)) {
+            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
         } else if(MaterialGroups.interactableBlocks.contains(material)) {
-            canAccess = boltPlugin.canAccess(protection, player.getUniqueId(), Permission.INTERACT);
+            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);
+        } else if (MaterialGroups.otherBlocks.contains(material)) {
+            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);
         }
 
         // Display red glowing block if player does not have access

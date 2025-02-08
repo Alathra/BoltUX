@@ -26,6 +26,7 @@ public class GlowingBlock {
     private final Block block;
     private final Player player;
     private final List<WrapperEntity> entities;
+    private Team team;
 
     public GlowingBlock (Block block, Player player) {
         this.block = block;
@@ -70,7 +71,7 @@ public class GlowingBlock {
         for (WrapperEntity entity : entities) {
             if (entity == null)
                 return;
-
+            team.removeEntry(entity.toString());
             entity.despawn();
             entity = null;
         }
@@ -80,7 +81,7 @@ public class GlowingBlock {
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard scoreboard = manager.getMainScoreboard();
         String teamName = "boltux_color_" + color.examinableName();
-        Team team = scoreboard.getTeam(teamName);
+        team = scoreboard.getTeam(teamName);
         if (team == null) {
             team = scoreboard.registerNewTeam(teamName);
             team.color(color);
