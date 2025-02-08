@@ -57,7 +57,7 @@ public class ProtectedEntityInteractListener implements Listener {
 
         // Make entity glow red if player does not have access
         if (!canAccess) {
-            if (GlowingEntity.glowingEntities.contains(entity.getUniqueId())) {
+            if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
                 return;
             }
             GlowingEntity glowingEntity = new GlowingEntity(entity, player);
@@ -73,7 +73,6 @@ public class ProtectedEntityInteractListener implements Listener {
         if (entity.getType() != EntityType.ARMOR_STAND) {
             return;
         }
-        EntityType entityType = entity.getType();
         Player player = event.getPlayer();
         EntityProtection protection = boltPlugin.loadProtection(entity);
         if (protection == null) {
@@ -90,6 +89,9 @@ public class ProtectedEntityInteractListener implements Listener {
 
         // Make entity glow red if player does not have access
         if (!canAccess) {
+            if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
+                return;
+            }
             GlowingEntity glowingEntity = new GlowingEntity(entity, player);
             glowingEntity.glow(NamedTextColor.RED);
         }

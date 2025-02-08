@@ -52,7 +52,7 @@ public class ProtectedEntityDamageListener implements Listener {
 
         // Make entity glow red if player does not have access
         if (!canBreak) {
-            if (GlowingEntity.glowingEntities.contains(entity.getUniqueId())) {
+            if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
                 return;
             }
             GlowingEntity glowingEntity = new GlowingEntity(entity, player);
@@ -87,7 +87,7 @@ public class ProtectedEntityDamageListener implements Listener {
 
         // Make entity glow red if player does not have access
         if (!canBreak) {
-            if (GlowingEntity.glowingEntities.contains(entity.getUniqueId())) {
+            if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
                 return;
             }
             GlowingEntity glowingEntity = new GlowingEntity(entity, player);

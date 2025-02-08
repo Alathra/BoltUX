@@ -2,11 +2,12 @@ package io.github.alathra.boltux;
 
 import com.github.milkdrinkers.colorparser.ColorParser;
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.PacketEventsAPI;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import io.github.alathra.boltux.command.CommandHandler;
 import io.github.alathra.boltux.config.ConfigHandler;
 import io.github.alathra.boltux.hook.*;
 import io.github.alathra.boltux.listener.ListenerHandler;
+import io.github.alathra.boltux.packets.GlowPacketListener;
 import io.github.alathra.boltux.translation.TranslationManager;
 import io.github.alathra.boltux.updatechecker.UpdateChecker;
 import io.github.alathra.boltux.utility.Logger;
@@ -41,7 +42,6 @@ public class BoltUX extends JavaPlugin {
 
     // Internal
     private static BoltPlugin boltPlugin;
-    private static PacketEventsAPI<?> packetEventsAPI;
 
     /**
      * Gets plugin instance.
@@ -95,14 +95,15 @@ public class BoltUX extends JavaPlugin {
         nexoHook.onEnable();
         oraxenHook.onEnable();
 
+        // PacketEvents + EntityLib initialization
         PacketEvents.getAPI().init();
-        packetEventsAPI = PacketEvents.getAPI();
         SpigotEntityLibPlatform platform = new SpigotEntityLibPlatform(this);
         APIConfig settings = new APIConfig(PacketEvents.getAPI())
             .tickTickables()
             .trackPlatformEntities()
             .usePlatformLogger();
         EntityLib.init(platform, settings);
+        PacketEvents.getAPI().getEventManager().registerListener(new GlowPacketListener(), PacketListenerPriority.NORMAL);
 
         boltPlugin = (BoltPlugin) Bukkit.getServer().getPluginManager().getPlugin("Bolt");
 
