@@ -80,7 +80,7 @@ public class GlowingBlock {
     private void setGlowColor(NamedTextColor color) {
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard scoreboard = manager.getMainScoreboard();
-        String teamName = "boltux_color_" + color.examinableName();
+        String teamName = "boltux_color_" + color.toString();
         team = scoreboard.getTeam(teamName);
         if (team == null) {
             team = scoreboard.registerNewTeam(teamName);
