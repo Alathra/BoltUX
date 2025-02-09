@@ -1,14 +1,18 @@
 package io.github.alathra.boltux.listener;
 
+import com.destroystokyo.paper.MaterialTags;
 import io.github.alathra.boltux.BoltUX;
+import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.core.MaterialGroups;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -25,7 +29,7 @@ public class ProtectedBlockInteractListener implements Listener {
         boltPlugin = BoltUX.getBoltPlugin();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onProtectedBlockRightClick(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
@@ -47,13 +51,19 @@ public class ProtectedBlockInteractListener implements Listener {
         Material material = block.getType();
         BlockProtection protection = boltPlugin.loadProtection(block);
         if (protection == null) {
-            return;
+            if (MaterialTags.DOORS.isTagged(material)) {
+                protection = boltPlugin.loadProtection(block.getRelative(BlockFace.DOWN));
+            } else {
+                return;
+            }
         }
 
         // Determine if player is protection owner
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner) {
-            // TODO: Open BoltUXGUI
+            if (player.isSneaking()) {
+                // TODO: Open BoltUXGUI
+            }
             return;
         }
 

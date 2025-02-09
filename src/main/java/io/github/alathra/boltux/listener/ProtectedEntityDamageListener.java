@@ -3,6 +3,7 @@ package io.github.alathra.boltux.listener;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.core.EntityGroups;
 import io.github.alathra.boltux.packets.GlowingEntity;
+import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -23,7 +24,7 @@ public class ProtectedEntityDamageListener implements Listener {
         boltPlugin = BoltUX.getBoltPlugin();
     }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onProtectedEntityDamage(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player player)) {
             return;
@@ -42,9 +43,7 @@ public class ProtectedEntityDamageListener implements Listener {
         }
 
         boolean canBreak = true;
-        if (EntityGroups.chestBoats.contains(entityType)
-            || EntityGroups.containerMinecarts.contains(entityType)
-            || EntityGroups.otherInteractableEntities.contains(entityType)
+        if (EntityGroups.otherInteractableEntities.contains(entityType)
             || EntityGroups.otherEntities.contains(entityType)
         ) {
             canBreak = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.DESTROY);
@@ -60,7 +59,40 @@ public class ProtectedEntityDamageListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onProtectedEntityAttack(PrePlayerAttackEntityEvent event) {
+        Entity entity = event.getAttacked();
+        if (!boltPlugin.isProtected(entity)) {
+            return;
+        }
+        EntityType entityType = entity.getType();
+        EntityProtection protection = boltPlugin.loadProtection(entity);
+        Player player = event.getPlayer();
+        if (protection == null) {
+            return;
+        }
+        if (protection.getOwner().equals(player.getUniqueId())) {
+            return;
+        }
+
+        boolean canBreak = true;
+        if (EntityGroups.chestBoats.contains(entityType)
+            || EntityGroups.containerMinecarts.contains(entityType)
+        ) {
+            canBreak = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.DESTROY);
+        }
+
+        // Make entity glow red if player does not have access
+        if (!canBreak) {
+            if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
+                return;
+            }
+            GlowingEntity glowingEntity = new GlowingEntity(entity, player);
+            glowingEntity.glow(NamedTextColor.RED);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onHangingEntityBreak(HangingBreakByEntityEvent event) {
         if (!(event.getRemover() instanceof Player player)) {
             return;

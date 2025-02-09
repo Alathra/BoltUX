@@ -4,12 +4,19 @@ import com.github.milkdrinkers.colorparser.ColorParser;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.core.ItemPlugin;
 import io.github.alathra.boltux.utility.Logger;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.intellij.lang.annotations.Subst;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Settings {
     public static BoltUX plugin;
@@ -23,6 +30,34 @@ public class Settings {
      */
     public static int getGlowBlockTime() {
         return plugin.getConfigHandler().getConfig().getOrDefault("GeneralSettings.blockGlowTime", 5);
+    }
+
+    public static boolean isLockingEnabled() {
+        return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.enabled", false);
+    }
+
+    public static boolean isLockingSoundEnabled() {
+        return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.sound.enabled", false);
+    }
+
+    public static Sound getLockingSound() {
+        @Subst("minecraft:entity.zombie.attack_iron_door") String soundID = plugin.getConfigHandler().getConfig().getOrDefault("LockItem.sound.effect", "minecraft:entity.zombie.attack_iron_door");
+        float volume = plugin.getConfigHandler().getConfig().getOrDefault("LockItem.sound.volume", 1.0).floatValue();
+        float pitch = plugin.getConfigHandler().getConfig().getOrDefault("LockItem.sound.pitch", 1.0).floatValue();
+
+        return Sound.sound()
+            .type(Key.key(soundID))
+            .source(Sound.Source.BLOCK)
+            .volume(volume)
+            .pitch(pitch)
+            .build();
+    }
+
+    public static List<World> getLockItemEnabledWorlds() {
+        return plugin.getConfigHandler().getConfig().getStringList("LockItem.enabledWorlds")
+            .stream()
+            .map(Bukkit::getWorld)
+            .collect(Collectors.toList());
     }
 
     public static ItemPlugin getItemPlugin() {

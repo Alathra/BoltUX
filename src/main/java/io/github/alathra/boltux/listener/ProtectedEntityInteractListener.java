@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -24,7 +25,7 @@ public class ProtectedEntityInteractListener implements Listener {
     }
 
     // For all entities except armor stands
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onProtectedEntityRightClick(PlayerInteractEntityEvent event) {
         Entity entity = event.getRightClicked();
         if (!boltPlugin.isProtected(entity)) {
@@ -67,7 +68,7 @@ public class ProtectedEntityInteractListener implements Listener {
     }
 
     // For armor stands only
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onProtectedEntityRightClick(PlayerInteractAtEntityEvent event) {
         Entity entity = event.getRightClicked();
         if (entity.getType() != EntityType.ARMOR_STAND) {
@@ -82,8 +83,9 @@ public class ProtectedEntityInteractListener implements Listener {
         // Determine if player is protection owner
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner) {
-            // TODO: Open BoltUXGUI
-            return;
+            if (player.isSneaking()) {
+                // TODO: Open BoltUXGUI
+            }
         }
         boolean canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN, Permission.MOUNT);
 

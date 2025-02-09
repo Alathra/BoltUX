@@ -12,6 +12,17 @@ GeneralSettings:
   blockGlowTime: 5
 
 LockItem:
+  # If the lock item is enabled. Settings this to false will make lock items do nothing
+  enabled: true
+  # What worlds players will be able to use locks in
+  enabledWorlds:
+    - world
+  # The sound made when a player creates a new protection with a lock
+  sound:
+    enabled: true
+    effect: "minecraft:entity.zombie.attack_iron_door"
+    volume: 1.0
+    pitch: 1.0
   # Possible entries are "ItemsAdder", "Nexo", "Oraxen" or "None". Leave blank or use "None" to use the default lock item
   itemPlugin: ""
   # The identifier of the custom lock item. Only applicable if using an item plugin defined above
