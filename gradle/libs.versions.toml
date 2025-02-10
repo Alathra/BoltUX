@@ -26,7 +26,7 @@ entitylib = "me.tofaa.entitylib:spigot:2.4.11-SNAPSHOT"
 placeholderapi = "me.clip:placeholderapi:2.11.6"
 itemsadder = "dev.lone:api-itemsadder:4.0.8"
 nexo = "com.nexomc:nexo:0.10.0"
-oraxen = "io.th0rgal:oraxen:1.188.0"
+oraxen = "io.th0rgal:oraxen:1.189.0"
 
 # Testing
 junit-bom = "org.junit:junit-bom:5.11.4"
