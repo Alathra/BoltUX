@@ -71,14 +71,16 @@ public class LockUseListener implements Listener {
         // https://github.com/pop4959/Bolt/blob/22bf46b45640e0ef75dbd38bc5c16cee2db267c0/bukkit/src/main/java/org/popcraft/bolt/command/impl/LockCommand.java#L19
         boltPlugin.player(player).setAction(new org.popcraft.bolt.util.Action(org.popcraft.bolt.util.Action.Type.LOCK, "bolt.command.lock", "private", false));
         // Bolt-Bukkit incapable of calling this, bolt-common will
-        BoltComponents.sendMessage(
-            player,
-            Translation.CLICK_ACTION,
-            boltPlugin.isUseActionBar(),
-            Placeholder.component(
-                Translation.Placeholder.ACTION, BoltComponents.resolveTranslation(Translation.LOCK, player)
-            )
-        );
+        try {
+            BoltComponents.sendMessage(
+                player,
+                Translation.CLICK_ACTION,
+                boltPlugin.isUseActionBar(),
+                Placeholder.component(
+                    Translation.Placeholder.ACTION, BoltComponents.resolveTranslation(Translation.LOCK, player)
+                )
+            );
+        } catch (NoSuchMethodError ignored) {}
 
         event.setCancelled(true);
     }
