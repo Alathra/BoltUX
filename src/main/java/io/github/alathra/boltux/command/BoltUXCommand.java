@@ -1,7 +1,10 @@
 package io.github.alathra.boltux.command;
 
 import com.github.milkdrinkers.colorparser.ColorParser;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import org.bukkit.command.CommandSender;
@@ -33,6 +36,16 @@ class BoltUXCommand {
             .withFullDescription("Gives yourself the lock item.")
             .withShortDescription("Gives lock item.")
             .withPermission(ADMIN_PERM)
-            .executesPlayer((Player sender, CommandArguments args) -> sender.getInventory().addItem(BoltUXAPI.getLockItem()));
+            .withOptionalArguments(
+                new IntegerArgument("amount")
+                    .replaceSuggestions(ArgumentSuggestions.strings("64", "32", "16"))
+            )
+            .executesPlayer((Player sender, CommandArguments args) -> {
+                Integer amount = (Integer) args.get("amount");
+                if (amount == null) {
+                    throw CommandAPIBukkit.failWithAdventureComponent(ColorParser.of("<red>Invalid item amount").build());
+                }
+                sender.getInventory().addItem(BoltUXAPI.getLockItem(amount));
+            });
     }
 }

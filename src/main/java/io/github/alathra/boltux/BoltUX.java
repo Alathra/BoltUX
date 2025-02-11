@@ -100,7 +100,6 @@ public class BoltUX extends JavaPlugin {
         SpigotEntityLibPlatform platform = new SpigotEntityLibPlatform(this);
         APIConfig settings = new APIConfig(PacketEvents.getAPI())
             .tickTickables()
-            .trackPlatformEntities()
             .usePlatformLogger();
         EntityLib.init(platform, settings);
         PacketEvents.getAPI().getEventManager().registerListener(new GlowPacketListener(), PacketListenerPriority.NORMAL);

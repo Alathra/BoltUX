@@ -9,30 +9,42 @@ public class BoltUXAPI {
 
     /**
      * Get the lock item
+     * @param amount The amount of lock items in the resulting itemstack
      * @return The lock item from the specified item plugin or the default (native) lock item
      */
-    public static ItemStack getLockItem() {
+    public static ItemStack getLockItem(int amount) {
+        ItemStack itemStack;
         switch (Settings.getItemPlugin()) {
             case ITEMSADDER -> {
                 if (BoltUX.getItemsAdderHook().isHookLoaded()) {
-                    return BoltUX.getItemsAdderHook().getLockItem();
+                    itemStack = BoltUX.getItemsAdderHook().getLockItem();
                 }
-                return getDefaultLockItem();
+                itemStack = getDefaultLockItem();
             }
             case NEXO -> {
                 if (BoltUX.getNexoHook().isHookLoaded()) {
-                    return BoltUX.getNexoHook().getLockItem();
+                    itemStack = BoltUX.getNexoHook().getLockItem();
                 }
-                return getDefaultLockItem();
+                itemStack = getDefaultLockItem();
             }
             case ORAXEN -> {
                 if (BoltUX.getOraxenHook().isHookLoaded()) {
-                    return BoltUX.getOraxenHook().getLockItem();
+                    itemStack = BoltUX.getOraxenHook().getLockItem();
                 }
-                return getDefaultLockItem();
+                itemStack = getDefaultLockItem();
             }
-            default -> {return getDefaultLockItem();}
+            default -> {itemStack = getDefaultLockItem();}
         }
+        itemStack.setAmount(amount);
+        return itemStack;
+    }
+
+    /**
+     * Get the lock item
+     * @return The lock item from the specified item plugin or the default (native) lock item
+     */
+    public static ItemStack getLockItem() {
+        return getLockItem(1);
     }
 
     /**

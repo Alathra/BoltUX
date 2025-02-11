@@ -69,7 +69,6 @@ dependencies {
 
     // Plugin dependencies
     compileOnly(libs.boltbukkit)
-    compileOnly(libs.boltcommon)
     implementation(libs.bstats)
     compileOnly(libs.vault)
     implementation(libs.packetevents)
