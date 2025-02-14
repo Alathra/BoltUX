@@ -30,6 +30,8 @@ public class ListenerHandler implements Reloadable {
             plugin.getServer().getPluginManager().registerEvents(new VaultListener(), plugin);
         // BoltUX specific
         plugin.getServer().getPluginManager().registerEvents(new LockUseListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ProtectedBlockBreakListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ProtectedEntityBreakListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new ProtectedBlockDamageListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new ProtectedBlockInteractListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new ProtectedEntityDamageListener(), plugin);

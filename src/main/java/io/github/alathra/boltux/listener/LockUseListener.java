@@ -65,7 +65,9 @@ public class LockUseListener implements Listener {
         // Player is using lock item on a valid block
         GlowingBlock glowingBlock = new GlowingBlock(block, player);
         glowingBlock.glow(NamedTextColor.GREEN);
-        player.playSound(Settings.getLockingSound());
+        if (Settings.isLockingSoundEnabled()) {
+            player.playSound(Settings.getLockingSound());
+        }
         lockItem.setAmount(lockItem.getAmount() - 1);
 
         // https://github.com/pop4959/Bolt/blob/22bf46b45640e0ef75dbd38bc5c16cee2db267c0/bukkit/src/main/java/org/popcraft/bolt/command/impl/LockCommand.java#L19

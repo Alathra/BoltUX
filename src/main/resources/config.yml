@@ -12,8 +12,11 @@ GeneralSettings:
   blockGlowTime: 5
 
 LockItem:
-  # If the lock item is enabled. Settings this to false will make lock items do nothing
+  # If the lock item is enabled. All following settings this to false will make lock items do nothing
   enabled: true
+
+  # If protected blocks/entities will drop a lock item when broken
+  protectionsDropLocks: true
   # What worlds players will be able to use locks in
   enabledWorlds:
     - world

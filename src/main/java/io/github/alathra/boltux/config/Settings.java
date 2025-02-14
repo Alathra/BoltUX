@@ -36,6 +36,10 @@ public class Settings {
         return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.enabled", false);
     }
 
+    public static boolean isLockDroppingEnabled() {
+        return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.protectionsDropLocks", false);
+    }
+
     public static boolean isLockingSoundEnabled() {
         return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.sound.enabled", false);
     }
