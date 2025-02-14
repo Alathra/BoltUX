@@ -45,6 +45,9 @@ public class ProtectedEntityBreakListener implements Listener {
             return;
         }
         Entity entity = event.getEntity();
+        if (!Settings.getLockItemEnabledWorlds().contains(entity.getWorld())) {
+            return;
+        }
         if (!boltPlugin.isProtected(entity)) {
             return;
         }
@@ -68,6 +71,9 @@ public class ProtectedEntityBreakListener implements Listener {
             return;
         }
         Entity entity = event.getEntity();
+        if (!Settings.getLockItemEnabledWorlds().contains(entity.getWorld())) {
+            return;
+        }
         if (!boltPlugin.isProtectable(entity)) {
             return;
         }
@@ -94,6 +100,9 @@ public class ProtectedEntityBreakListener implements Listener {
         if (!(event.getAttacker() instanceof Player)) {
             return;
         }
+        if (!Settings.getLockItemEnabledWorlds().contains(vehicle.getWorld())) {
+            return;
+        }
         if (boltPlugin.isProtected(vehicle)) {
             protectedVehicleUUIDs.add(vehicle.getUniqueId());
         }
@@ -114,6 +123,9 @@ public class ProtectedEntityBreakListener implements Listener {
             return;
         }
         Vehicle vehicle = event.getVehicle();
+        if (!Settings.getLockItemEnabledWorlds().contains(vehicle.getWorld())) {
+            return;
+        }
         // Vehicle was protected
         if (protectedVehicleUUIDs.contains(vehicle.getUniqueId())) {
             // Drop a lock item at the broken block location
@@ -135,6 +147,9 @@ public class ProtectedEntityBreakListener implements Listener {
         }
         Entity entity = event.getRightClicked();
         if (!entity.getType().equals(EntityType.LEASH_KNOT)) {
+            return;
+        }
+        if (!Settings.getLockItemEnabledWorlds().contains(entity.getWorld())) {
             return;
         }
         if (!boltPlugin.isProtected(entity)) {

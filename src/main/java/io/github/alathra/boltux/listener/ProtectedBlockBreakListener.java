@@ -30,6 +30,9 @@ public class ProtectedBlockBreakListener implements Listener {
             return;
         }
         Block block = event.getBlock();
+        if (!Settings.getLockItemEnabledWorlds().contains(block.getWorld())) {
+            return;
+        }
         if (!boltPlugin.isProtectable(block)) {
             return;
         }
