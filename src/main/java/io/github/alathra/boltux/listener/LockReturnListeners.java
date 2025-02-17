@@ -3,6 +3,7 @@ package io.github.alathra.boltux.listener;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -10,11 +11,13 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.EntityProtection;
 import org.popcraft.bolt.util.Permission;
@@ -23,14 +26,37 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class ProtectedEntityBreakListener implements Listener {
+public class LockReturnListeners implements Listener {
 
     private final BoltPlugin boltPlugin;
     private final Set<UUID> protectedVehicleUUIDs;
 
-    public ProtectedEntityBreakListener() {
+    public LockReturnListeners() {
         boltPlugin = BoltUX.getBoltPlugin();
         protectedVehicleUUIDs = new HashSet<>();
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onProtectedBlockBreak(BlockBreakEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+        if (!Settings.isLockingEnabled()) {
+            return;
+        }
+        if (!Settings.isLockDroppingEnabled()) {
+            return;
+        }
+        Block block = event.getBlock();
+        if (!Settings.getLockItemEnabledWorlds().contains(block.getWorld())) {
+            return;
+        }
+        if (!boltPlugin.isProtectable(block)) {
+            return;
+        }
+
+        // Drop a lock item at the broken block location
+        block.getWorld().dropItemNaturally(block.getLocation(), BoltUXAPI.getLockItem());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -143,6 +169,9 @@ public class ProtectedEntityBreakListener implements Listener {
             return;
         }
         if (!Settings.isLockDroppingEnabled()) {
+            return;
+        }
+        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
         Entity entity = event.getRightClicked();
