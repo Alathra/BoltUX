@@ -4,6 +4,7 @@ import com.destroystokyo.paper.MaterialTags;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.core.EntityGroups;
 import io.github.alathra.boltux.core.MaterialGroups;
+import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -67,7 +68,9 @@ public class ProtectionInteractListeners implements Listener {
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner) {
             if (player.isSneaking()) {
-                // TODO: Open BoltUXGUI
+                GuiHandler.generateProtectionOwnerGUI(player, protection, block.getLocation());
+                event.setCancelled(true);
+                return;
             }
             return;
         }
@@ -88,62 +91,12 @@ public class ProtectionInteractListeners implements Listener {
         }
     }
 
-    // For all entities except armor stands
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onProtectedEntityRightClick(PlayerInteractEntityEvent event) {
-        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
-            return;
-        }
-        Entity entity = event.getRightClicked();
-        if (!boltPlugin.isProtected(entity)) {
-            return;
-        }
-        EntityType entityType = entity.getType();
-        Player player = event.getPlayer();
-        EntityProtection protection = boltPlugin.loadProtection(entity);
-        if (protection == null) {
-            return;
-        }
-
-        // Determine if player is protection owner
-        boolean isOwner = protection.getOwner().equals(player.getUniqueId());
-        if (isOwner) {
-            // TODO: Open BoltUXGUI
-            return;
-        }
-
-        boolean canAccess = true;
-        if (EntityGroups.chestBoats.contains(entityType)) {
-            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN, Permission.MOUNT);
-        } else if (EntityGroups.containerMinecarts.contains(entityType)) {
-            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
-        } else if (EntityGroups.otherInteractableEntities.contains(entityType)) {
-            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);
-        } else if (EntityGroups.otherEntities.contains(entityType)) {
-            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);
-        }
-
-        // Make entity glow red if player does not have access
-        if (!canAccess) {
-            if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
-                return;
-            }
-            GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-            glowingEntity.glow(NamedTextColor.RED);
-        }
-
-    }
-
-    // For armor stands only
     @EventHandler(priority = EventPriority.NORMAL)
     public void onProtectedEntityRightClick(PlayerInteractAtEntityEvent event) {
         if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
         Entity entity = event.getRightClicked();
-        if (entity.getType() != EntityType.ARMOR_STAND) {
-            return;
-        }
         Player player = event.getPlayer();
         EntityProtection protection = boltPlugin.loadProtection(entity);
         if (protection == null) {
@@ -154,8 +107,11 @@ public class ProtectionInteractListeners implements Listener {
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner) {
             if (player.isSneaking()) {
-                // TODO: Open BoltUXGUI
+                event.setCancelled(true);
+                GuiHandler.generateProtectionOwnerGUI(player, protection, entity.getLocation());
+                return;
             }
+            return;
         }
         boolean canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN, Permission.MOUNT);
 
