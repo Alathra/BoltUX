@@ -92,7 +92,7 @@ public class ProtectionInteractListeners implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onProtectedEntityRightClick(PlayerInteractAtEntityEvent event) {
+    public void onProtectedEntityRightClick(PlayerInteractEntityEvent event) {
         if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
@@ -107,13 +107,24 @@ public class ProtectionInteractListeners implements Listener {
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner) {
             if (player.isSneaking()) {
-                event.setCancelled(true);
                 GuiHandler.generateProtectionOwnerGUI(player, protection, entity.getLocation());
+                event.setCancelled(true);
                 return;
             }
             return;
         }
-        boolean canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN, Permission.MOUNT);
+        EntityType entityType = entity.getType();
+
+        boolean canAccess = true;
+        if (EntityGroups.chestBoats.contains(entityType)) {
+            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN, Permission.MOUNT);
+        } else if (EntityGroups.containerMinecarts.contains(entityType)) {
+            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
+        } else if (EntityGroups.otherInteractableEntities.contains(entityType)) {
+            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);
+        } else if (EntityGroups.otherEntities.contains(entityType)) {
+            canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);
+        }
 
         // Make entity glow red if player does not have access
         if (!canAccess) {
@@ -124,4 +135,43 @@ public class ProtectionInteractListeners implements Listener {
             glowingEntity.glow(NamedTextColor.RED);
         }
     }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onProtectedEntityRightClick(PlayerInteractAtEntityEvent event) {
+        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+            return;
+        }
+        Entity entity = event.getRightClicked();
+        if (entity.getType() != EntityType.ARMOR_STAND) {
+            return;
+        }
+        Player player = event.getPlayer();
+        EntityProtection protection = boltPlugin.loadProtection(entity);
+        if (protection == null) {
+            return;
+        }
+
+        // Determine if player is protection owner
+        boolean isOwner = protection.getOwner().equals(player.getUniqueId());
+        if (isOwner) {
+            if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+                GuiHandler.generateProtectionOwnerGUI(player, protection, entity.getLocation());
+                event.setCancelled(true);
+                return;
+            }
+            return;
+        }
+
+        boolean canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);
+
+        // Make entity glow red if player does not have access
+        if (!canAccess) {
+            if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
+                return;
+            }
+            GlowingEntity glowingEntity = new GlowingEntity(entity, player);
+            glowingEntity.glow(NamedTextColor.RED);
+        }
+    }
+
 }

@@ -5,10 +5,14 @@ import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,21 +25,23 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.lang.Translation;
+import org.popcraft.bolt.lang.Translator;
+import org.popcraft.bolt.protection.Protection;
 import org.popcraft.bolt.util.BoltComponents;
 import org.popcraft.bolt.util.BoltPlayer;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class LockUseListeners implements Listener {
 
     private final BoltPlugin boltPlugin;
+    private final MiniMessage miniMessage;
     // Player UUID, entity UUID
     private final Map<UUID, UUID> pendingLocking;
 
     public LockUseListeners() {
         boltPlugin = BoltUX.getBoltPlugin();
+        miniMessage = MiniMessage.miniMessage();
         pendingLocking = new HashMap<>();
     }
 
@@ -83,19 +89,28 @@ public class LockUseListeners implements Listener {
         }
         lockItem.setAmount(lockItem.getAmount() - 1);
 
-        // https://github.com/pop4959/Bolt/blob/22bf46b45640e0ef75dbd38bc5c16cee2db267c0/bukkit/src/main/java/org/popcraft/bolt/command/impl/LockCommand.java#L19
-        boltPlugin.player(player).setAction(new org.popcraft.bolt.util.Action(org.popcraft.bolt.util.Action.Type.LOCK, "bolt.command.lock", "private", false));
-        // Bolt-Bukkit incapable of calling this, bolt-common will
-        try {
-            BoltComponents.sendMessage(
-                player,
-                Translation.CLICK_ACTION,
-                boltPlugin.isUseActionBar(),
-                Placeholder.component(
-                    Translation.Placeholder.ACTION, BoltComponents.resolveTranslation(Translation.LOCK, player)
-                )
-            );
-        } catch (NoSuchMethodError ignored) {}
+        // Create new protection
+        org.popcraft.bolt.util.Action lockAction = new org.popcraft.bolt.util.Action(org.popcraft.bolt.util.Action.Type.LOCK, "bolt.command.lock", "private", false);
+        BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
+        final UUID protectionUUID = boltPlayer.isLockNil() ? org.popcraft.bolt.util.Profiles.NIL_UUID : player.getUniqueId();
+        final String protectionType = Optional.ofNullable(lockAction.getData())
+            .flatMap(type -> boltPlugin.getBolt().getAccessRegistry().getProtectionByType(type))
+            .map(org.popcraft.bolt.access.Access::type)
+            .orElse(boltPlugin.getDefaultProtectionType());
+        final Protection protection = boltPlugin.createProtection(block, protectionUUID, protectionType);
+        boltPlugin.saveProtection(protection);
+        boltPlayer.setLockNil(false);
+
+        /*
+        BoltComponents.sendMessage(
+            player,
+            Translation.CLICK_ACTION,
+            boltPlugin.isUseActionBar(),
+            Placeholder.component(
+                Translation.Placeholder.ACTION, resolveTranslation(Translation.LOCK, player)
+            )
+        );
+         */
 
         event.setCancelled(true);
     }
@@ -146,36 +161,39 @@ public class LockUseListeners implements Listener {
         }
         lockItem.setAmount(lockItem.getAmount() - 1);
 
-        // https://github.com/pop4959/Bolt/blob/22bf46b45640e0ef75dbd38bc5c16cee2db267c0/bukkit/src/main/java/org/popcraft/bolt/command/impl/LockCommand.java#L19
+        // Create new protection
+        org.popcraft.bolt.util.Action lockAction = new org.popcraft.bolt.util.Action(org.popcraft.bolt.util.Action.Type.LOCK, "bolt.command.lock", "private", false);
         BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
-        boltPlayer.setAction(new org.popcraft.bolt.util.Action(org.popcraft.bolt.util.Action.Type.LOCK, "bolt.command.lock", "private", false));
-        pendingLocking.remove(player.getUniqueId());
-        pendingLocking.put(player.getUniqueId(), entity.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(BoltUX.getInstance(), () -> {
-            Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractAtEntityEvent(player, entity, event.getClickedPosition()));
-        }, 1);
+        final UUID protectionUUID = boltPlayer.isLockNil() ? org.popcraft.bolt.util.Profiles.NIL_UUID : player.getUniqueId();
+        final String protectionType = Optional.ofNullable(lockAction.getData())
+            .flatMap(type -> boltPlugin.getBolt().getAccessRegistry().getProtectionByType(type))
+            .map(org.popcraft.bolt.access.Access::type)
+            .orElse(boltPlugin.getDefaultProtectionType());
+        final Protection protection = boltPlugin.createProtection(entity, protectionUUID, protectionType);
+        boltPlugin.saveProtection(protection);
+        boltPlayer.setLockNil(false);
 
         // Bolt-Bukkit incapable of calling this, bolt-common will
-        try {
-            BoltComponents.sendMessage(
-                player,
-                Translation.CLICK_ACTION,
-                boltPlugin.isUseActionBar(),
-                Placeholder.component(
-                    Translation.Placeholder.ACTION, BoltComponents.resolveTranslation(Translation.LOCK, player)
-                )
-            );
-        } catch (NoSuchMethodError ignored) {}
+        /*
+        BoltComponents.sendMessage(
+            player,
+            Translation.CLICK_ACTION,
+            boltPlugin.isUseActionBar(),
+            Placeholder.component(
+                Translation.Placeholder.ACTION, resolveTranslation(Translation.LOCK, player)
+            )
+        );
+         */
 
         event.setCancelled(true);
 
     }
 
+    // For some reason this is needed for locking chest boats so the inventory does not open
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryOpen(InventoryOpenEvent event) {
         if (pendingLocking.containsKey(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
-            return;
         }
     }
 }
