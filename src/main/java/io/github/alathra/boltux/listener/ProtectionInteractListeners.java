@@ -68,7 +68,7 @@ public class ProtectionInteractListeners implements Listener {
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner) {
             if (player.isSneaking()) {
-                GuiHandler.generateProtectionOwnerGUI(player, protection, block.getLocation());
+                GuiHandler.generateMainMenu(player, protection, block.getLocation());
                 event.setCancelled(true);
                 return;
             }
@@ -107,7 +107,7 @@ public class ProtectionInteractListeners implements Listener {
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner) {
             if (player.isSneaking()) {
-                GuiHandler.generateProtectionOwnerGUI(player, protection, entity.getLocation());
+                GuiHandler.generateMainMenu(player, protection, entity.getLocation());
                 event.setCancelled(true);
                 return;
             }
@@ -155,7 +155,7 @@ public class ProtectionInteractListeners implements Listener {
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner) {
             if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
-                GuiHandler.generateProtectionOwnerGUI(player, protection, entity.getLocation());
+                GuiHandler.generateMainMenu(player, protection, entity.getLocation());
                 event.setCancelled(true);
                 return;
             }

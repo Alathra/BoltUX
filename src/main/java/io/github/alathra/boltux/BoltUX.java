@@ -21,9 +21,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.popcraft.bolt.BoltPlugin;
 
-/**
- * Main class.
- */
 public class BoltUX extends JavaPlugin {
     private static BoltUX instance;
     private ConfigHandler configHandler;
@@ -43,11 +40,6 @@ public class BoltUX extends JavaPlugin {
     // Internal
     private static BoltPlugin boltPlugin;
 
-    /**
-     * Gets plugin instance.
-     *
-     * @return the plugin instance
-     */
     public static BoltUX getInstance() {
         return instance;
     }
@@ -149,11 +141,6 @@ public class BoltUX extends JavaPlugin {
         return boltPlugin;
     }
 
-    /**
-     * Gets config handler.
-     *
-     * @return the config handler
-     */
     @NotNull
     public ConfigHandler getConfigHandler() {
         return configHandler;
