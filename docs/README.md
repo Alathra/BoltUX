@@ -1,11 +1,11 @@
 <h1 style="text-align:center;">BoltUX - An Unofficial Bolt Expansion</h1>
 <p style="text-align:center;">
-    <img alt="GitHub License" src="https://img.shields.io/github/license/Alathra/Template-Gradle-Plugin?style=for-the-badge&color=blue&labelColor=141417">
-    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/Alathra/Template-Gradle-Plugin/total?style=for-the-badge&labelColor=141417">
-    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/Alathra/Template-Gradle-Plugin?include_prereleases&sort=semver&style=for-the-badge&label=LATEST%20VERSION&labelColor=141417">
-    <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/Alathra/Template-Gradle-Plugin/ci.yml?style=for-the-badge&labelColor=141417">
-    <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/Alathra/Template-Gradle-Plugin?style=for-the-badge&labelColor=141417">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Alathra/Template-Gradle-Plugin?style=for-the-badge&labelColor=141417">
+    <img alt="GitHub License" src="https://img.shields.io/github/license/Alathra/BoltUX?style=for-the-badge&color=blue&labelColor=141417">
+    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/Alathra/BoltUX/total?style=for-the-badge&labelColor=141417">
+    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/Alathra/BoltUX?include_prereleases&sort=semver&style=for-the-badge&label=LATEST%20VERSION&labelColor=141417">
+    <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/Alathra/BoltUX/ci.yml?style=for-the-badge&labelColor=141417">
+    <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/Alathra/BoltUX?style=for-the-badge&labelColor=141417">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Alathra/BoltUX?style=for-the-badge&labelColor=141417">
 </p>
 
 ---
