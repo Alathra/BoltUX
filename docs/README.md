@@ -12,10 +12,13 @@
 
 ## Description
 
-BoltUX (Bolt User Experience) primarily seeks to provide a GUI interface for [Bolt](https://github.com/pop4959/Bolt) commands and interactions, as well additonal user feedback. At this time it is only supported on Bukkit/Paper servers for Minecraft 1.21.4. This plugin is inspired by projects like [TownMenu](https://github.com/cobrex1/TownyMenu), which provide GUIs for feature-rich, command-based plugins. By providing user interfaces, projects like TownyMenu and BoltUX make it easier for most players to use their parent plugin by abstracting away commands and granular functionality. Since the parent plugin's (Bolt's) commands are retained, more experienced players (or those who prefer commands) can use commands in conjuction with, or in the place of the GUI menus.
+BoltUX (Bolt User Experience) primarily seeks to provide a GUI interfaces for [Bolt](https://github.com/pop4959/Bolt) commands and interactions, as well additonal user feedback. At this time it is only supported on Bukkit/Paper servers for Minecraft 1.21.4. This plugin is inspired by projects like [TownMenu](https://github.com/cobrex1/TownyMenu), which provide GUIs for feature-rich, command-based plugins. By providing user interfaces, projects like TownyMenu and BoltUX make it easier for most players to use their parent plugin by abstracting away commands and granular functionality. Since the parent plugin's (Bolt's) commands are retained, more experienced players (or those who prefer commands) can use commands in conjuction with, or in the place of the GUI menus.
 
 ### Features
+##### Custom Lock Item
+BoltUX adds support for a custom lock item that can be required to create protections instead of using commands. An [example resourcepack](https://github.com/Alathra/BoltUX/blob/main/BoltUX-Resourcepack-1.0.zip) is included to provide a custom texture and model for the lock item. If this feature is enabled, protections are created by **shift right clicking with the lock item**. It using this feature, it is highly recommended that you disable the **bolt.command.lock** permission node so that users cannot circumvent the item by using the **/bolt lock** command.
 
+![Lock Item Usage](https://github.com/Alathra/BoltUX/blob/main/images/lock_user.gif "Lock Usage")
 
 ---
 
