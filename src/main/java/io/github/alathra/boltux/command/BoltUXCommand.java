@@ -7,17 +7,17 @@ import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import io.github.alathra.boltux.api.BoltUXAPI;
+import io.github.alathra.boltux.data.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 class BoltUXCommand {
-    private static final String ADMIN_PERM = "boltux.admin";
 
     protected BoltUXCommand() {
         new CommandAPICommand("boltux")
             .withFullDescription("BoltUX commands.")
             .withShortDescription("BoltUX commands.")
-            .withPermission(ADMIN_PERM)
+            .withPermission(Permissions.ADMIN_PERMISSION)
             .withSubcommands(
                 GetLockCommand(),
                 new TranslationCommand().command()
@@ -35,7 +35,7 @@ class BoltUXCommand {
         return new CommandAPICommand("getlock")
             .withFullDescription("Gives yourself the lock item.")
             .withShortDescription("Gives lock item.")
-            .withPermission(ADMIN_PERM)
+            .withPermission(Permissions.ADMIN_PERMISSION)
             .withOptionalArguments(
                 new IntegerArgument("amount")
                     .replaceSuggestions(ArgumentSuggestions.strings("64", "32", "16"))
