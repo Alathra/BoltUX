@@ -9,12 +9,10 @@ import dev.triumphteam.gui.guis.PaginatedGui;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.gui.GuiHelper;
-import io.github.alathra.boltux.utility.BoltUtil;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -89,6 +87,6 @@ public class TransferMenu {
     }
 
     public static void populateContent(PaginatedGui gui, Player player, Protection protection) {
-        GuiHelper.getSuggestedPlayers(player).forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToTransferableAccessIcon(suggestedPlayer, protection)));
+        GuiHelper.getSuggestedPlayers(player).forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToTransferableAccessIcon(gui, player, suggestedPlayer, protection)));
     }
 }

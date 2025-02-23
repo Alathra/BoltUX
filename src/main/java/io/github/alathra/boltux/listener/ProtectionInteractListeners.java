@@ -4,6 +4,7 @@ import com.destroystokyo.paper.MaterialTags;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.core.EntityGroups;
 import io.github.alathra.boltux.core.MaterialGroups;
+import io.github.alathra.boltux.core.Permissions;
 import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
@@ -66,8 +67,8 @@ public class ProtectionInteractListeners implements Listener {
 
         // Determine if player is protection owner
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
-        if (isOwner) {
-            if (player.isSneaking()) {
+        if (isOwner || player.hasPermission(Permissions.ADMIN_PERMISSION)) {
+            if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                 GuiHandler.generateMainMenu(player, protection, block.getLocation());
                 event.setCancelled(true);
                 return;
@@ -105,8 +106,8 @@ public class ProtectionInteractListeners implements Listener {
 
         // Determine if player is protection owner
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
-        if (isOwner) {
-            if (player.isSneaking()) {
+        if (isOwner || player.hasPermission(Permissions.ADMIN_PERMISSION)) {
+            if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                 GuiHandler.generateMainMenu(player, protection, entity.getLocation());
                 event.setCancelled(true);
                 return;
@@ -153,7 +154,7 @@ public class ProtectionInteractListeners implements Listener {
 
         // Determine if player is protection owner
         boolean isOwner = protection.getOwner().equals(player.getUniqueId());
-        if (isOwner) {
+        if (isOwner || player.hasPermission(Permissions.ADMIN_PERMISSION)) {
             if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                 GuiHandler.generateMainMenu(player, protection, entity.getLocation());
                 event.setCancelled(true);

@@ -21,7 +21,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.Protection;
-import org.popcraft.bolt.util.Group;
 
 import java.util.HashSet;
 import java.util.List;
@@ -86,7 +85,7 @@ public class ProtectionAccessAddMenu {
         ));
         backButton.setItemMeta(backButtonMeta);
         base.setItem(6, 1, ItemBuilder.from(backButton).asGuiItem(event -> {
-            GuiHandler.generateMainMenu(player, protection, protectionLocation);
+            GuiHandler.generateProtectionAccessMenu(player, protection, protectionLocation);
         }));
 
         return base;
@@ -95,7 +94,7 @@ public class ProtectionAccessAddMenu {
     public static void populateContent(PaginatedGui gui, Player player, Protection protection) {
 
         // Get all groups the player owns that haven't been granted access
-        BoltUtil.getGroupsWithoutAccess(protection).forEach(group -> gui.addItem(GuiHelper.groupToAddableAccessIcon(group)));
+        BoltUtil.getGroupsWithoutAccess(protection).forEach(group -> gui.addItem(GuiHelper.groupToAddableAccessIcon(gui, protection, group)));
 
         // Get suggested players that haven't been granted access
         Set<OfflinePlayer> playerSuggestions = new HashSet<>(GuiHelper.getSuggestedPlayers(player));

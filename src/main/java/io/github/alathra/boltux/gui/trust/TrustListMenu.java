@@ -14,14 +14,12 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.Protection;
-import org.popcraft.bolt.util.Group;
 
 import java.util.List;
 import java.util.UUID;
@@ -91,8 +89,8 @@ public class TrustListMenu {
     }
 
     public static void populateContent(PaginatedGui gui, Player player) {
-        BoltUtil.getTrustedGroups(player).forEach(trustedGroup -> gui.addItem(GuiHelper.groupToRemovableTrustIcon(trustedGroup)));
-        BoltUtil.getTrustedPlayers(player).forEach(trustedPlayer -> gui.addItem(GuiHelper.playerToRemovableTrustIcon(trustedPlayer)));
+        BoltUtil.getTrustedGroups(player).forEach(trustedGroup -> gui.addItem(GuiHelper.groupToRemovableTrustIcon(gui, player, trustedGroup)));
+        BoltUtil.getTrustedPlayers(player).forEach(trustedPlayer -> gui.addItem(GuiHelper.playerToRemovableTrustIcon(gui, player, trustedPlayer)));
     }
 
 }

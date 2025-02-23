@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.popcraft.bolt.data.Store;
 import org.popcraft.bolt.protection.Protection;
 import org.popcraft.bolt.util.Group;
 
@@ -91,18 +92,22 @@ public class GuiHelper {
         return sortedPlayers;
     }
 
-    public static GuiItem playerToRemovableAccessIcon(PaginatedGui gui, OfflinePlayer player, Protection protection) {
+    public static GuiItem playerToRemovableAccessIcon(PaginatedGui gui, Protection protection, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
         skullMeta.setPlayerProfile(player.getPlayerProfile());
         skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
         skullMeta.lore(List.of(
-            ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false)
+            ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Click to revoke access").build().decoration(TextDecoration.ITALIC, false)
         ));
         skullItem.setItemMeta(skullMeta);
         return ItemBuilder.from(skullItem).asGuiItem(event -> {
             protection.getAccess().remove("player:" + player.getUniqueId());
             BoltUX.getBoltPlugin().saveProtection(protection);
+            skullItem.setAmount(0);
+            final int slot = event.getSlot();
+            gui.updateItem(slot, skullItem);
         });
     }
 
@@ -112,36 +117,44 @@ public class GuiHelper {
         skullMeta.setPlayerProfile(player.getPlayerProfile());
         skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
         skullMeta.lore(List.of(
-            ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false)
+            ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Click to grant access").build().decoration(TextDecoration.ITALIC, false)
         ));
         skullItem.setItemMeta(skullMeta);
         return ItemBuilder.from(skullItem).asGuiItem(event -> {
-            int slot = event.getSlot();
+            final int slot = event.getSlot();
             protection.getAccess().put("player:" + player.getUniqueId(), "normal");
             BoltUX.getBoltPlugin().saveProtection(protection);
-            skullItem.addEnchantment(Enchantment.SHARPNESS, 1);
-            skullMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            skullItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+            skullItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            skullMeta.lore(List.of(
+                ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
+                ColorParser.of("<green>Access has been granted").build().decoration(TextDecoration.ITALIC, false)
+
+            ));
             skullItem.setItemMeta(skullMeta);
             gui.updateItem(slot, skullItem);
         });
     }
 
-    public static GuiItem playerToTransferableAccessIcon(OfflinePlayer player, Protection protection) {
+    public static GuiItem playerToTransferableAccessIcon(PaginatedGui gui, Player viewer, OfflinePlayer player, Protection protection) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
         skullMeta.setPlayerProfile(player.getPlayerProfile());
         skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
         skullMeta.lore(List.of(
-            ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false)
+            ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Click to transfer ownership").build().decoration(TextDecoration.ITALIC, false)
         ));
         skullItem.setItemMeta(skullMeta);
         return ItemBuilder.from(skullItem).asGuiItem(event -> {
             protection.setOwner(player.getUniqueId());
             BoltUX.getBoltPlugin().saveProtection(protection);
+            gui.close(viewer);
         });
     }
 
-    public static GuiItem playerToRemovableTrustIcon(OfflinePlayer player) {
+    public static GuiItem playerToRemovableTrustIcon(PaginatedGui gui, Player viewer, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
         skullMeta.setPlayerProfile(player.getPlayerProfile());
@@ -151,11 +164,18 @@ public class GuiHelper {
         ));
         skullItem.setItemMeta(skullMeta);
         return ItemBuilder.from(skullItem).asGuiItem(event -> {
-
+            final int slot = event.getSlot();
+            final Store store =BoltUX.getBoltPlugin().getBolt().getStore();
+            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
+                accessList.getAccess().remove("player:" + player.getUniqueId());
+                store.saveAccessList(accessList);
+                skullItem.setAmount(0);
+                gui.updateItem(slot, skullItem);
+            });
         });
     }
 
-    public static GuiItem playerToAddableTrustIcon(OfflinePlayer player) {
+    public static GuiItem playerToAddableTrustIcon(PaginatedGui gui, Player viewer, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
         skullMeta.setPlayerProfile(player.getPlayerProfile());
@@ -165,11 +185,24 @@ public class GuiHelper {
         ));
         skullItem.setItemMeta(skullMeta);
         return ItemBuilder.from(skullItem).asGuiItem(event -> {
-
+            final int slot = event.getSlot();
+            final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
+            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
+                accessList.getAccess().put("player:" + player.getUniqueId(), "normal");
+                store.saveAccessList(accessList);
+                skullItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+                skullItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                skullMeta.lore(List.of(
+                    ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
+                    ColorParser.of("<green>Trust has been granted").build().decoration(TextDecoration.ITALIC, false)
+                ));
+                skullItem.setItemMeta(skullMeta);
+                gui.updateItem(slot, skullItem);
+            });
         });
     }
 
-    public static GuiItem groupToRemovableAccessIcon(Group group) {
+    public static GuiItem groupToRemovableAccessIcon(PaginatedGui gui, Protection protection, Group group) {
         ItemStack groupItem = new ItemStack(Material.CRAFTING_TABLE);
         ItemMeta groupMeta = groupItem.getItemMeta();
         String groupMemberNames = String.join(", ",
@@ -181,15 +214,81 @@ public class GuiHelper {
         groupMeta.lore(List.of(
             ColorParser.of("<gray>Group").build().decoration(TextDecoration.ITALIC, false),
             ColorParser.of("<gray>Owner: " + Bukkit.getOfflinePlayer(group.getOwner()).getName()).build().decoration(TextDecoration.ITALIC, false),
-            ColorParser.of("<gray>Members: " + groupMemberNames).build().decoration(TextDecoration.ITALIC, false)
+            ColorParser.of("<gray>Members: " + groupMemberNames).build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Click to revoke access").build().decoration(TextDecoration.ITALIC, false)
         ));
         groupItem.setItemMeta(groupMeta);
         return ItemBuilder.from(groupItem).asGuiItem(event -> {
-
+            protection.getAccess().remove("group:" + group.getName());
+            BoltUX.getBoltPlugin().saveProtection(protection);
+            groupItem.setAmount(0);
+            final int slot = event.getSlot();
+            gui.updateItem(slot, groupItem);
         });
     }
 
-    public static GuiItem groupToAddableAccessIcon(Group group) {
+    public static GuiItem groupToAddableAccessIcon(PaginatedGui gui, Protection protection, Group group) {
+        ItemStack groupItem = new ItemStack(Material.CRAFTING_TABLE);
+        ItemMeta groupMeta = groupItem.getItemMeta();
+        String groupMemberNames = String.join(", ",
+            group.getMembers().stream()
+                .map(uuid -> Bukkit.getOfflinePlayer(uuid).getName())
+                .collect(Collectors.toSet())
+        );
+        groupMeta.displayName(ColorParser.of("<blue>" + group.getName()).build().decoration(TextDecoration.ITALIC, false));
+        groupMeta.lore(List.of(
+            ColorParser.of("<gray>Group").build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Owner: " + Bukkit.getOfflinePlayer(group.getOwner()).getName()).build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Members: " + groupMemberNames).build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Click to grant access").build().decoration(TextDecoration.ITALIC, false)
+        ));
+        groupItem.setItemMeta(groupMeta);
+        return ItemBuilder.from(groupItem).asGuiItem(event -> {
+            final int slot = event.getSlot();
+            protection.getAccess().put("group:" + group.getName(), "normal");
+            BoltUX.getBoltPlugin().saveProtection(protection);
+            groupItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+            groupItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            groupMeta.lore(List.of(
+                ColorParser.of("<gray>Group").build().decoration(TextDecoration.ITALIC, false),
+                ColorParser.of("<gray>Owner: " + Bukkit.getOfflinePlayer(group.getOwner()).getName()).build().decoration(TextDecoration.ITALIC, false),
+                ColorParser.of("<gray>Members: " + groupMemberNames).build().decoration(TextDecoration.ITALIC, false),
+                ColorParser.of("<green>Access has been granted").build().decoration(TextDecoration.ITALIC, false)
+            ));
+            groupItem.setItemMeta(groupMeta);
+            gui.updateItem(slot, groupItem);
+        });
+    }
+
+    public static GuiItem groupToRemovableTrustIcon(PaginatedGui gui, Player viewer, Group group) {
+        ItemStack groupItem = new ItemStack(Material.CRAFTING_TABLE);
+        ItemMeta groupMeta = groupItem.getItemMeta();
+        String groupMemberNames = String.join(", ",
+            group.getMembers().stream()
+                .map(uuid -> Bukkit.getOfflinePlayer(uuid).getName())
+                .collect(Collectors.toSet())
+        );
+        groupMeta.displayName(ColorParser.of("<blue>" + group.getName()).build().decoration(TextDecoration.ITALIC, false));
+        groupMeta.lore(List.of(
+            ColorParser.of("<gray>Group").build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Owner: " + Bukkit.getOfflinePlayer(group.getOwner()).getName()).build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Members: " + groupMemberNames).build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Click to revoke trust").build().decoration(TextDecoration.ITALIC, false)
+        ));
+        groupItem.setItemMeta(groupMeta);
+        return ItemBuilder.from(groupItem).asGuiItem(event -> {
+            final int slot = event.getSlot();
+            final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
+            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
+                accessList.getAccess().remove("group:" + group.getName());
+                store.saveAccessList(accessList);
+                groupItem.setAmount(0);
+                gui.updateItem(slot, groupItem);
+            });
+        });
+    }
+
+    public static GuiItem groupToAddableTrustIcon(PaginatedGui gui, Player viewer, Group group) {
         ItemStack groupItem = new ItemStack(Material.CRAFTING_TABLE);
         ItemMeta groupMeta = groupItem.getItemMeta();
         String groupMemberNames = String.join(", ",
@@ -205,47 +304,22 @@ public class GuiHelper {
         ));
         groupItem.setItemMeta(groupMeta);
         return ItemBuilder.from(groupItem).asGuiItem(event -> {
-
-        });
-    }
-
-    public static GuiItem groupToRemovableTrustIcon(Group group) {
-        ItemStack groupItem = new ItemStack(Material.CRAFTING_TABLE);
-        ItemMeta groupMeta = groupItem.getItemMeta();
-        String groupMemberNames = String.join(", ",
-            group.getMembers().stream()
-                .map(uuid -> Bukkit.getOfflinePlayer(uuid).getName())
-                .collect(Collectors.toSet())
-        );
-        groupMeta.displayName(ColorParser.of("<blue>" + group.getName()).build().decoration(TextDecoration.ITALIC, false));
-        groupMeta.lore(List.of(
-            ColorParser.of("<gray>Group").build().decoration(TextDecoration.ITALIC, false),
-            ColorParser.of("<gray>Owner: " + Bukkit.getOfflinePlayer(group.getOwner()).getName()).build().decoration(TextDecoration.ITALIC, false),
-            ColorParser.of("<gray>Members: " + groupMemberNames).build().decoration(TextDecoration.ITALIC, false)
-        ));
-        groupItem.setItemMeta(groupMeta);
-        return ItemBuilder.from(groupItem).asGuiItem(event -> {
-
-        });
-    }
-
-    public static GuiItem groupToAddableTrustIcon(Group group) {
-        ItemStack groupItem = new ItemStack(Material.CRAFTING_TABLE);
-        ItemMeta groupMeta = groupItem.getItemMeta();
-        String groupMemberNames = String.join(", ",
-            group.getMembers().stream()
-                .map(uuid -> Bukkit.getOfflinePlayer(uuid).getName())
-                .collect(Collectors.toSet())
-        );
-        groupMeta.displayName(ColorParser.of("<blue>" + group.getName()).build().decoration(TextDecoration.ITALIC, false));
-        groupMeta.lore(List.of(
-            ColorParser.of("<gray>Group").build().decoration(TextDecoration.ITALIC, false),
-            ColorParser.of("<gray>Owner: " + Bukkit.getOfflinePlayer(group.getOwner()).getName()).build().decoration(TextDecoration.ITALIC, false),
-            ColorParser.of("<gray>Members: " + groupMemberNames).build().decoration(TextDecoration.ITALIC, false)
-        ));
-        groupItem.setItemMeta(groupMeta);
-        return ItemBuilder.from(groupItem).asGuiItem(event -> {
-
+            final int slot = event.getSlot();
+            final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
+            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
+                accessList.getAccess().put("group:" + group.getName(), "normal");
+                store.saveAccessList(accessList);
+                groupItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+                groupItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                groupMeta.lore(List.of(
+                    ColorParser.of("<gray>Group").build().decoration(TextDecoration.ITALIC, false),
+                    ColorParser.of("<gray>Owner: " + Bukkit.getOfflinePlayer(group.getOwner()).getName()).build().decoration(TextDecoration.ITALIC, false),
+                    ColorParser.of("<gray>Members: " + groupMemberNames).build().decoration(TextDecoration.ITALIC, false),
+                    ColorParser.of("<green>Trust has been granted").build().decoration(TextDecoration.ITALIC, false)
+                ));
+                groupItem.setItemMeta(groupMeta);
+                gui.updateItem(slot, groupItem);
+            });
         });
     }
 

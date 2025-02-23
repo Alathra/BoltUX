@@ -89,8 +89,8 @@ public class ProtectionAccessListMenu {
     }
 
     public static void populateContent(PaginatedGui gui, Protection protection) {
-        BoltUtil.getGroupAccessSet(protection).forEach(accessGroup -> gui.addItem(GuiHelper.groupToRemovableAccessIcon(accessGroup)));
-        BoltUtil.getPlayerAccessSet(protection).forEach(accessPlayer -> gui.addItem(GuiHelper.playerToRemovableAccessIcon(gui, accessPlayer, protection)));
+        BoltUtil.getGroupAccessSet(protection).forEach(accessGroup -> gui.addItem(GuiHelper.groupToRemovableAccessIcon(gui, protection, accessGroup)));
+        BoltUtil.getPlayerAccessSet(protection).forEach(accessPlayer -> gui.addItem(GuiHelper.playerToRemovableAccessIcon(gui, protection, accessPlayer)));
     }
 
 }

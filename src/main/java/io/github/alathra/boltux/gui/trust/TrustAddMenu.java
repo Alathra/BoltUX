@@ -103,11 +103,11 @@ public class TrustAddMenu {
             store.loadGroup(groupName).thenAccept(untrustedGroups::add);
         }
         untrustedGroups.removeAll(BoltUtil.getTrustedGroups(player));
-        untrustedGroups.forEach(group -> gui.addItem(GuiHelper.groupToAddableTrustIcon(group)));
+        untrustedGroups.forEach(group -> gui.addItem(GuiHelper.groupToAddableTrustIcon(gui, player, group)));
 
         // Get untrusted suggested players
         Set<OfflinePlayer> suggestedPlayers = new HashSet<>(GuiHelper.getSuggestedPlayers(player));
         suggestedPlayers.removeAll(BoltUtil.getTrustedPlayers(player));
-        suggestedPlayers.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableTrustIcon(suggestedPlayer)));
+        suggestedPlayers.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableTrustIcon(gui, player, suggestedPlayer)));
     }
 }

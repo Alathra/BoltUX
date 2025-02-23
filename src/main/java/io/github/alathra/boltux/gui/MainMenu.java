@@ -126,6 +126,7 @@ public class MainMenu {
             if (Settings.isLockingEnabled() && Settings.getLockItemEnabledWorlds().contains(player.getWorld())) {
                 player.getWorld().dropItemNaturally(protectionLocation, BoltUXAPI.getLockItem());
             }
+            boltPlugin.removeProtection(protection);
             gui.close(player);
         }));
 
