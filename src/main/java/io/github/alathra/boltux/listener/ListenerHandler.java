@@ -18,8 +18,6 @@ public class ListenerHandler implements Reloadable {
     public void onEnable() {
         // Template listeners
         plugin.getServer().getPluginManager().registerEvents(new UpdateCheckListener(), plugin);
-        if (BoltUX.getVaultHook().isHookLoaded())
-            plugin.getServer().getPluginManager().registerEvents(new VaultListener(), plugin);
         // BoltUX specific
         plugin.getServer().getPluginManager().registerEvents(new LockUseListeners(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new LockReturnListeners(), plugin);

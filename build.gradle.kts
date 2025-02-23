@@ -28,18 +28,12 @@ repositories {
 
     maven("https://maven.athyrium.eu/releases")
 
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") // PlaceholderAPI
     maven("https://repo.codemc.org/repository/maven-public/") {
         content {
             includeGroup("com.github.retrooper") // PacketEvents
         }
     }
     maven("https://maven.evokegames.gg/snapshots") // EntityLib
-    maven("https://jitpack.io/") {
-        content {
-            includeGroup("com.github.MilkBowl") // VaultAPI
-        }
-    }
     maven("https://repo.codemc.io/repository/maven-public/") // Bolt
     maven("https://maven.devs.beer/") // ItemsAdderAPI
     maven("https://repo.nexomc.com/releases") // Nexo
@@ -71,13 +65,8 @@ dependencies {
 
     // Plugin dependencies
     compileOnly(libs.boltbukkit)
-    implementation(libs.bstats)
-    compileOnly(libs.vault)
     implementation(libs.packetevents)
     implementation(libs.entitylib)
-    compileOnly(libs.placeholderapi) {
-        exclude("me.clip.placeholderapi.libs", "kyori")
-    }
     compileOnly(libs.itemsadder)
     compileOnly(libs.nexo)
     compileOnly(libs.oraxen)
@@ -128,7 +117,6 @@ tasks {
         reloc("com.github.milkdrinkers.colorparser", "colorparser")
         reloc("dev.jorel.commandapi", "commandapi")
         reloc("dev.triumphteam.gui", "gui")
-        reloc("org.bstats", "bstats")
         reloc("com.github.retrooper", "packetevents")
         reloc("me.tofaa.entitylib", "entitylib")
 
@@ -174,7 +162,7 @@ bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
     // Misc properties
     load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
     depend = listOf("Bolt")
-    softDepend = listOf("Vault", "ItemsAdder", "Nexo", "Oraxen", "Towny")
+    softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny")
 }
 
 fun applyCustomVersion() {

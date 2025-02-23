@@ -18,11 +18,8 @@ triumph-gui = "dev.triumphteam:triumph-gui:3.1.11"
 
 # Plugin dependencies
 boltbukkit = "org.popcraft:bolt-bukkit:1.1.43"
-bstats = "org.bstats:bstats-bukkit:3.1.0"
-vault = "com.github.MilkBowl:VaultAPI:1.7.1"
 packetevents = "com.github.retrooper:packetevents-spigot:2.7.0"
 entitylib = "me.tofaa.entitylib:spigot:3.0.3-SNAPSHOT"
-placeholderapi = "me.clip:placeholderapi:2.11.6"
 itemsadder = "dev.lone:api-itemsadder:4.0.8"
 nexo = "com.nexomc:nexo:0.10.0"
 oraxen = "io.th0rgal:oraxen:1.189.0"

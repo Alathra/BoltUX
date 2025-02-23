@@ -30,9 +30,6 @@ public class BoltUX extends JavaPlugin {
     private UpdateChecker updateChecker;
 
     // Hooks
-    private static BStatsHook bStatsHook;
-    private static VaultHook vaultHook;
-    private static PAPIHook papiHook;
     private static ItemsAdderHook itemsAdderHook;
     private static NexoHook nexoHook;
     private static OraxenHook oraxenHook;
@@ -53,9 +50,6 @@ public class BoltUX extends JavaPlugin {
         commandHandler = new CommandHandler(instance);
         listenerHandler = new ListenerHandler(instance);
         updateChecker = new UpdateChecker();
-        bStatsHook = new BStatsHook(instance);
-        vaultHook = new VaultHook(instance);
-        papiHook = new PAPIHook(instance);
         itemsAdderHook = new ItemsAdderHook(instance);
         nexoHook = new NexoHook(instance);
         oraxenHook = new OraxenHook(instance);
@@ -66,9 +60,6 @@ public class BoltUX extends JavaPlugin {
         commandHandler.onLoad();
         listenerHandler.onLoad();
         updateChecker.onLoad();
-        bStatsHook.onLoad();
-        vaultHook.onLoad();
-        papiHook.onLoad();
         itemsAdderHook.onLoad();
         nexoHook.onLoad();
         oraxenHook.onLoad();
@@ -83,9 +74,6 @@ public class BoltUX extends JavaPlugin {
         configHandler.onEnable();
         translationManager.onEnable();
         updateChecker.onEnable();
-        bStatsHook.onEnable();
-        vaultHook.onEnable();
-        papiHook.onEnable();
         itemsAdderHook.onEnable();
         nexoHook.onEnable();
         oraxenHook.onEnable();
@@ -102,12 +90,6 @@ public class BoltUX extends JavaPlugin {
 
         boltPlugin = (BoltPlugin) Bukkit.getServer().getPluginManager().getPlugin("Bolt");
 
-        if (vaultHook.isHookLoaded()) {
-            Logger.get().info(ColorParser.of("<green>Vault has been found on this server. Vault support enabled.").build());
-        } else {
-            Logger.get().warn(ColorParser.of("<yellow>Vault is not installed on this server. Vault support has been disabled.").build());
-        }
-
         if (itemsAdderHook.isHookLoaded()) {
             Logger.get().info(ColorParser.of("<green>ItemsAdder has been found on this server. ItemsAdder support enabled.").build());
         }
@@ -118,6 +100,10 @@ public class BoltUX extends JavaPlugin {
 
         if (oraxenHook.isHookLoaded()) {
             Logger.get().info(ColorParser.of("<green>Oraxen has been found on this server. Oraxen support enabled.").build());
+        }
+
+        if (townyHook.isHookLoaded()) {
+            Logger.get().info(ColorParser.of("<green>Towny has been found on this server. Towny support enabled.").build());
         }
 
         commandHandler.onEnable();
@@ -131,9 +117,6 @@ public class BoltUX extends JavaPlugin {
         commandHandler.onDisable();
         listenerHandler.onDisable();
         updateChecker.onDisable();
-        bStatsHook.onDisable();
-        vaultHook.onDisable();
-        papiHook.onDisable();
         itemsAdderHook.onDisable();
         nexoHook.onDisable();
         oraxenHook.onDisable();
@@ -159,16 +142,6 @@ public class BoltUX extends JavaPlugin {
     @NotNull
     public UpdateChecker getUpdateChecker() {
         return updateChecker;
-    }
-
-    @NotNull
-    public static BStatsHook getBStatsHook() {
-        return bStatsHook;
-    }
-
-    @NotNull
-    public static VaultHook getVaultHook() {
-        return vaultHook;
     }
 
     @NotNull
