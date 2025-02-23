@@ -16,20 +16,28 @@ import org.popcraft.bolt.protection.Protection;
 
 import java.util.List;
 
-public class ProtectionEditMenu {
+public class ProtectionAccessMenu {
 
     private static BoltPlugin boltPlugin;
 
     public static Gui generateBase() {
         Gui base = Gui.gui()
             .title(ColorParser.of("Access Options").build())
-            .rows(1)
+            .rows(3)
             .disableItemPlace()
             .disableItemSwap()
             .disableItemDrop()
             .disableItemTake()
             .create();
         boltPlugin = BoltUX.getBoltPlugin();
+
+        // Apply gray glass pane border
+        ItemStack grayBorder = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        ItemMeta grayBorderItemMeta = grayBorder.getItemMeta();
+        grayBorderItemMeta.displayName(ColorParser.of("").build());
+        grayBorder.setItemMeta(grayBorderItemMeta);
+        base.getFiller().fillBorder(ItemBuilder.from(grayBorder).asGuiItem());
+
         return base;
     }
 
@@ -44,8 +52,8 @@ public class ProtectionEditMenu {
             ColorParser.of("<gray>Applies to this specific protection").build().decoration(TextDecoration.ITALIC, false)
         ));
         addAccessButton.setItemMeta(addAccessButtonMeta);
-        gui.setItem(1, 1, ItemBuilder.from(addAccessButton).asGuiItem(event -> {
-            GuiHandler.generateProtectionEditAddMenu(player, protection, protectionLocation);
+        gui.setItem(2, 4, ItemBuilder.from(addAccessButton).asGuiItem(event -> {
+            GuiHandler.generateProtectionAccessAddMenu(player, protection, protectionLocation);
         }));
 
         // List/Remove Access Button
@@ -57,19 +65,19 @@ public class ProtectionEditMenu {
             ColorParser.of("<gray>Applies to this specific protection").build().decoration(TextDecoration.ITALIC, false)
         ));
         listRemoveAccessButton.setItemMeta(listRemoveAccessMeta);
-        gui.setItem(1, 2, ItemBuilder.from(listRemoveAccessButton).asGuiItem(event -> {
-            GuiHandler.generateProtectionEditListMenu(player, protection, protectionLocation);
+        gui.setItem(2, 6, ItemBuilder.from(listRemoveAccessButton).asGuiItem(event -> {
+            GuiHandler.generateProtectionAccessListMenu(player, protection, protectionLocation);
         }));
 
         // Back button
-        ItemStack backButton = new ItemStack(Material.BARRIER);
+        ItemStack backButton = new ItemStack(Material.PAPER);
         ItemMeta backButtonMeta = backButton.getItemMeta();
         backButtonMeta.displayName(ColorParser.of("<red>Back").build().decoration(TextDecoration.ITALIC, false));
         backButtonMeta.lore(List.of(
             ColorParser.of("<gray>Return to main menu").build().decoration(TextDecoration.ITALIC, false)
         ));
         backButton.setItemMeta(backButtonMeta);
-        gui.setItem(1, 9, ItemBuilder.from(backButton).asGuiItem(event -> {
+        gui.setItem(3, 1, ItemBuilder.from(backButton).asGuiItem(event -> {
             GuiHandler.generateMainMenu(player, protection, protectionLocation);
         }));
 

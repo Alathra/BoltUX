@@ -5,29 +5,19 @@ import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.popcraft.bolt.BoltPlugin;
-import org.popcraft.bolt.lang.Translation;
-import org.popcraft.bolt.lang.Translator;
 import org.popcraft.bolt.protection.Protection;
-import org.popcraft.bolt.util.BoltComponents;
 import org.popcraft.bolt.util.BoltPlayer;
 
 import java.util.*;
@@ -35,14 +25,10 @@ import java.util.*;
 public class LockUseListeners implements Listener {
 
     private final BoltPlugin boltPlugin;
-    private final MiniMessage miniMessage;
     // Player UUID, entity UUID
-    private final Map<UUID, UUID> pendingLocking;
 
     public LockUseListeners() {
         boltPlugin = BoltUX.getBoltPlugin();
-        miniMessage = MiniMessage.miniMessage();
-        pendingLocking = new HashMap<>();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -129,11 +115,6 @@ public class LockUseListeners implements Listener {
             return;
         }
         Entity entity = event.getRightClicked();
-        if (pendingLocking.containsKey(player.getUniqueId())) {
-            pendingLocking.remove(player.getUniqueId());
-            event.setCancelled(true);
-            return;
-        }
         if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
@@ -187,13 +168,5 @@ public class LockUseListeners implements Listener {
 
         event.setCancelled(true);
 
-    }
-
-    // For some reason this is needed for locking chest boats so the inventory does not open
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onInventoryOpen(InventoryOpenEvent event) {
-        if (pendingLocking.containsKey(event.getPlayer().getUniqueId())) {
-            event.setCancelled(true);
-        }
     }
 }

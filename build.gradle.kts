@@ -44,7 +44,9 @@ repositories {
     maven("https://maven.devs.beer/") // ItemsAdderAPI
     maven("https://repo.nexomc.com/releases") // Nexo
     maven("https://repo.oraxen.com/releases") // Oraxen
-
+    maven("https://repo.glaremasters.me/repository/towny/") { // Towny
+        content { includeGroup("com.palmergames.bukkit.towny") }
+    }
 
 }
 
@@ -79,6 +81,7 @@ dependencies {
     compileOnly(libs.itemsadder)
     compileOnly(libs.nexo)
     compileOnly(libs.oraxen)
+    compileOnly(libs.towny)
 
 }
 
@@ -150,7 +153,6 @@ tasks {
         downloadPlugins {
             modrinth("Bolt", "1.1.31")
             github("MilkBowl", "Vault", "1.7.3", "Vault.jar")
-            hangar("PlaceholderAPI", "2.11.6")
         }
     }
 }
@@ -171,7 +173,7 @@ bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
     // Misc properties
     load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
     depend = listOf("Bolt")
-    softDepend = listOf("Vault", "PlaceholderAPI", "ItemsAdder", "Nexo", "Oraxen")
+    softDepend = listOf("Vault", "ItemsAdder", "Nexo", "Oraxen", "Towny")
 }
 
 fun applyCustomVersion() {

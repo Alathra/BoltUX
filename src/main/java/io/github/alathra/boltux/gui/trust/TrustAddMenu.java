@@ -8,18 +8,25 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
+import io.github.alathra.boltux.gui.GuiHelper;
+import io.github.alathra.boltux.utility.BoltUtil;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.popcraft.bolt.BoltPlugin;
+import org.popcraft.bolt.data.Store;
 import org.popcraft.bolt.protection.Protection;
+import org.popcraft.bolt.util.Group;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class TrustAddMenu {
@@ -72,17 +79,35 @@ public class TrustAddMenu {
         }));
 
         // Back button
-        ItemStack backButton = new ItemStack(Material.BARRIER);
+        ItemStack backButton = new ItemStack(Material.PAPER);
         ItemMeta backButtonMeta = backButton.getItemMeta();
         backButtonMeta.displayName(ColorParser.of("<red>Back").build().decoration(TextDecoration.ITALIC, false));
         backButtonMeta.lore(List.of(
             ColorParser.of("<gray>Return to trust options menu").build().decoration(TextDecoration.ITALIC, false)
         ));
         backButton.setItemMeta(backButtonMeta);
-        base.setItem(1, 5, ItemBuilder.from(backButton).asGuiItem(event -> {
+        base.setItem(6, 1, ItemBuilder.from(backButton).asGuiItem(event -> {
             GuiHandler.generateTrustMenu(player, protection, protectionLocation);
         }));
 
         return base;
+    }
+
+    public static void populateContent(PaginatedGui gui, Player player) {
+        final Store store = boltPlugin.getBolt().getStore();
+
+        // Get untrusted groups
+        final Set<Group> untrustedGroups = new HashSet<>();
+        final List<String> groupNames = boltPlugin.getPlayersOwnedGroups(player);
+        for (String groupName : groupNames) {
+            store.loadGroup(groupName).thenAccept(untrustedGroups::add);
+        }
+        untrustedGroups.removeAll(BoltUtil.getTrustedGroups(player));
+        untrustedGroups.forEach(group -> gui.addItem(GuiHelper.groupToAddableTrustIcon(group)));
+
+        // Get untrusted suggested players
+        Set<OfflinePlayer> suggestedPlayers = new HashSet<>(GuiHelper.getSuggestedPlayers(player));
+        suggestedPlayers.removeAll(BoltUtil.getTrustedPlayers(player));
+        suggestedPlayers.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableTrustIcon(suggestedPlayer)));
     }
 }

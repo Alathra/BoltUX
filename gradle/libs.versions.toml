@@ -26,6 +26,7 @@ placeholderapi = "me.clip:placeholderapi:2.11.6"
 itemsadder = "dev.lone:api-itemsadder:4.0.8"
 nexo = "com.nexomc:nexo:0.10.0"
 oraxen = "io.th0rgal:oraxen:1.189.0"
+towny = "com.palmergames.bukkit.towny:towny:0.101.1.2"
 
 # Testing
 junit-bom = "org.junit:junit-bom:5.11.4"

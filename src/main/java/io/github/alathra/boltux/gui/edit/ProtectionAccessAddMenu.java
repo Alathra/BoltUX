@@ -8,21 +8,27 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
+import io.github.alathra.boltux.gui.GuiHelper;
+import io.github.alathra.boltux.utility.BoltUtil;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.Protection;
+import org.popcraft.bolt.util.Group;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-public class ProtectionEditAddMenu {
+public class ProtectionAccessAddMenu {
 
     private static BoltPlugin boltPlugin;
 
@@ -72,17 +78,29 @@ public class ProtectionEditAddMenu {
         }));
 
         // Back button
-        ItemStack backButton = new ItemStack(Material.BARRIER);
+        ItemStack backButton = new ItemStack(Material.PAPER);
         ItemMeta backButtonMeta = backButton.getItemMeta();
         backButtonMeta.displayName(ColorParser.of("<red>Back").build().decoration(TextDecoration.ITALIC, false));
         backButtonMeta.lore(List.of(
             ColorParser.of("<gray>Return to access options menu").build().decoration(TextDecoration.ITALIC, false)
         ));
         backButton.setItemMeta(backButtonMeta);
-        base.setItem(1, 5, ItemBuilder.from(backButton).asGuiItem(event -> {
+        base.setItem(6, 1, ItemBuilder.from(backButton).asGuiItem(event -> {
             GuiHandler.generateMainMenu(player, protection, protectionLocation);
         }));
 
         return base;
     }
+
+    public static void populateContent(PaginatedGui gui, Player player, Protection protection) {
+
+        // Get all groups the player owns that haven't been granted access
+        BoltUtil.getGroupsWithoutAccess(protection).forEach(group -> gui.addItem(GuiHelper.groupToAddableAccessIcon(group)));
+
+        // Get suggested players that haven't been granted access
+        Set<OfflinePlayer> playerSuggestions = new HashSet<>(GuiHelper.getSuggestedPlayers(player));
+        playerSuggestions.removeAll(BoltUtil.getPlayerAccessSet(protection));
+        playerSuggestions.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableAccessIcon(gui, suggestedPlayer, protection)));
+    }
+
 }

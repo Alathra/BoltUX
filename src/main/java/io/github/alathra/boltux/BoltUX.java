@@ -36,6 +36,7 @@ public class BoltUX extends JavaPlugin {
     private static ItemsAdderHook itemsAdderHook;
     private static NexoHook nexoHook;
     private static OraxenHook oraxenHook;
+    private static TownyHook townyHook;
 
     // Internal
     private static BoltPlugin boltPlugin;
@@ -58,6 +59,7 @@ public class BoltUX extends JavaPlugin {
         itemsAdderHook = new ItemsAdderHook(instance);
         nexoHook = new NexoHook(instance);
         oraxenHook = new OraxenHook(instance);
+        townyHook = new TownyHook(instance);
 
         configHandler.onLoad();
         translationManager.onLoad();
@@ -70,6 +72,7 @@ public class BoltUX extends JavaPlugin {
         itemsAdderHook.onLoad();
         nexoHook.onLoad();
         oraxenHook.onLoad();
+        townyHook.onLoad();
 
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
         PacketEvents.getAPI().load();
@@ -86,6 +89,7 @@ public class BoltUX extends JavaPlugin {
         itemsAdderHook.onEnable();
         nexoHook.onEnable();
         oraxenHook.onEnable();
+        townyHook.onEnable();
 
         // PacketEvents + EntityLib initialization
         PacketEvents.getAPI().init();
@@ -133,6 +137,7 @@ public class BoltUX extends JavaPlugin {
         itemsAdderHook.onDisable();
         nexoHook.onDisable();
         oraxenHook.onDisable();
+        townyHook.onDisable();
 
         PacketEvents.getAPI().terminate();
     }
@@ -179,5 +184,10 @@ public class BoltUX extends JavaPlugin {
     @NotNull
     public static OraxenHook getOraxenHook() {
         return oraxenHook;
+    }
+
+    @NotNull
+    public static TownyHook getTownyHook() {
+        return townyHook;
     }
 }

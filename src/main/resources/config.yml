@@ -11,6 +11,10 @@ GeneralSettings:
   # Amount of seconds the block glow effect lasts when the use of a locked item is denied
   blockGlowTime: 5
 
+GuiSettings:
+  # When a menu is grabbing nearby players for suggestions, this is how far it will look around the player
+  nearbyPlayersRange: 100
+
 LockItem:
   # If the lock item is enabled. All following settings this to false will make lock items do nothing
   enabled: true

@@ -32,6 +32,10 @@ public class Settings {
         return plugin.getConfigHandler().getConfig().getOrDefault("GeneralSettings.blockGlowTime", 5);
     }
 
+    public static int getNearbyPlayersRange() {
+        return plugin.getConfigHandler().getConfig().getOrDefault("GuiSettings.nearbyPlayersRange", 100);
+    }
+
     public static boolean isLockingEnabled() {
         return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.enabled", false);
     }
