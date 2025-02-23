@@ -65,6 +65,7 @@ dependencies {
 
     // Plugin dependencies
     compileOnly(libs.boltbukkit)
+    compileOnly(libs.boltcommon)
     implementation(libs.packetevents)
     implementation(libs.entitylib)
     compileOnly(libs.itemsadder)

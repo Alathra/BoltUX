@@ -1,11 +1,14 @@
 package io.github.alathra.boltux.listener;
 
+import com.github.milkdrinkers.colorparser.ColorParser;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
+import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -19,7 +22,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.popcraft.bolt.BoltPlugin;
+import org.popcraft.bolt.lang.Translation;
 import org.popcraft.bolt.protection.Protection;
+import org.popcraft.bolt.util.BoltComponents;
 import org.popcraft.bolt.util.BoltPlayer;
 
 import java.util.*;
@@ -68,6 +73,10 @@ public class LockUseListeners implements Listener {
         if (!boltPlugin.isProtectable(block)) {
             return;
         }
+        if (!player.hasPermission(Permissions.LOCK_PERMISSION)) {
+            player.sendMessage(ColorParser.of("<red>You do not have permission to use locks").build());
+            return;
+        }
 
         // Player is using lock item on a valid block
         GlowingBlock glowingBlock = new GlowingBlock(block, player);
@@ -78,27 +87,22 @@ public class LockUseListeners implements Listener {
         lockItem.setAmount(lockItem.getAmount() - 1);
 
         // Create new protection
-        org.popcraft.bolt.util.Action lockAction = new org.popcraft.bolt.util.Action(org.popcraft.bolt.util.Action.Type.LOCK, "bolt.command.lock", "private", false);
         BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
         final UUID protectionUUID = boltPlayer.isLockNil() ? org.popcraft.bolt.util.Profiles.NIL_UUID : player.getUniqueId();
-        final String protectionType = Optional.ofNullable(lockAction.getData())
-            .flatMap(type -> boltPlugin.getBolt().getAccessRegistry().getProtectionByType(type))
-            .map(org.popcraft.bolt.access.Access::type)
-            .orElse(boltPlugin.getDefaultProtectionType());
-        final Protection protection = boltPlugin.createProtection(block, protectionUUID, protectionType);
+        final Protection protection = boltPlugin.createProtection(block, protectionUUID, "private");
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
 
-        /*
-        BoltComponents.sendMessage(
-            player,
-            Translation.CLICK_ACTION,
-            boltPlugin.isUseActionBar(),
-            Placeholder.component(
-                Translation.Placeholder.ACTION, resolveTranslation(Translation.LOCK, player)
-            )
-        );
-         */
+        try {
+            BoltComponents.sendMessage(
+                player,
+                Translation.CLICK_ACTION,
+                boltPlugin.isUseActionBar(),
+                Placeholder.component(
+                    Translation.Placeholder.ACTION, BoltComponents.resolveTranslation(Translation.LOCK, player)
+                )
+            );
+        } catch (NoSuchMethodError ignored){}
 
         event.setCancelled(true);
     }
@@ -133,6 +137,10 @@ public class LockUseListeners implements Listener {
         if (!boltPlugin.isProtectable(entity)) {
             return;
         }
+        if (!player.hasPermission(Permissions.LOCK_PERMISSION)) {
+            player.sendMessage(ColorParser.of("<red>You do not have permission to use locks").build());
+            return;
+        }
 
         GlowingEntity glowingEntity = new GlowingEntity(entity, player);
         glowingEntity.glow(NamedTextColor.GREEN);
@@ -142,16 +150,22 @@ public class LockUseListeners implements Listener {
         lockItem.setAmount(lockItem.getAmount() - 1);
 
         // Create new protection
-        org.popcraft.bolt.util.Action lockAction = new org.popcraft.bolt.util.Action(org.popcraft.bolt.util.Action.Type.LOCK, "bolt.command.lock", "private", false);
         BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
         final UUID protectionUUID = boltPlayer.isLockNil() ? org.popcraft.bolt.util.Profiles.NIL_UUID : player.getUniqueId();
-        final String protectionType = Optional.ofNullable(lockAction.getData())
-            .flatMap(type -> boltPlugin.getBolt().getAccessRegistry().getProtectionByType(type))
-            .map(org.popcraft.bolt.access.Access::type)
-            .orElse(boltPlugin.getDefaultProtectionType());
-        final Protection protection = boltPlugin.createProtection(entity, protectionUUID, protectionType);
+        final Protection protection = boltPlugin.createProtection(entity, protectionUUID, "private");
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
+
+        try {
+            BoltComponents.sendMessage(
+                player,
+                Translation.CLICK_ACTION,
+                boltPlugin.isUseActionBar(),
+                Placeholder.component(
+                    Translation.Placeholder.ACTION, BoltComponents.resolveTranslation(Translation.LOCK, player)
+                )
+            );
+        } catch (NoSuchMethodError ignored){}
 
         event.setCancelled(true);
 
@@ -190,6 +204,10 @@ public class LockUseListeners implements Listener {
         if (!boltPlugin.isProtectable(entity)) {
             return;
         }
+        if (!player.hasPermission(Permissions.LOCK_PERMISSION)) {
+            player.sendMessage(ColorParser.of("<red>You do not have permission to use locks").build());
+            return;
+        }
 
         GlowingEntity glowingEntity = new GlowingEntity(entity, player);
         glowingEntity.glow(NamedTextColor.GREEN);
@@ -199,16 +217,22 @@ public class LockUseListeners implements Listener {
         lockItem.setAmount(lockItem.getAmount() - 1);
 
         // Create new protection
-        org.popcraft.bolt.util.Action lockAction = new org.popcraft.bolt.util.Action(org.popcraft.bolt.util.Action.Type.LOCK, "bolt.command.lock", "private", false);
         BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
         final UUID protectionUUID = boltPlayer.isLockNil() ? org.popcraft.bolt.util.Profiles.NIL_UUID : player.getUniqueId();
-        final String protectionType = Optional.ofNullable(lockAction.getData())
-            .flatMap(type -> boltPlugin.getBolt().getAccessRegistry().getProtectionByType(type))
-            .map(org.popcraft.bolt.access.Access::type)
-            .orElse(boltPlugin.getDefaultProtectionType());
-        final Protection protection = boltPlugin.createProtection(entity, protectionUUID, protectionType);
+        final Protection protection = boltPlugin.createProtection(entity, protectionUUID, "private");
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
+
+        try {
+            BoltComponents.sendMessage(
+                player,
+                Translation.CLICK_ACTION,
+                boltPlugin.isUseActionBar(),
+                Placeholder.component(
+                    Translation.Placeholder.ACTION, BoltComponents.resolveTranslation(Translation.LOCK, player)
+                )
+            );
+        } catch (NoSuchMethodError ignored){}
 
         event.setCancelled(true);
 
