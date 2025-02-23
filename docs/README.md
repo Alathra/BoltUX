@@ -53,7 +53,8 @@ BoltUX uses packets in order to display a red glowing effect to the client when 
 BoltUX contains the following permission nodes:
 * ``boltux.admin``
 Grants the user the ability to open and use the BoltUX GUI for any protection, regardless of whether the user is the protection owner. It also grants access to the **/boltux getlock** command.
-
+* ``boltux.lock``
+Grants the user the ability to use the custom lock items to lock protections, if the feature is enabled.
 ---
 
 ## Commands
