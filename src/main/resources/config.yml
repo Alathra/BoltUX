@@ -28,7 +28,7 @@ LockItem:
   sound:
     enabled: true
     effect: "minecraft:entity.zombie.attack_iron_door"
-    volume: 1.0
+    volume: 0.5
     pitch: 1.0
   # Possible entries are "ItemsAdder", "Nexo", "Oraxen" or "None". Leave blank or use "None" to use the default lock item
   itemPlugin: ""

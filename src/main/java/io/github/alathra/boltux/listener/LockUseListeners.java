@@ -8,11 +8,13 @@ import io.github.alathra.boltux.packets.GlowingEntity;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -101,9 +103,9 @@ public class LockUseListeners implements Listener {
         event.setCancelled(true);
     }
 
-    // For armor stands only
+    // For anything but armor stands
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLockUseOnEntity(PlayerInteractAtEntityEvent event) {
+    public void onLockUseOnEntity(PlayerInteractEntityEvent event) {
         if (event.isCancelled()) {
             return;
         }
@@ -132,9 +134,6 @@ public class LockUseListeners implements Listener {
             return;
         }
 
-        if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
-            return;
-        }
         GlowingEntity glowingEntity = new GlowingEntity(entity, player);
         glowingEntity.glow(NamedTextColor.GREEN);
         if (Settings.isLockingSoundEnabled()) {
@@ -154,17 +153,62 @@ public class LockUseListeners implements Listener {
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
 
-        // Bolt-Bukkit incapable of calling this, bolt-common will
-        /*
-        BoltComponents.sendMessage(
-            player,
-            Translation.CLICK_ACTION,
-            boltPlugin.isUseActionBar(),
-            Placeholder.component(
-                Translation.Placeholder.ACTION, resolveTranslation(Translation.LOCK, player)
-            )
-        );
-         */
+        event.setCancelled(true);
+
+    }
+
+    // For anything but armor stands
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onLockUseOnEntity(PlayerInteractAtEntityEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+        if (!Settings.isLockingEnabled()) {
+            return;
+        }
+        Player player = event.getPlayer();
+        if (!Settings.getLockItemEnabledWorlds().contains(player.getWorld())) {
+            return;
+        }
+        Entity entity = event.getRightClicked();
+        if (entity.getType() != EntityType.ARMOR_STAND) {
+            return;
+        }
+        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+            return;
+        }
+        if (!BoltUXAPI.isLockItem(player.getInventory().getItemInMainHand())) {
+            return;
+        }
+        ItemStack lockItem = player.getInventory().getItemInMainHand();
+        if (!player.isSneaking()) {
+            return;
+        }
+        if (boltPlugin.isProtected(entity)) {
+            return;
+        }
+        if (!boltPlugin.isProtectable(entity)) {
+            return;
+        }
+
+        GlowingEntity glowingEntity = new GlowingEntity(entity, player);
+        glowingEntity.glow(NamedTextColor.GREEN);
+        if (Settings.isLockingSoundEnabled()) {
+            player.playSound(Settings.getLockingSound());
+        }
+        lockItem.setAmount(lockItem.getAmount() - 1);
+
+        // Create new protection
+        org.popcraft.bolt.util.Action lockAction = new org.popcraft.bolt.util.Action(org.popcraft.bolt.util.Action.Type.LOCK, "bolt.command.lock", "private", false);
+        BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
+        final UUID protectionUUID = boltPlayer.isLockNil() ? org.popcraft.bolt.util.Profiles.NIL_UUID : player.getUniqueId();
+        final String protectionType = Optional.ofNullable(lockAction.getData())
+            .flatMap(type -> boltPlugin.getBolt().getAccessRegistry().getProtectionByType(type))
+            .map(org.popcraft.bolt.access.Access::type)
+            .orElse(boltPlugin.getDefaultProtectionType());
+        final Protection protection = boltPlugin.createProtection(entity, protectionUUID, protectionType);
+        boltPlugin.saveProtection(protection);
+        boltPlayer.setLockNil(false);
 
         event.setCancelled(true);
 

@@ -152,6 +152,7 @@ tasks {
         // Automatically install dependencies
         downloadPlugins {
             modrinth("Bolt", "1.1.31")
+            modrinth("BoltTowny", "1.0.1")
             github("MilkBowl", "Vault", "1.7.3", "Vault.jar")
         }
     }

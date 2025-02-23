@@ -2,7 +2,7 @@ package io.github.alathra.boltux.config;
 
 import com.github.milkdrinkers.colorparser.ColorParser;
 import io.github.alathra.boltux.BoltUX;
-import io.github.alathra.boltux.core.ItemPlugin;
+import io.github.alathra.boltux.data.ItemPlugin;
 import io.github.alathra.boltux.utility.Logger;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.intellij.lang.annotations.Subst;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package io.github.alathra.boltux.core;
+package io.github.alathra.boltux.data;
 
 import com.destroystokyo.paper.MaterialTags;
 import org.bukkit.Material;

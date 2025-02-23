@@ -3,6 +3,7 @@ package io.github.alathra.boltux.listener;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -36,7 +37,7 @@ public class LockReturnListeners implements Listener {
         protectedVehicleUUIDs = new HashSet<>();
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onProtectedBlockBreak(BlockBreakEvent event) {
         if (event.isCancelled()) {
             return;
@@ -51,7 +52,7 @@ public class LockReturnListeners implements Listener {
         if (!Settings.getLockItemEnabledWorlds().contains(block.getWorld())) {
             return;
         }
-        if (!boltPlugin.isProtectable(block)) {
+        if (!boltPlugin.isProtected(block)) {
             return;
         }
 
@@ -59,7 +60,7 @@ public class LockReturnListeners implements Listener {
         block.getWorld().dropItemNaturally(block.getLocation(), BoltUXAPI.getLockItem());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onProtectedEntityDeath(EntityDeathEvent event) {
         if (event.isCancelled()) {
             return;
@@ -82,7 +83,7 @@ public class LockReturnListeners implements Listener {
         entity.getWorld().dropItemNaturally(entity.getLocation(), BoltUXAPI.getLockItem());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onProtectedHangingEntityBreak(HangingBreakByEntityEvent event) {
         if (event.isCancelled()) {
             return;
@@ -100,7 +101,7 @@ public class LockReturnListeners implements Listener {
         if (!Settings.getLockItemEnabledWorlds().contains(entity.getWorld())) {
             return;
         }
-        if (!boltPlugin.isProtectable(entity)) {
+        if (!boltPlugin.isProtected(entity)) {
             return;
         }
 
@@ -109,7 +110,7 @@ public class LockReturnListeners implements Listener {
     }
 
     // BoltAPI can track the entity here, but not in VehicleDestroyEvent. Chaining events is needed.
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onProtectedVehicleDamage(VehicleDamageEvent event) {
         if (event.isCancelled()) {
             return;
@@ -134,7 +135,7 @@ public class LockReturnListeners implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onProtectedVehicleDestroy(VehicleDestroyEvent event) {
         if (event.isCancelled()) {
             return;
@@ -160,7 +161,7 @@ public class LockReturnListeners implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onProtectedLeadInteract(PlayerInteractEntityEvent event) {
         if (event.isCancelled()) {
             return;

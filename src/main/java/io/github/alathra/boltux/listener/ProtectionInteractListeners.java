@@ -2,9 +2,9 @@ package io.github.alathra.boltux.listener;
 
 import com.destroystokyo.paper.MaterialTags;
 import io.github.alathra.boltux.BoltUX;
-import io.github.alathra.boltux.core.EntityGroups;
-import io.github.alathra.boltux.core.MaterialGroups;
-import io.github.alathra.boltux.core.Permissions;
+import io.github.alathra.boltux.data.EntityGroups;
+import io.github.alathra.boltux.data.MaterialGroups;
+import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
