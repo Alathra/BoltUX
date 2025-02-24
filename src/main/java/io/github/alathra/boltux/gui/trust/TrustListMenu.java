@@ -89,6 +89,9 @@ public class TrustListMenu {
     }
 
     public static void populateContent(PaginatedGui gui, Player player) {
+        if (BoltUX.getTownyHook().isHookLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
+            BoltUtil.getTrustedTowns(player).forEach(trustedTown -> gui.addItem(GuiHelper.townToRemovableTrustIcon(gui, player, trustedTown)));
+        }
         BoltUtil.getTrustedGroups(player).forEach(trustedGroup -> gui.addItem(GuiHelper.groupToRemovableTrustIcon(gui, player, trustedGroup)));
         BoltUtil.getTrustedPlayers(player).forEach(trustedPlayer -> gui.addItem(GuiHelper.playerToRemovableTrustIcon(gui, player, trustedPlayer)));
     }

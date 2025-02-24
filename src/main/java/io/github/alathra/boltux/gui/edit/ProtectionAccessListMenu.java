@@ -89,6 +89,9 @@ public class ProtectionAccessListMenu {
     }
 
     public static void populateContent(PaginatedGui gui, Protection protection) {
+        if (BoltUX.getTownyHook().isHookLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
+            BoltUtil.getTownAccessSet(protection).forEach(accessTown -> gui.addItem(GuiHelper.townToRemovableAccessIcon(gui, protection, accessTown)));
+        }
         BoltUtil.getGroupAccessSet(protection).forEach(accessGroup -> gui.addItem(GuiHelper.groupToRemovableAccessIcon(gui, protection, accessGroup)));
         BoltUtil.getPlayerAccessSet(protection).forEach(accessPlayer -> gui.addItem(GuiHelper.playerToRemovableAccessIcon(gui, protection, accessPlayer)));
     }

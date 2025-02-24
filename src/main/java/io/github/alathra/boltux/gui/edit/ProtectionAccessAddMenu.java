@@ -3,6 +3,7 @@ package io.github.alathra.boltux.gui.edit;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.milkdrinkers.colorparser.ColorParser;
+import com.palmergames.bukkit.towny.object.Town;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.PaginatedGui;
@@ -93,13 +94,20 @@ public class ProtectionAccessAddMenu {
 
     public static void populateContent(PaginatedGui gui, Player player, Protection protection) {
 
+        // Get all suggested towns that haven't been granted access
+        if (BoltUX.getTownyHook().isHookLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
+            Set<Town> townSuggestions = new HashSet<>(GuiHelper.getSuggestedTowns(player));
+            townSuggestions.removeAll(BoltUtil.getTownAccessSet(protection));
+            townSuggestions.forEach(suggestedTown -> gui.addItem(GuiHelper.townToAddableAccessIcon(gui, protection, suggestedTown)));
+        }
+
         // Get all groups the player owns that haven't been granted access
         BoltUtil.getGroupsWithoutAccess(protection).forEach(group -> gui.addItem(GuiHelper.groupToAddableAccessIcon(gui, protection, group)));
 
         // Get suggested players that haven't been granted access
         Set<OfflinePlayer> playerSuggestions = new HashSet<>(GuiHelper.getSuggestedPlayers(player));
         playerSuggestions.removeAll(BoltUtil.getPlayerAccessSet(protection));
-        playerSuggestions.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableAccessIcon(gui, suggestedPlayer, protection)));
+        playerSuggestions.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableAccessIcon(gui, protection, suggestedPlayer)));
     }
 
 }

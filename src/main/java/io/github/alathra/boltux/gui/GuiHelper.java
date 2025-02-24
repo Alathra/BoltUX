@@ -92,6 +92,23 @@ public class GuiHelper {
         return sortedPlayers;
     }
 
+    public static Set<Town> getSuggestedTowns(Player player) {
+        Set<Town> suggestedTowns = new HashSet<>();
+        Resident resident = TownyAPI.getInstance().getResident(player);
+        if (resident == null) {
+            return suggestedTowns;
+        }
+        Town residentTown = resident.getTownOrNull();
+        if (residentTown != null) {
+            suggestedTowns.add(residentTown);
+            Nation nation = resident.getNationOrNull();
+            if (nation != null) {
+                suggestedTowns.addAll(nation.getTowns());
+            }
+        }
+        return suggestedTowns;
+    }
+
     public static GuiItem playerToRemovableAccessIcon(PaginatedGui gui, Protection protection, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
@@ -111,7 +128,7 @@ public class GuiHelper {
         });
     }
 
-    public static GuiItem playerToAddableAccessIcon(PaginatedGui gui, OfflinePlayer player, Protection protection) {
+    public static GuiItem playerToAddableAccessIcon(PaginatedGui gui, Protection protection, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
         skullMeta.setPlayerProfile(player.getPlayerProfile());
@@ -165,7 +182,7 @@ public class GuiHelper {
         skullItem.setItemMeta(skullMeta);
         return ItemBuilder.from(skullItem).asGuiItem(event -> {
             final int slot = event.getSlot();
-            final Store store =BoltUX.getBoltPlugin().getBolt().getStore();
+            final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
             store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
                 accessList.getAccess().remove("player:" + player.getUniqueId());
                 store.saveAccessList(accessList);
@@ -203,7 +220,7 @@ public class GuiHelper {
     }
 
     public static GuiItem groupToRemovableAccessIcon(PaginatedGui gui, Protection protection, Group group) {
-        ItemStack groupItem = new ItemStack(Material.CRAFTING_TABLE);
+        ItemStack groupItem = new ItemStack(Material.CHEST);
         ItemMeta groupMeta = groupItem.getItemMeta();
         String groupMemberNames = String.join(", ",
             group.getMembers().stream()
@@ -228,7 +245,7 @@ public class GuiHelper {
     }
 
     public static GuiItem groupToAddableAccessIcon(PaginatedGui gui, Protection protection, Group group) {
-        ItemStack groupItem = new ItemStack(Material.CRAFTING_TABLE);
+        ItemStack groupItem = new ItemStack(Material.CHEST);
         ItemMeta groupMeta = groupItem.getItemMeta();
         String groupMemberNames = String.join(", ",
             group.getMembers().stream()
@@ -261,7 +278,7 @@ public class GuiHelper {
     }
 
     public static GuiItem groupToRemovableTrustIcon(PaginatedGui gui, Player viewer, Group group) {
-        ItemStack groupItem = new ItemStack(Material.CRAFTING_TABLE);
+        ItemStack groupItem = new ItemStack(Material.CHEST);
         ItemMeta groupMeta = groupItem.getItemMeta();
         String groupMemberNames = String.join(", ",
             group.getMembers().stream()
@@ -289,7 +306,7 @@ public class GuiHelper {
     }
 
     public static GuiItem groupToAddableTrustIcon(PaginatedGui gui, Player viewer, Group group) {
-        ItemStack groupItem = new ItemStack(Material.CRAFTING_TABLE);
+        ItemStack groupItem = new ItemStack(Material.CHEST);
         ItemMeta groupMeta = groupItem.getItemMeta();
         String groupMemberNames = String.join(", ",
             group.getMembers().stream()
@@ -319,6 +336,95 @@ public class GuiHelper {
                 ));
                 groupItem.setItemMeta(groupMeta);
                 gui.updateItem(slot, groupItem);
+            });
+        });
+    }
+
+    public static GuiItem townToRemovableAccessIcon(PaginatedGui gui, Protection protection, Town town) {
+        ItemStack townItem = new ItemStack(Material.ENDER_CHEST);
+        ItemMeta townMeta = townItem.getItemMeta();
+        townMeta.displayName(ColorParser.of("<green>" + town.getName()).build().decoration(TextDecoration.ITALIC, false));
+        townMeta.lore(List.of(
+            ColorParser.of("<gray>Town").build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Click to revoke access").build().decoration(TextDecoration.ITALIC, false)
+        ));
+        townItem.setItemMeta(townMeta);
+        return ItemBuilder.from(townItem).asGuiItem(event -> {
+            protection.getAccess().remove("town:" + town.getName());
+            BoltUX.getBoltPlugin().saveProtection(protection);
+            townItem.setAmount(0);
+            final int slot = event.getSlot();
+            gui.updateItem(slot, townItem);
+        });
+    }
+
+    public static GuiItem townToAddableAccessIcon(PaginatedGui gui, Protection protection, Town town) {
+        ItemStack townItem = new ItemStack(Material.ENDER_CHEST);
+        ItemMeta townMeta = townItem.getItemMeta();
+        townMeta.displayName(ColorParser.of("<green>" + town.getName()).build().decoration(TextDecoration.ITALIC, false));
+        townMeta.lore(List.of(
+            ColorParser.of("<gray>Town").build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Click to grant access").build().decoration(TextDecoration.ITALIC, false)
+        ));
+        townItem.setItemMeta(townMeta);
+        return ItemBuilder.from(townItem).asGuiItem(event -> {
+            final int slot = event.getSlot();
+            protection.getAccess().put("town:" + town.getName(), "normal");
+            BoltUX.getBoltPlugin().saveProtection(protection);
+            townItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+            townItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            townMeta.lore(List.of(
+                ColorParser.of("<gray>Town").build().decoration(TextDecoration.ITALIC, false),
+                ColorParser.of("<green>Access has been granted").build().decoration(TextDecoration.ITALIC, false)
+
+            ));
+            townItem.setItemMeta(townMeta);
+            gui.updateItem(slot, townItem);
+        });
+    }
+
+    public static GuiItem townToRemovableTrustIcon(PaginatedGui gui, Player viewer, Town town) {
+        ItemStack townItem = new ItemStack(Material.ENDER_CHEST);
+        ItemMeta townMeta = townItem.getItemMeta();
+        townMeta.displayName(ColorParser.of("<green>" + town.getName()).build().decoration(TextDecoration.ITALIC, false));
+        townMeta.lore(List.of(
+            ColorParser.of("<gray>Town").build().decoration(TextDecoration.ITALIC, false)
+        ));
+        townItem.setItemMeta(townMeta);
+        return ItemBuilder.from(townItem).asGuiItem(event -> {
+            final int slot = event.getSlot();
+            final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
+            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
+                accessList.getAccess().remove("town:" + town.getName());
+                store.saveAccessList(accessList);
+                townItem.setAmount(0);
+                gui.updateItem(slot, townItem);
+            });
+        });
+    }
+
+    public static GuiItem townToAddableTrustIcon(PaginatedGui gui, Player viewer, Town town) {
+        ItemStack townItem = new ItemStack(Material.ENDER_CHEST);
+        ItemMeta townMeta = townItem.getItemMeta();
+        townMeta.displayName(ColorParser.of("<green>" + town.getName()).build().decoration(TextDecoration.ITALIC, false));
+        townMeta.lore(List.of(
+            ColorParser.of("<gray>Town").build().decoration(TextDecoration.ITALIC, false)
+        ));
+        townItem.setItemMeta(townMeta);
+        return ItemBuilder.from(townItem).asGuiItem(event -> {
+            final int slot = event.getSlot();
+            final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
+            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
+                accessList.getAccess().put("town:" + town.getName(), "normal");
+                store.saveAccessList(accessList);
+                townItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+                townItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                townMeta.lore(List.of(
+                    ColorParser.of("<gray>Town").build().decoration(TextDecoration.ITALIC, false),
+                    ColorParser.of("<green>Trust has been granted").build().decoration(TextDecoration.ITALIC, false)
+                ));
+                townItem.setItemMeta(townMeta);
+                gui.updateItem(slot, townItem);
             });
         });
     }

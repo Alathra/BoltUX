@@ -1,5 +1,7 @@
 package io.github.alathra.boltux.utility;
 
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.Town;
 import io.github.alathra.boltux.BoltUX;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -7,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.data.Store;
 import org.popcraft.bolt.protection.Protection;
+import org.popcraft.bolt.source.Source;
+import org.popcraft.bolt.source.SourceTypes;
 import org.popcraft.bolt.util.Group;
 
 import java.util.*;
@@ -15,9 +19,10 @@ public class BoltUtil {
 
     public static Set<OfflinePlayer> getPlayerAccessSet(Protection protection) {
         final Set<OfflinePlayer> accessPlayerSet = new HashSet<>();
-        for (String accessDetails : protection.getAccess().keySet()) {
-            if (accessDetails.startsWith("player:")) {
-                accessPlayerSet.add(Bukkit.getOfflinePlayer(UUID.fromString(accessDetails.substring(7))));
+        for (String rawSource : protection.getAccess().keySet()) {
+            Source source = Source.parse(rawSource);
+            if (source.getType().equals(SourceTypes.PLAYER)) {
+                accessPlayerSet.add(Bukkit.getOfflinePlayer(source.getIdentifier()));
             }
         }
         return accessPlayerSet;
@@ -26,12 +31,72 @@ public class BoltUtil {
     public static Set<Group> getGroupAccessSet(Protection protection) {
         final Set<Group> accessGroupSet = new HashSet<>();
         final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
-        for (String accessDetails : protection.getAccess().keySet()) {
-            if (accessDetails.startsWith("group:")) {
-                store.loadGroup(accessDetails.substring(6)).thenAccept(accessGroupSet::add);
+        for (String rawSource : protection.getAccess().keySet()) {
+            Source source = Source.parse(rawSource);
+            if (source.getType().equals(SourceTypes.GROUP)) {
+                store.loadGroup(source.getIdentifier()).thenAccept(accessGroupSet::add);
             }
         }
         return accessGroupSet;
+    }
+
+    public static Set<Town> getTownAccessSet(Protection protection) {
+        final Set<Town> accessTownSet = new HashSet<>();
+        TownyAPI townyAPI = TownyAPI.getInstance();
+        for (String rawSource : protection.getAccess().keySet()) {
+            Source source = Source.parse(rawSource);
+            if (source.getType().equals(SourceTypes.TOWN)) {
+                if (townyAPI.getTown(source.getIdentifier()) != null) {
+                    accessTownSet.add(townyAPI.getTown(source.getIdentifier()));
+                }
+            }
+        }
+        return accessTownSet;
+    }
+
+    public static Set<OfflinePlayer> getTrustedPlayers(Player player) {
+        final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
+        final Set<OfflinePlayer> trustedPlayers = new HashSet<>();
+        store.loadAccessList(player.getUniqueId()).thenAccept(accessList -> {
+            for (String rawSource : accessList.getAccess().keySet()) {
+                Source source = Source.parse(rawSource);
+                if (source.getType().equals(SourceTypes.PLAYER)) {
+                    trustedPlayers.add(Bukkit.getOfflinePlayer(UUID.fromString(source.getIdentifier())));
+                }
+            }
+        });
+        return trustedPlayers;
+    }
+
+    public static Set<Group> getTrustedGroups(Player player) {
+        final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
+        final Set<Group> trustedGroups = new HashSet<>();
+        store.loadAccessList(player.getUniqueId()).thenAccept(accessList -> {
+            for (String rawSource : accessList.getAccess().keySet()) {
+                Source source = Source.parse(rawSource);
+                if (source.getType().equals(SourceTypes.GROUP)) {
+                    store.loadGroup(source.getIdentifier()).thenAccept(trustedGroups::add);
+                }
+            }
+        });
+        return trustedGroups;
+    }
+
+    public static Set<Town> getTrustedTowns(Player player) {
+        final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
+        final Set<Town> trustedTowns = new HashSet<>();
+        TownyAPI townyAPI = TownyAPI.getInstance();
+        store.loadAccessList(player.getUniqueId()).thenAccept(accessList -> {
+            for (String rawSource : accessList.getAccess().keySet()) {
+                Source source = Source.parse(rawSource);
+                if (source.getType().equals(SourceTypes.TOWN)) {
+                    if (townyAPI.getTown(source.getIdentifier()) != null) {
+                        trustedTowns.add(townyAPI.getTown(source.getIdentifier()));
+                    }
+                }
+            }
+        });
+        return trustedTowns;
     }
 
     public static Set<Group> getGroupsWithoutAccess(Protection protection) {
@@ -49,29 +114,4 @@ public class BoltUtil {
         return groups;
     }
 
-    public static Set<Group> getTrustedGroups(Player player) {
-        final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
-        final Set<Group> trustedGroups = new HashSet<>();
-        store.loadAccessList(player.getUniqueId()).thenAccept(accessList -> {
-            for (String accessDetails : accessList.getAccess().keySet()) {
-                if (accessDetails.startsWith("group:")) {
-                    store.loadGroup(accessDetails.substring(6)).thenAccept(trustedGroups::add);
-                }
-            }
-        });
-        return trustedGroups;
-    }
-
-    public static Set<OfflinePlayer> getTrustedPlayers(Player player) {
-        final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
-        final Set<OfflinePlayer> trustedPlayers = new HashSet<>();
-        store.loadAccessList(player.getUniqueId()).thenAccept(accessList -> {
-            for (String accessDetails : accessList.getAccess().keySet()) {
-                if (accessDetails.startsWith("player:")) {
-                    trustedPlayers.add(Bukkit.getOfflinePlayer(UUID.fromString(accessDetails.substring(7))));
-                }
-            }
-        });
-        return trustedPlayers;
-    }
 }

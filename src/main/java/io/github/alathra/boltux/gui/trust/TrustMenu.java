@@ -44,7 +44,7 @@ public class TrustMenu {
     public static void generateButtons(Gui gui, Player player, Protection protection, Location protectionLocation) {
 
         // Add Access Button
-        ItemStack addAccessButton = new ItemStack(Material.PLAYER_HEAD);
+        ItemStack addAccessButton = new ItemStack(Material.WRITABLE_BOOK);
         ItemMeta addAccessButtonMeta = addAccessButton.getItemMeta();
         addAccessButtonMeta.displayName(ColorParser.of("<green>Add Trusted").build().decoration(TextDecoration.ITALIC, false));
         addAccessButtonMeta.lore(List.of(
@@ -57,7 +57,7 @@ public class TrustMenu {
         }));
 
         // List/Remove Access Button
-        ItemStack listRemoveAccessButton = new ItemStack(Material.ENDER_CHEST);
+        ItemStack listRemoveAccessButton = new ItemStack(Material.BOOK);
         ItemMeta listRemoveAccessMeta = listRemoveAccessButton.getItemMeta();
         listRemoveAccessMeta.displayName(ColorParser.of("<yellow>List/Remove Trusted").build().decoration(TextDecoration.ITALIC, false));
         listRemoveAccessMeta.lore(List.of(

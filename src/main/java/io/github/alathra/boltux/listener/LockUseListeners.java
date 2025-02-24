@@ -8,7 +8,6 @@ import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -22,9 +21,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.popcraft.bolt.BoltPlugin;
-import org.popcraft.bolt.lang.Translation;
 import org.popcraft.bolt.protection.Protection;
-import org.popcraft.bolt.util.BoltComponents;
 import org.popcraft.bolt.util.BoltPlayer;
 
 import java.util.*;
@@ -93,16 +90,7 @@ public class LockUseListeners implements Listener {
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
 
-        try {
-            BoltComponents.sendMessage(
-                player,
-                Translation.CLICK_ACTION,
-                boltPlugin.isUseActionBar(),
-                Placeholder.component(
-                    Translation.Placeholder.ACTION, BoltComponents.resolveTranslation(Translation.LOCK, player)
-                )
-            );
-        } catch (NoSuchMethodError ignored){}
+        player.sendMessage(ColorParser.of("<green>Protection has been created").build());
 
         event.setCancelled(true);
     }
@@ -156,19 +144,9 @@ public class LockUseListeners implements Listener {
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
 
-        try {
-            BoltComponents.sendMessage(
-                player,
-                Translation.CLICK_ACTION,
-                boltPlugin.isUseActionBar(),
-                Placeholder.component(
-                    Translation.Placeholder.ACTION, BoltComponents.resolveTranslation(Translation.LOCK, player)
-                )
-            );
-        } catch (NoSuchMethodError ignored){}
+        player.sendMessage(ColorParser.of("<green>Protection has been created").build());
 
         event.setCancelled(true);
-
     }
 
     // For anything but armor stands
@@ -223,18 +201,8 @@ public class LockUseListeners implements Listener {
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
 
-        try {
-            BoltComponents.sendMessage(
-                player,
-                Translation.CLICK_ACTION,
-                boltPlugin.isUseActionBar(),
-                Placeholder.component(
-                    Translation.Placeholder.ACTION, BoltComponents.resolveTranslation(Translation.LOCK, player)
-                )
-            );
-        } catch (NoSuchMethodError ignored){}
+        player.sendMessage(ColorParser.of("<green>Protection has been created").build());
 
         event.setCancelled(true);
-
     }
 }

@@ -3,6 +3,7 @@ package io.github.alathra.boltux.gui.trust;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.milkdrinkers.colorparser.ColorParser;
+import com.palmergames.bukkit.towny.object.Town;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.PaginatedGui;
@@ -95,6 +96,13 @@ public class TrustAddMenu {
 
     public static void populateContent(PaginatedGui gui, Player player) {
         final Store store = boltPlugin.getBolt().getStore();
+
+        // Get untrusted suggested towns
+        if (BoltUX.getTownyHook().isHookLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
+            Set<Town> suggestedTowns = new HashSet<>(GuiHelper.getSuggestedTowns(player));
+            suggestedTowns.removeAll(BoltUtil.getTrustedTowns(player));
+            suggestedTowns.forEach(suggestedTown -> gui.addItem(GuiHelper.townToAddableTrustIcon(gui, player, suggestedTown)));
+        }
 
         // Get untrusted groups
         final Set<Group> untrustedGroups = new HashSet<>();
