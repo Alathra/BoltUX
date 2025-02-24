@@ -65,7 +65,6 @@ dependencies {
 
     // Plugin dependencies
     compileOnly(libs.boltbukkit)
-    compileOnly(libs.boltcommon)
     implementation(libs.packetevents)
     implementation(libs.entitylib)
     compileOnly(libs.itemsadder)
@@ -140,7 +139,7 @@ tasks {
 
         // Automatically install dependencies
         downloadPlugins {
-            modrinth("Bolt", "1.1.31")
+            modrinth("Bolt", "1.1.52")
             modrinth("BoltTowny", "1.0.1")
             github("MilkBowl", "Vault", "1.7.3", "Vault.jar")
         }
