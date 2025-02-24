@@ -16,7 +16,7 @@ BoltUX (Bolt User Experience) primarily seeks to provide a GUI interfaces for [B
 
 ### Features
 #### Custom Lock Item
-BoltUX adds support for a custom lock item that can be required to create protections instead of using commands. An [example resourcepack](https://github.com/Alathra/BoltUX/blob/main/BoltUX-Resourcepack-1.0.zip) is included to provide a custom texture and model for the lock item. If this feature is enabled, protections are created by **shift right clicking with the lock item**. It using this feature, it is highly recommended that you disable the **bolt.command.lock** permission node and set ``autoProtect: false`` for all parts in the Bolt config so that users cannot lock a protection without using the lock item. This feature also requires users to be given the permission node **boltux.lock**.
+BoltUX adds support for a custom lock item that can be required to create protections instead of using commands. An [example resourcepack](https://github.com/Alathra/BoltUX/blob/main/BoltUX-Resourcepack-1.0.zip) is included to provide a custom texture and model for the lock item. If this feature is enabled, protections are created by **shift right clicking with the lock item**. If using this feature, it is highly recommended that you disable the **bolt.command.lock** permission node and set ``autoProtect: false`` for all parts in the Bolt config so that users cannot lock a protection without using the lock item. This feature also requires users to be given the permission node **boltux.lock**.
 
 ![Lock Item Usage](https://github.com/Alathra/BoltUX/blob/main/docs/assets/lock_user.gif "Lock Usage")
 
