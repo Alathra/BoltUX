@@ -42,8 +42,8 @@ BoltUX uses packets in order to display a red glowing effect to the client when 
 ### Dependencies
 * #### [Bolt](https://github.com/pop4959/Bolt)
 ### Optional Hooks
-* #### [Towny](https://github.com/TownyAdvanced/Towny)
-    If Towny is used, BoltUX will automatically use TownyAPI in order to provide Town and Nation members as suggestions in the Add Access Menu. 
+* #### [Towny](https://github.com/TownyAdvanced/Towny), [BoltTowny](https://github.com/pop4959/BoltTowny/tree/master)
+    If Towny is used, BoltUX will automatically use TownyAPI in order to provide Town and Nation members as suggestions in the Add Access Menu. If both Towny and BoltTowny are used, Town sources will be supported in the menus.
 * #### [ItemsAdder](https://itemsadder.devs.beer/), [Nexo](https://docs.nexomc.com/), [Oraxen](https://oraxen.com/)
     The above plugins are used to create and manage custom items. BoltUX supports the use of either of them for the optional lock item. If you wish to create a custom lock item using one of these item frameworks, you can define item id for BoltUX to link and use in the [config.yml](https://github.com/Alathra/BoltUX/blob/main/src/main/resources/config.yml).
 
@@ -69,5 +69,3 @@ Spawns the specified amount of lock items in the player's inventory, defaults to
 BoltUX can be configured by editing values in the [config.yml](https://github.com/Alathra/BoltUX/blob/main/src/main/resources/config.yml). **BoltUX does not have a reload command because it automatically checks for updates in the config file**. When you make edits to the file the changes will be applied immediately.
 
 ---
-
-
