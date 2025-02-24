@@ -5,6 +5,8 @@ import io.github.alathra.boltux.config.Settings;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Objects;
+
 public class BoltUXAPI {
 
     /**
@@ -18,24 +20,27 @@ public class BoltUXAPI {
             case ITEMSADDER -> {
                 if (BoltUX.getItemsAdderHook().isHookLoaded()) {
                     itemStack = BoltUX.getItemsAdderHook().getLockItem();
+                } else {
+                    itemStack = getDefaultLockItem();
                 }
-                itemStack = getDefaultLockItem();
             }
             case NEXO -> {
                 if (BoltUX.getNexoHook().isHookLoaded()) {
                     itemStack = BoltUX.getNexoHook().getLockItem();
+                } else {
+                    itemStack = getDefaultLockItem();
                 }
-                itemStack = getDefaultLockItem();
             }
             case ORAXEN -> {
                 if (BoltUX.getOraxenHook().isHookLoaded()) {
                     itemStack = BoltUX.getOraxenHook().getLockItem();
+                } else {
+                    itemStack = getDefaultLockItem();
                 }
-                itemStack = getDefaultLockItem();
             }
             default -> {itemStack = getDefaultLockItem();}
         }
-        itemStack.setAmount(amount);
+        Objects.requireNonNull(itemStack).setAmount(amount);
         return itemStack;
     }
 
