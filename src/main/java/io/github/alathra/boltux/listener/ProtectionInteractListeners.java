@@ -8,6 +8,7 @@ import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
+import io.github.alathra.boltux.utility.BlockUtil;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -60,6 +61,14 @@ public class ProtectionInteractListeners implements Listener {
         if (protection == null) {
             if (MaterialTags.DOORS.isTagged(material)) {
                 protection = boltPlugin.loadProtection(block.getRelative(BlockFace.DOWN));
+                if (protection == null) {
+                    return;
+                }
+            } else if (material.equals(Material.CHEST) || material.equals(Material.TRAPPED_CHEST)) {
+                protection = boltPlugin.loadProtection(BlockUtil.getConnectedDoubleChest(block));
+                if (protection == null) {
+                    return;
+                }
             } else {
                 return;
             }

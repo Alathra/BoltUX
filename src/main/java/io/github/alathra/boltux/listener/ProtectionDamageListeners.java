@@ -6,6 +6,7 @@ import io.github.alathra.boltux.data.EntityGroups;
 import io.github.alathra.boltux.data.MaterialGroups;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
+import io.github.alathra.boltux.utility.BlockUtil;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
@@ -59,6 +60,14 @@ public class ProtectionDamageListeners implements Listener {
         if (protection == null) {
             if (MaterialTags.DOORS.isTagged(material)) {
                 protection = boltPlugin.loadProtection(block.getRelative(BlockFace.DOWN));
+                if (protection == null) {
+                    return;
+                }
+            } else if (material.equals(Material.CHEST) || material.equals(Material.TRAPPED_CHEST)) {
+                protection = boltPlugin.loadProtection(BlockUtil.getConnectedDoubleChest(block));
+                if (protection == null) {
+                    return;
+                }
             } else {
                 return;
             }

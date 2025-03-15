@@ -4,13 +4,16 @@ import com.destroystokyo.paper.MaterialTags;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.config.Settings;
+import io.github.alathra.boltux.utility.BlockUtil;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import me.tofaa.entitylib.meta.mobs.cuboid.SlimeMeta;
 import me.tofaa.entitylib.wrapper.WrapperEntity;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.Player;
@@ -41,17 +44,27 @@ public class GlowingBlock {
     }
 
     private void placeEntities() {
-        // Corrects offset since slimes do not spawn at the center of the block
-        Location location = block.getLocation().add(0.5, 0.0,0.5);
-        int numEntities = 1;
+        List<Location> entityLocations = new ArrayList<>();
+        entityLocations.add(block.getLocation().add(0.5, 0.0,0.5));
+
         if (MaterialTags.DOORS.isTagged(block.getType())) {
             Door door = (Door) block.getBlockData();
             if(door.getHalf().equals(Bisected.Half.TOP)) {
-                location.add(0.0, -1.0, 0);
+                entityLocations.add(block.getLocation().add(0.0, -1.0, 0.0).add(0.5, 0.0,0.5));
+            } else {
+                entityLocations.add(block.getLocation().add(0.0, 1.0, 0.0).add(0.5, 0.0,0.5));
             }
-            numEntities = 2;
+        } else if (block.getType().equals(Material.CHEST) || block.getType().equals(Material.TRAPPED_CHEST)) {
+            Chest chest = (Chest) block.getState();
+            if (BlockUtil.isDoubleChest(chest.getInventory())) {
+                Block connectedChest = BlockUtil.getConnectedDoubleChest(block);
+                if (connectedChest == null) {
+                    return;
+                }
+                entityLocations.add(connectedChest.getLocation().add(0.5, 0.0,0.5));
+            }
         }
-        for (int i = 0; i < numEntities; i++) {
+        for (Location location : entityLocations) {
             // Slimes are block-shaped
             // Slimes are used instead of shulkers because shulkers collision cannot be disabled
             WrapperEntity entity = new WrapperEntity(EntityTypes.SLIME);
@@ -62,7 +75,7 @@ public class GlowingBlock {
             slimeMeta.setSize(2);
             entity.addViewer(player.getUniqueId());
             // Place a second entity 1 block up for doors
-            entity.spawn(SpigotConversionUtil.fromBukkitLocation(location.add(0.0, i, 0.0)));
+            entity.spawn(SpigotConversionUtil.fromBukkitLocation(location));
             entities.add(entity);
         }
     }

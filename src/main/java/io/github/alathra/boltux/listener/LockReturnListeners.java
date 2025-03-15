@@ -1,10 +1,14 @@
 package io.github.alathra.boltux.listener;
 
+import com.destroystokyo.paper.MaterialTags;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
-import org.bukkit.Bukkit;
+import io.github.alathra.boltux.utility.BlockUtil;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -20,6 +24,7 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.popcraft.bolt.BoltPlugin;
+import org.popcraft.bolt.protection.BlockProtection;
 import org.popcraft.bolt.protection.EntityProtection;
 import org.popcraft.bolt.util.Permission;
 
@@ -54,6 +59,13 @@ public class LockReturnListeners implements Listener {
         }
         if (!boltPlugin.isProtected(block)) {
             return;
+        }
+        // check for double chest and return, so locks aren't duped
+        if (block.getType().equals(Material.CHEST) || block.getType().equals(Material.TRAPPED_CHEST)) {
+            Chest chest = (Chest) block.getState();
+            if (BlockUtil.isDoubleChest(chest.getInventory())) {
+                return;
+            }
         }
 
         // Drop a lock item at the broken block location
