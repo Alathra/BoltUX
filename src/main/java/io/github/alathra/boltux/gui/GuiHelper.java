@@ -50,7 +50,10 @@ public class GuiHelper {
                 if (playerTown != null) {
                     for (Resident resident : playerTown.getResidents()) {
                         if (!resident.getUUID().equals(player.getUniqueId())) {
-                            players.put(resident.getUUID(), 2);
+                            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(resident.getUUID());
+                            if (offlinePlayer.getName() != null) {
+                                players.put(resident.getUUID(), 2);
+                            }
                         }
                     }
                     Nation playerNation = playerTown.getNationOrNull();
@@ -59,7 +62,10 @@ public class GuiHelper {
                             if (town != playerTown) {
                                 for (Resident resident : town.getResidents()) {
                                     if (!resident.getUUID().equals(player.getUniqueId())) {
-                                        players.put(resident.getUUID(), 3);
+                                        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(resident.getUUID());
+                                        if (offlinePlayer.getName() != null) {
+                                            players.put(resident.getUUID(), 3);
+                                        }
                                     }
                                 }
                             }

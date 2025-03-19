@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Town;
 import io.github.alathra.boltux.BoltUX;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.data.Store;
@@ -21,6 +22,10 @@ public class BoltUtil {
         for (String rawSource : protection.getAccess().keySet()) {
             Source source = Source.parse(rawSource);
             if (source.getType().equals(SourceTypes.PLAYER)) {
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(source.getIdentifier());
+                if (offlinePlayer.getName() == null) {
+                    continue;
+                }
                 accessPlayerSet.add(UUID.fromString(source.getIdentifier()));
             }
         }
@@ -60,6 +65,10 @@ public class BoltUtil {
             for (String rawSource : accessList.getAccess().keySet()) {
                 Source source = Source.parse(rawSource);
                 if (source.getType().equals(SourceTypes.PLAYER)) {
+                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(source.getIdentifier());
+                    if (offlinePlayer.getName() == null) {
+                        continue;
+                    }
                     trustedPlayers.add(UUID.fromString(source.getIdentifier()));
                 }
             }
