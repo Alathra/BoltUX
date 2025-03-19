@@ -15,7 +15,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -105,9 +104,9 @@ public class ProtectionAccessAddMenu {
         BoltUtil.getGroupsWithoutAccess(protection).forEach(group -> gui.addItem(GuiHelper.groupToAddableAccessIcon(gui, protection, group)));
 
         // Get suggested players that haven't been granted access
-        Set<OfflinePlayer> playerSuggestions = new HashSet<>(GuiHelper.getSuggestedPlayers(player));
+        Set<UUID> playerSuggestions = new HashSet<>(GuiHelper.getSuggestedPlayers(player));
         playerSuggestions.removeAll(BoltUtil.getPlayerAccessSet(protection));
-        playerSuggestions.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableAccessIcon(gui, protection, suggestedPlayer)));
+        playerSuggestions.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableAccessIcon(gui, protection, Bukkit.getOfflinePlayer(suggestedPlayer))));
     }
 
 }

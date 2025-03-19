@@ -30,14 +30,14 @@ import java.util.stream.Collectors;
 
 public class GuiHelper {
 
-    public static Set<OfflinePlayer> getSuggestedPlayers(Player player) {
+    public static Set<UUID> getSuggestedPlayers(Player player) {
         // player, priority
-        Map<OfflinePlayer, Integer> players = new HashMap<>();
+        Map<UUID, Integer> players = new HashMap<>();
 
         // Get nearby players
         for (Entity entity : player.getNearbyEntities(Settings.getNearbyPlayersRange(), Settings.getNearbyPlayersRange(), Settings.getNearbyPlayersRange())) {
             if (entity instanceof Player nearbyPlayer) {
-                players.put(nearbyPlayer, 1);
+                players.put(nearbyPlayer.getUniqueId(), 1);
             }
         }
 
@@ -50,7 +50,7 @@ public class GuiHelper {
                 if (playerTown != null) {
                     for (Resident resident : playerTown.getResidents()) {
                         if (!resident.getUUID().equals(player.getUniqueId())) {
-                            players.put(Bukkit.getOfflinePlayer(resident.getUUID()), 2);
+                            players.put(resident.getUUID(), 2);
                         }
                     }
                     Nation playerNation = playerTown.getNationOrNull();
@@ -59,7 +59,7 @@ public class GuiHelper {
                             if (town != playerTown) {
                                 for (Resident resident : town.getResidents()) {
                                     if (!resident.getUUID().equals(player.getUniqueId())) {
-                                        players.put(Bukkit.getOfflinePlayer(resident.getUUID()), 3);
+                                        players.put(resident.getUUID(), 3);
                                     }
                                 }
                             }
@@ -72,19 +72,19 @@ public class GuiHelper {
         // Get online players
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (!onlinePlayer.getUniqueId().equals(player.getUniqueId())) {
-                players.put(onlinePlayer, 4);
+                players.put(onlinePlayer.getUniqueId(), 4);
             }
         }
 
         // Sort the players first by priority, then by name
-        Set<OfflinePlayer> sortedPlayers = new TreeSet<>((p1, p2) -> {
+        Set<UUID> sortedPlayers = new TreeSet<>((p1, p2) -> {
             // Compare by priority
             int priorityComparison = players.get(p1).compareTo(players.get(p2));
             if (priorityComparison != 0) {
                 return priorityComparison;
             }
             // If priority is the same, compare by player name (alphabetically)
-            return Objects.requireNonNull(p1.getName()).compareToIgnoreCase(Objects.requireNonNull(p2.getName()));
+            return Objects.requireNonNull(Bukkit.getOfflinePlayer(p1).getName()).compareToIgnoreCase(Objects.requireNonNull(Bukkit.getOfflinePlayer(p2).getName()));
         });
 
         sortedPlayers.addAll(players.keySet());
@@ -112,6 +112,7 @@ public class GuiHelper {
     public static GuiItem playerToRemovableAccessIcon(PaginatedGui gui, Protection protection, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
+        Bukkit.broadcastMessage(player.getName().toString());
         skullMeta.setOwningPlayer(player);
         skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
         skullMeta.lore(List.of(

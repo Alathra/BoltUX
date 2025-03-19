@@ -15,7 +15,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -114,8 +113,8 @@ public class TrustAddMenu {
         untrustedGroups.forEach(group -> gui.addItem(GuiHelper.groupToAddableTrustIcon(gui, player, group)));
 
         // Get untrusted suggested players
-        Set<OfflinePlayer> suggestedPlayers = new HashSet<>(GuiHelper.getSuggestedPlayers(player));
+        Set<UUID> suggestedPlayers = new HashSet<>(GuiHelper.getSuggestedPlayers(player));
         suggestedPlayers.removeAll(BoltUtil.getTrustedPlayers(player));
-        suggestedPlayers.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableTrustIcon(gui, player, suggestedPlayer)));
+        suggestedPlayers.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableTrustIcon(gui, player, Bukkit.getOfflinePlayer(suggestedPlayer))));
     }
 }

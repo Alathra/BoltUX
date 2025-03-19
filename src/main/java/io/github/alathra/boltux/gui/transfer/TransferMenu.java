@@ -87,6 +87,6 @@ public class TransferMenu {
     }
 
     public static void populateContent(PaginatedGui gui, Player player, Protection protection) {
-        GuiHelper.getSuggestedPlayers(player).forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToTransferableAccessIcon(gui, player, suggestedPlayer, protection)));
+        GuiHelper.getSuggestedPlayers(player).forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToTransferableAccessIcon(gui, player, Bukkit.getOfflinePlayer(suggestedPlayer), protection)));
     }
 }

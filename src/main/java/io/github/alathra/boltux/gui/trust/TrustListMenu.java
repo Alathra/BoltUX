@@ -93,7 +93,7 @@ public class TrustListMenu {
             BoltUtil.getTrustedTowns(player).forEach(trustedTown -> gui.addItem(GuiHelper.townToRemovableTrustIcon(gui, player, trustedTown)));
         }
         BoltUtil.getTrustedGroups(player).forEach(trustedGroup -> gui.addItem(GuiHelper.groupToRemovableTrustIcon(gui, player, trustedGroup)));
-        BoltUtil.getTrustedPlayers(player).forEach(trustedPlayer -> gui.addItem(GuiHelper.playerToRemovableTrustIcon(gui, player, trustedPlayer)));
+        BoltUtil.getTrustedPlayers(player).forEach(trustedPlayer -> gui.addItem(GuiHelper.playerToRemovableTrustIcon(gui, player, Bukkit.getOfflinePlayer(trustedPlayer))));
     }
 
 }

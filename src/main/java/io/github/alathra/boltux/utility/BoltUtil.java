@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Town;
 import io.github.alathra.boltux.BoltUX;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.data.Store;
@@ -17,12 +16,12 @@ import java.util.*;
 
 public class BoltUtil {
 
-    public static Set<OfflinePlayer> getPlayerAccessSet(Protection protection) {
-        final Set<OfflinePlayer> accessPlayerSet = new HashSet<>();
+    public static Set<UUID> getPlayerAccessSet(Protection protection) {
+        final Set<UUID> accessPlayerSet = new HashSet<>();
         for (String rawSource : protection.getAccess().keySet()) {
             Source source = Source.parse(rawSource);
             if (source.getType().equals(SourceTypes.PLAYER)) {
-                accessPlayerSet.add(Bukkit.getOfflinePlayer(source.getIdentifier()));
+                accessPlayerSet.add(UUID.fromString(source.getIdentifier()));
             }
         }
         return accessPlayerSet;
@@ -54,14 +53,14 @@ public class BoltUtil {
         return accessTownSet;
     }
 
-    public static Set<OfflinePlayer> getTrustedPlayers(Player player) {
+    public static Set<UUID> getTrustedPlayers(Player player) {
         final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
-        final Set<OfflinePlayer> trustedPlayers = new HashSet<>();
+        final Set<UUID> trustedPlayers = new HashSet<>();
         store.loadAccessList(player.getUniqueId()).thenAccept(accessList -> {
             for (String rawSource : accessList.getAccess().keySet()) {
                 Source source = Source.parse(rawSource);
                 if (source.getType().equals(SourceTypes.PLAYER)) {
-                    trustedPlayers.add(Bukkit.getOfflinePlayer(UUID.fromString(source.getIdentifier())));
+                    trustedPlayers.add(UUID.fromString(source.getIdentifier()));
                 }
             }
         });

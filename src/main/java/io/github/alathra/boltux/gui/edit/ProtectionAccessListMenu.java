@@ -93,7 +93,7 @@ public class ProtectionAccessListMenu {
             BoltUtil.getTownAccessSet(protection).forEach(accessTown -> gui.addItem(GuiHelper.townToRemovableAccessIcon(gui, protection, accessTown)));
         }
         BoltUtil.getGroupAccessSet(protection).forEach(accessGroup -> gui.addItem(GuiHelper.groupToRemovableAccessIcon(gui, protection, accessGroup)));
-        BoltUtil.getPlayerAccessSet(protection).forEach(accessPlayer -> gui.addItem(GuiHelper.playerToRemovableAccessIcon(gui, protection, accessPlayer)));
+        BoltUtil.getPlayerAccessSet(protection).forEach(accessPlayer -> gui.addItem(GuiHelper.playerToRemovableAccessIcon(gui, protection, Bukkit.getOfflinePlayer(accessPlayer))));
     }
 
 }
