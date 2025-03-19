@@ -1,5 +1,6 @@
 package io.github.alathra.boltux.listener;
 
+import com.destroystokyo.paper.MaterialTags;
 import com.github.milkdrinkers.colorparser.ColorParser;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
@@ -9,6 +10,9 @@ import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -83,10 +87,18 @@ public class LockUseListeners implements Listener {
         }
         lockItem.setAmount(lockItem.getAmount() - 1);
 
+        Block protectionBlock = block;
+        if (MaterialTags.DOORS.isTagged(block.getType())) {
+            Door door = (Door) block.getBlockData();
+            if (door.getHalf().equals(Bisected.Half.TOP)) {
+                protectionBlock = block.getRelative(BlockFace.DOWN);
+            }
+        }
+
         // Create new protection
         BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
         final UUID protectionUUID = boltPlayer.isLockNil() ? org.popcraft.bolt.util.Profiles.NIL_UUID : player.getUniqueId();
-        final Protection protection = boltPlugin.createProtection(block, protectionUUID, "private");
+        final Protection protection = boltPlugin.createProtection(protectionBlock, protectionUUID, "private");
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
 
