@@ -112,7 +112,6 @@ public class GuiHelper {
     public static GuiItem playerToRemovableAccessIcon(PaginatedGui gui, Protection protection, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
-        Bukkit.broadcastMessage(player.getName().toString());
         skullMeta.setOwningPlayer(player);
         skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
         skullMeta.lore(List.of(
