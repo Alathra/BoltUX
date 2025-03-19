@@ -112,7 +112,7 @@ public class GuiHelper {
     public static GuiItem playerToRemovableAccessIcon(PaginatedGui gui, Protection protection, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
-        skullMeta.setPlayerProfile(player.getPlayerProfile());
+        skullMeta.setOwningPlayer(player);
         skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
         skullMeta.lore(List.of(
             ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
@@ -131,7 +131,7 @@ public class GuiHelper {
     public static GuiItem playerToAddableAccessIcon(PaginatedGui gui, Protection protection, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
-        skullMeta.setPlayerProfile(player.getPlayerProfile());
+        skullMeta.setOwningPlayer(player);
         skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
         skullMeta.lore(List.of(
             ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
@@ -157,7 +157,7 @@ public class GuiHelper {
     public static GuiItem playerToTransferableAccessIcon(PaginatedGui gui, Player viewer, OfflinePlayer player, Protection protection) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
-        skullMeta.setPlayerProfile(player.getPlayerProfile());
+        skullMeta.setOwningPlayer(player);
         skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
         skullMeta.lore(List.of(
             ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
@@ -174,7 +174,7 @@ public class GuiHelper {
     public static GuiItem playerToRemovableTrustIcon(PaginatedGui gui, Player viewer, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
-        skullMeta.setPlayerProfile(player.getPlayerProfile());
+        skullMeta.setOwningPlayer(player);
         skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
         skullMeta.lore(List.of(
             ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false)
@@ -195,7 +195,7 @@ public class GuiHelper {
     public static GuiItem playerToAddableTrustIcon(PaginatedGui gui, Player viewer, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
-        skullMeta.setPlayerProfile(player.getPlayerProfile());
+        skullMeta.setOwningPlayer(player);
         skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
         skullMeta.lore(List.of(
             ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false)
