@@ -26,6 +26,7 @@ public class GlowingEntity {
 
     private final Entity entity;
     private final Player player;
+    private EntityMeta entityMeta = null;
     private BukkitTask stopGlowTimer;
     private Team team;
 
@@ -36,7 +37,7 @@ public class GlowingEntity {
 
     public void glow(NamedTextColor color) {
         glowingEntities.add(this);
-        EntityMeta entityMeta = EntityMeta.createMeta(entity.getEntityId(), SpigotConversionUtil.fromBukkitEntityType(entity.getType()));
+        entityMeta = EntityMeta.createMeta(entity.getEntityId(), SpigotConversionUtil.fromBukkitEntityType(entity.getType()));
         setGlowColor(color);
         // Without this 1-tick delay, this will have no effect, for some reason
         Bukkit.getScheduler().runTaskLater(BoltUX.getInstance(), () -> {
@@ -61,6 +62,16 @@ public class GlowingEntity {
         glowingEntities.remove(this);
     }
 
+    public void stopGlowNow() {
+        stopGlowTimer.cancel();
+        entityMeta.setGlowing(false);
+        PacketEvents.getAPI().getPlayerManager().sendPacket(player, entityMeta.createPacket());
+        glowingEntitiesRawMap.remove(entity.getEntityId());
+        // Remove from team so glow color is not persistent
+        team.removeEntity(entity);
+        glowingEntities.remove(this);
+    }
+
     private void setGlowColor(NamedTextColor color) {
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard scoreboard = manager.getMainScoreboard();
@@ -78,6 +89,10 @@ public class GlowingEntity {
 
     public int getEntityID() {
         return entity.getEntityId();
+    }
+
+    public Entity getEntity() {
+        return entity;
     }
 
     public static @Nullable GlowingEntity getGlowingEntityByEntityID(int entityID) {
