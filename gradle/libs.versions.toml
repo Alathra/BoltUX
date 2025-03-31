@@ -23,7 +23,7 @@ entitylib = "me.tofaa.entitylib:spigot:3.0.3-SNAPSHOT"
 itemsadder = "dev.lone:api-itemsadder:4.0.9"
 nexo = "com.nexomc:nexo:1.1.0"
 oraxen = "io.th0rgal:oraxen:1.189.0"
-towny = "com.palmergames.bukkit.towny:towny:0.101.1.6"
+towny = "com.palmergames.bukkit.towny:towny:0.101.1.7"
 
 # Testing
 junit-bom = "org.junit:junit-bom:5.12.1"
