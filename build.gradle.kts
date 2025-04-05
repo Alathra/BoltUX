@@ -1,3 +1,5 @@
+import java.time.Instant
+
 plugins {
     `java-library`
 
@@ -10,6 +12,7 @@ plugins {
 }
 
 val mainPackage = "${project.group}.${project.name.lowercase()}"
+applyCustomVersion()
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21)) // Configure the java toolchain. This allows gradle to auto-provision JDK 21 on systems that only have JDK 8 installed for example.
@@ -157,4 +160,12 @@ bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
     load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
     depend = listOf("Bolt")
     softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny")
+}
+
+fun applyCustomVersion() {
+    // Apply custom version arg or append snapshot version
+    val ver = properties["altVer"]?.toString() ?: "${rootProject.version}-SNAPSHOT-${Instant.now().epochSecond}"
+
+    // Strip prefixed "v" from version tag
+    rootProject.version = (if (ver.first().equals('v', true)) ver.substring(1) else ver.uppercase()).uppercase()
 }
