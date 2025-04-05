@@ -20,6 +20,9 @@ BoltUX adds support for a custom lock item that can be required to create protec
 
 ![Lock Item Usage](https://github.com/Alathra/BoltUX/blob/main/docs/assets/lock_user.gif "Lock Usage")
 
+There is a default crafting recipe for the lock item.
+![Lock Recipe](https://github.com/Alathra/BoltUX/blob/main/docs/assets/lock_recipe.PNG?raw=true "Lock Crafting Recipe")
+
 #### Protection Owner GUI
 A GUI for interfacing protections can be accessed by any protection owner by **shift right clicking** on their owned protection with their hand. The interface facilitates most Bolt actions including but not limited to:
 * Adding player/group access
