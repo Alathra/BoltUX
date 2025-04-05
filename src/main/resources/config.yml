@@ -1,12 +1,3 @@
-# Update Checker Settings
-update-checker:
-  enable: true
-  console: true # Post message to console
-  op: true # Send update notification to opped players on join
-
-# Translation, specify the language file to use, for example `en-US` which will load `/translations/en-US.yml`
-translation: "en-US"
-
 GeneralSettings:
   # Amount of seconds the block glow effect lasts when the use of a locked item is denied
   blockGlowTime: 5
@@ -19,21 +10,31 @@ LockItem:
   # If the lock item is enabled. All following settings this to false will make lock items do nothing
   enabled: true
 
+  # If the default crafting recipe should be enabled (loaded) when the plugin is enabled
+  enableCraftingRecipe: true
+
   # If protected blocks/entities will drop a lock item when broken
   protectionsDropLocks: true
+
   # What worlds players will be able to use locks in
   enabledWorlds:
     - world
+    - world_nether
+    - world_the_end
+
   # The sound made when a player creates a new protection with a lock
   sound:
     enabled: true
     effect: "minecraft:entity.zombie.attack_iron_door"
     volume: 0.25
     pitch: 1.0
+
   # Possible entries are "ItemsAdder", "Nexo", "Oraxen" or "None". Leave blank or use "None" to use the default lock item
   itemPlugin: ""
+
   # The identifier of the custom lock item. Only applicable if using an item plugin defined above
   customLockItemID: ""
+
   # The default lock item if no item plugin is specified
   # Uses MiniMessage color formats
   DefaultLockItem:

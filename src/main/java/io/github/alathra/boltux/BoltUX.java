@@ -5,11 +5,10 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import io.github.alathra.boltux.command.CommandHandler;
 import io.github.alathra.boltux.config.ConfigHandler;
+import io.github.alathra.boltux.crafting.CraftingHandler;
 import io.github.alathra.boltux.hook.*;
 import io.github.alathra.boltux.listener.ListenerHandler;
 import io.github.alathra.boltux.packets.GlowPacketListener;
-import io.github.alathra.boltux.translation.TranslationManager;
-import io.github.alathra.boltux.updatechecker.UpdateChecker;
 import io.github.alathra.boltux.utility.Logger;
 
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
@@ -24,10 +23,9 @@ import org.popcraft.bolt.BoltPlugin;
 public class BoltUX extends JavaPlugin {
     private static BoltUX instance;
     private ConfigHandler configHandler;
-    private TranslationManager translationManager;
+    private CraftingHandler craftingHandler;
     private CommandHandler commandHandler;
     private ListenerHandler listenerHandler;
-    private UpdateChecker updateChecker;
 
     // Hooks
     private static ItemsAdderHook itemsAdderHook;
@@ -46,20 +44,18 @@ public class BoltUX extends JavaPlugin {
     public void onLoad() {
         instance = this;
         configHandler = new ConfigHandler(instance);
-        translationManager = new TranslationManager(instance);
+        craftingHandler = new CraftingHandler(instance);
         commandHandler = new CommandHandler(instance);
         listenerHandler = new ListenerHandler(instance);
-        updateChecker = new UpdateChecker();
         itemsAdderHook = new ItemsAdderHook(instance);
         nexoHook = new NexoHook(instance);
         oraxenHook = new OraxenHook(instance);
         townyHook = new TownyHook(instance);
 
         configHandler.onLoad();
-        translationManager.onLoad();
+        craftingHandler.onLoad();
         commandHandler.onLoad();
         listenerHandler.onLoad();
-        updateChecker.onLoad();
         itemsAdderHook.onLoad();
         nexoHook.onLoad();
         oraxenHook.onLoad();
@@ -72,8 +68,7 @@ public class BoltUX extends JavaPlugin {
     @Override
     public void onEnable() {
         configHandler.onEnable();
-        translationManager.onEnable();
-        updateChecker.onEnable();
+        craftingHandler.onEnable();
         itemsAdderHook.onEnable();
         nexoHook.onEnable();
         oraxenHook.onEnable();
@@ -113,10 +108,9 @@ public class BoltUX extends JavaPlugin {
     @Override
     public void onDisable() {
         configHandler.onDisable();
-        translationManager.onDisable();
+        craftingHandler.onDisable();
         commandHandler.onDisable();
         listenerHandler.onDisable();
-        updateChecker.onDisable();
         itemsAdderHook.onDisable();
         nexoHook.onDisable();
         oraxenHook.onDisable();
@@ -132,16 +126,6 @@ public class BoltUX extends JavaPlugin {
     @NotNull
     public ConfigHandler getConfigHandler() {
         return configHandler;
-    }
-
-    @NotNull
-    public TranslationManager getTranslationManager() {
-        return translationManager;
-    }
-
-    @NotNull
-    public UpdateChecker getUpdateChecker() {
-        return updateChecker;
     }
 
     @NotNull

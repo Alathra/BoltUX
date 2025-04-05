@@ -18,8 +18,7 @@ class BoltUXCommand {
             .withShortDescription("BoltUX commands.")
             .withPermission(Permissions.ADMIN_PERMISSION)
             .withSubcommands(
-                GetLockCommand(),
-                new TranslationCommand().command()
+                getLockCommand()
             )
             .executes(this::helpMenu)
             .register();
@@ -30,7 +29,7 @@ class BoltUXCommand {
         sender.sendMessage(ColorParser.of("<yellow>/boltux getlock <green>Spawn a lock item").build());
     }
 
-    private CommandAPICommand GetLockCommand() {
+    private CommandAPICommand getLockCommand() {
         return new CommandAPICommand("getlock")
             .withFullDescription("Gives yourself the lock item.")
             .withShortDescription("Gives lock item.")

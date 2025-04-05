@@ -39,6 +39,10 @@ public class Settings {
         return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.enabled", false);
     }
 
+    public static boolean isDefaultLockCraftingRecipeEnabled() {
+        return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.enableCraftingRecipe", false);
+    }
+
     public static boolean isLockDroppingEnabled() {
         return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.protectionsDropLocks", false);
     }

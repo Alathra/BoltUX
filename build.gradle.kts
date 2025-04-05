@@ -1,5 +1,3 @@
-import java.time.Instant
-
 plugins {
     `java-library`
 
@@ -12,7 +10,6 @@ plugins {
 }
 
 val mainPackage = "${project.group}.${project.name.lowercase()}"
-applyCustomVersion()
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21)) // Configure the java toolchain. This allows gradle to auto-provision JDK 21 on systems that only have JDK 8 installed for example.
@@ -49,7 +46,6 @@ dependencies {
     compileOnly(libs.annotations)
     annotationProcessor(libs.annotations)
     compileOnly(libs.paper.api)
-    implementation(libs.morepaperlib)
 
     // API
     implementation(libs.crate.api)
@@ -91,7 +87,6 @@ tasks {
 
     javadoc {
         isFailOnError = false
-        exclude("**/database/schema/**") // Exclude generated jOOQ sources from javadocs
         val options = options as StandardJavadocDocletOptions
         options.encoding = Charsets.UTF_8.name()
         options.overview = "src/main/javadoc/overview.html"
@@ -112,7 +107,6 @@ tasks {
         // Shadow classes
         fun reloc(originPkg: String, targetPkg: String) = relocate(originPkg, "${mainPackage}.lib.${targetPkg}")
 
-        reloc("space.arim.morepaperlib", "morepaperlib")
         reloc("com.github.milkdrinkers.crate", "crate")
         reloc("com.github.milkdrinkers.colorparser", "colorparser")
         reloc("dev.jorel.commandapi", "commandapi")
@@ -163,12 +157,4 @@ bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
     load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
     depend = listOf("Bolt")
     softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny")
-}
-
-fun applyCustomVersion() {
-    // Apply custom version arg or append snapshot version
-    val ver = properties["altVer"]?.toString() ?: "${rootProject.version}-SNAPSHOT-${Instant.now().epochSecond}"
-
-    // Strip prefixed "v" from version tag
-    rootProject.version = (if (ver.first().equals('v', true)) ver.substring(1) else ver.uppercase()).uppercase()
 }
