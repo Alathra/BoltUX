@@ -20,7 +20,9 @@ BoltUX adds support for a custom lock item that can be required to create protec
 
 ![Lock Item Usage](https://github.com/Alathra/BoltUX/blob/main/docs/assets/lock_user.gif "Lock Usage")
 
-There is a default crafting recipe for the lock item. <br>
+There is a default crafting recipe for the lock item.
+<br>
+<br>
 ![Lock Recipe](https://github.com/Alathra/BoltUX/blob/main/docs/assets/lock_recipe.PNG?raw=true "Lock Crafting Recipe")
 
 #### Protection Owner GUI
