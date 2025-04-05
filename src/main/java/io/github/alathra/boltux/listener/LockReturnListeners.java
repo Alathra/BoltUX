@@ -1,13 +1,11 @@
 package io.github.alathra.boltux.listener;
 
-import com.destroystokyo.paper.MaterialTags;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
 import io.github.alathra.boltux.utility.BlockUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -24,7 +22,6 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.popcraft.bolt.BoltPlugin;
-import org.popcraft.bolt.protection.BlockProtection;
 import org.popcraft.bolt.protection.EntityProtection;
 import org.popcraft.bolt.util.Permission;
 
@@ -47,7 +44,7 @@ public class LockReturnListeners implements Listener {
         if (event.isCancelled()) {
             return;
         }
-        if (!Settings.isLockingEnabled()) {
+        if (!Settings.isLockItemEnabled()) {
             return;
         }
         if (!Settings.isLockDroppingEnabled()) {
@@ -77,7 +74,7 @@ public class LockReturnListeners implements Listener {
         if (event.isCancelled()) {
             return;
         }
-        if (!Settings.isLockingEnabled()) {
+        if (!Settings.isLockItemEnabled()) {
             return;
         }
         if (!Settings.isLockDroppingEnabled()) {
@@ -100,7 +97,7 @@ public class LockReturnListeners implements Listener {
         if (event.isCancelled()) {
             return;
         }
-        if (!Settings.isLockingEnabled()) {
+        if (!Settings.isLockItemEnabled()) {
             return;
         }
         if (!Settings.isLockDroppingEnabled()) {
@@ -130,7 +127,7 @@ public class LockReturnListeners implements Listener {
         // Prevents potential duplication of lock item
         Vehicle vehicle = event.getVehicle();
         protectedVehicleUUIDs.remove(vehicle.getUniqueId());
-        if (!Settings.isLockingEnabled()) {
+        if (!Settings.isLockItemEnabled()) {
             return;
         }
         if (!Settings.isLockDroppingEnabled()) {
@@ -152,7 +149,7 @@ public class LockReturnListeners implements Listener {
         if (event.isCancelled()) {
             return;
         }
-        if (!Settings.isLockingEnabled()) {
+        if (!Settings.isLockItemEnabled()) {
             return;
         }
         if (!Settings.isLockDroppingEnabled()) {
@@ -178,7 +175,7 @@ public class LockReturnListeners implements Listener {
         if (event.isCancelled()) {
             return;
         }
-        if (!Settings.isLockingEnabled()) {
+        if (!Settings.isLockItemEnabled()) {
             return;
         }
         if (!Settings.isLockDroppingEnabled()) {

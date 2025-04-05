@@ -35,7 +35,7 @@ public class Settings {
         return plugin.getConfigHandler().getConfig().getOrDefault("GuiSettings.nearbyPlayersRange", 100);
     }
 
-    public static boolean isLockingEnabled() {
+    public static boolean isLockItemEnabled() {
         return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.enabled", false);
     }
 

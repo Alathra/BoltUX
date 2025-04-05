@@ -123,7 +123,7 @@ public class MainMenu {
         ));
         unlockButton.setItemMeta(unlockButtonMeta);
         gui.setItem(4, 6, ItemBuilder.from(unlockButton).asGuiItem(event -> {
-            if (Settings.isLockingEnabled() && Settings.getLockItemEnabledWorlds().contains(player.getWorld())) {
+            if (Settings.isLockItemEnabled() && Settings.getLockItemEnabledWorlds().contains(player.getWorld())) {
                 player.getWorld().dropItemNaturally(protectionLocation, BoltUXAPI.getLockItem());
             }
             boltPlugin.removeProtection(protection);

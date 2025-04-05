@@ -23,7 +23,7 @@ public class CraftingHandler implements Reloadable {
 
     @Override
     public void onEnable() {
-        if (Settings.isDefaultLockCraftingRecipeEnabled()) {
+        if (Settings.isDefaultLockCraftingRecipeEnabled() && Settings.isLockItemEnabled()) {
             loadLockRecipe();
         }
     }

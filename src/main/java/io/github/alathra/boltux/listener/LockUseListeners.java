@@ -41,7 +41,7 @@ public class LockUseListeners implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLockUseOnBlock(PlayerInteractEvent event) {
-        if (!Settings.isLockingEnabled()) {
+        if (!Settings.isLockItemEnabled()) {
             return;
         }
         Player player = event.getPlayer();
@@ -113,7 +113,7 @@ public class LockUseListeners implements Listener {
         if (event.isCancelled()) {
             return;
         }
-        if (!Settings.isLockingEnabled()) {
+        if (!Settings.isLockItemEnabled()) {
             return;
         }
         Player player = event.getPlayer();
@@ -167,7 +167,7 @@ public class LockUseListeners implements Listener {
         if (event.isCancelled()) {
             return;
         }
-        if (!Settings.isLockingEnabled()) {
+        if (!Settings.isLockItemEnabled()) {
             return;
         }
         Player player = event.getPlayer();
