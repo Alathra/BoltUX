@@ -3,14 +3,12 @@ package io.github.alathra.boltux.listener;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
+import io.github.alathra.boltux.data.MaterialGroups;
 import io.github.alathra.boltux.utility.BlockUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Vehicle;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,6 +21,7 @@ import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.EntityProtection;
+import org.popcraft.bolt.protection.Protection;
 import org.popcraft.bolt.util.Permission;
 
 import java.util.HashSet;
@@ -54,6 +53,7 @@ public class LockReturnListeners implements Listener {
         if (!Settings.getLockItemEnabledWorlds().contains(block.getWorld())) {
             return;
         }
+
         if (!boltPlugin.isProtected(block)) {
             return;
         }
@@ -64,6 +64,21 @@ public class LockReturnListeners implements Listener {
                 return;
             }
         }
+        Protection protection = boltPlugin.findProtection(block);
+        if (protection == null) {
+            return;
+        }
+        Player player = event.getPlayer();
+        if (!protection.getOwner().equals(player.getUniqueId())) {
+            if (!boltPlugin.canAccess(block, player, Permission.DESTROY)) {
+                return;
+            }
+        }
+        Material material = block.getType();
+        if (!MaterialGroups.containerBlocks.contains(material) && !MaterialGroups.interactableBlocks.contains(material) && !MaterialGroups.otherBlocks.contains(material)) {
+            return;
+        }
+
 
         // Drop a lock item at the broken block location
         block.getWorld().dropItemNaturally(block.getLocation(), BoltUXAPI.getLockItem());
@@ -103,15 +118,21 @@ public class LockReturnListeners implements Listener {
         if (!Settings.isLockDroppingEnabled()) {
             return;
         }
-        if (!(event.getRemover() instanceof Player)) {
+        if (!(event.getRemover() instanceof Player player)) {
             return;
         }
         Entity entity = event.getEntity();
         if (!Settings.getLockItemEnabledWorlds().contains(entity.getWorld())) {
             return;
         }
-        if (!boltPlugin.isProtected(entity)) {
+        Protection protection = boltPlugin.findProtection(entity);
+        if (protection == null) {
             return;
+        }
+        if (!protection.getOwner().equals(player.getUniqueId())) {
+            if (!boltPlugin.canAccess(entity, player, Permission.DESTROY)) {
+                return;
+            }
         }
 
         // Drop a lock item at the broken block location
