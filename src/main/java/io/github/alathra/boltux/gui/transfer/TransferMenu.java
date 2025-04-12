@@ -5,6 +5,7 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.milkdrinkers.colorparser.ColorParser;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
+import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
@@ -13,6 +14,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -87,6 +89,23 @@ public class TransferMenu {
     }
 
     public static void populateContent(PaginatedGui gui, Player player, Protection protection) {
-        GuiHelper.getSuggestedPlayers(player).forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToTransferableAccessIcon(gui, player, Bukkit.getOfflinePlayer(suggestedPlayer), protection)));
+        GuiHelper.getSuggestedPlayers(player).forEach(suggestedPlayer -> gui.addItem(playerToTransferableAccessIcon(gui, player, Bukkit.getOfflinePlayer(suggestedPlayer), protection)));
+    }
+
+    private static GuiItem playerToTransferableAccessIcon(PaginatedGui gui, Player viewer, OfflinePlayer player, Protection protection) {
+        ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
+        skullMeta.setOwningPlayer(player);
+        skullMeta.displayName(ColorParser.of("<green>" + player.getName()).build().decoration(TextDecoration.ITALIC, false));
+        skullMeta.lore(List.of(
+            ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
+            ColorParser.of("<gray>Click to transfer ownership").build().decoration(TextDecoration.ITALIC, false)
+        ));
+        skullItem.setItemMeta(skullMeta);
+        return ItemBuilder.from(skullItem).asGuiItem(event -> {
+            protection.setOwner(player.getUniqueId());
+            BoltUX.getBoltPlugin().saveProtection(protection);
+            gui.close(viewer);
+        });
     }
 }
