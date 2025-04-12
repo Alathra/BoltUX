@@ -93,14 +93,14 @@ public class TrustAddMenu {
         return base;
     }
 
-    public static void populateContent(PaginatedGui gui, Player player) {
+    public static void populateContent(PaginatedGui gui, Protection protection, Player player) {
         final Store store = boltPlugin.getBolt().getStore();
 
         // Get untrusted suggested towns
         if (BoltUX.getTownyHook().isHookLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
             Set<Town> suggestedTowns = new HashSet<>(GuiHelper.getSuggestedTowns(player));
             suggestedTowns.removeAll(BoltUtil.getTrustedTowns(player));
-            suggestedTowns.forEach(suggestedTown -> gui.addItem(GuiHelper.townToAddableTrustIcon(gui, player, suggestedTown)));
+            suggestedTowns.forEach(suggestedTown -> gui.addItem(GuiHelper.townToAddableTrustIcon(gui, protection, suggestedTown)));
         }
 
         // Get untrusted groups
@@ -110,11 +110,11 @@ public class TrustAddMenu {
             store.loadGroup(groupName).thenAccept(untrustedGroups::add);
         }
         untrustedGroups.removeAll(BoltUtil.getTrustedGroups(player));
-        untrustedGroups.forEach(group -> gui.addItem(GuiHelper.groupToAddableTrustIcon(gui, player, group)));
+        untrustedGroups.forEach(group -> gui.addItem(GuiHelper.groupToAddableTrustIcon(gui, protection, group)));
 
         // Get untrusted suggested players
         Set<UUID> suggestedPlayers = new HashSet<>(GuiHelper.getSuggestedPlayers(player));
         suggestedPlayers.removeAll(BoltUtil.getTrustedPlayers(player));
-        suggestedPlayers.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableTrustIcon(gui, player, Bukkit.getOfflinePlayer(suggestedPlayer))));
+        suggestedPlayers.forEach(suggestedPlayer -> gui.addItem(GuiHelper.playerToAddableTrustIcon(gui, protection, Bukkit.getOfflinePlayer(suggestedPlayer))));
     }
 }

@@ -54,13 +54,13 @@ public class GuiHandler {
 
     public static void generateTrustListMenu(Player player, Protection protection, Location protectionLocation) {
         PaginatedGui trustListMenu = TrustListMenu.generateBase(player, protection, protectionLocation);
-        TrustListMenu.populateContent(trustListMenu, player);
+        TrustListMenu.populateContent(trustListMenu, protection, player);
         trustListMenu.open(player);
     }
 
     public static void generateTrustAddMenu(Player player, Protection protection, Location protectionLocation) {
         PaginatedGui trustAddMenu = TrustAddMenu.generateBase(player, protection, protectionLocation);
-        TrustAddMenu.populateContent(trustAddMenu, player);
+        TrustAddMenu.populateContent(trustAddMenu, protection, player);
         trustAddMenu.open(player);
     }
 

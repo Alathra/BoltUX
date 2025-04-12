@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.popcraft.bolt.access.AccessList;
 import org.popcraft.bolt.data.Store;
 import org.popcraft.bolt.protection.Protection;
 import org.popcraft.bolt.util.Group;
@@ -177,7 +178,7 @@ public class GuiHelper {
         });
     }
 
-    public static GuiItem playerToRemovableTrustIcon(PaginatedGui gui, Player viewer, OfflinePlayer player) {
+    public static GuiItem playerToRemovableTrustIcon(PaginatedGui gui, Protection protection, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
         skullMeta.setOwningPlayer(player);
@@ -189,16 +190,15 @@ public class GuiHelper {
         return ItemBuilder.from(skullItem).asGuiItem(event -> {
             final int slot = event.getSlot();
             final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
-            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
-                accessList.getAccess().remove("player:" + player.getUniqueId());
-                store.saveAccessList(accessList);
-                skullItem.setAmount(0);
-                gui.updateItem(slot, skullItem);
-            });
+            final AccessList accessList = Objects.requireNonNullElse(store.loadAccessList(protection.getOwner()).join(), new AccessList(protection.getOwner(), new HashMap<>()));
+            accessList.getAccess().remove("player:" + player.getUniqueId());
+            store.saveAccessList(accessList);
+            skullItem.setAmount(0);
+            gui.updateItem(slot, skullItem);
         });
     }
 
-    public static GuiItem playerToAddableTrustIcon(PaginatedGui gui, Player viewer, OfflinePlayer player) {
+    public static GuiItem playerToAddableTrustIcon(PaginatedGui gui, Protection protection, OfflinePlayer player) {
         ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
         skullMeta.setOwningPlayer(player);
@@ -210,18 +210,17 @@ public class GuiHelper {
         return ItemBuilder.from(skullItem).asGuiItem(event -> {
             final int slot = event.getSlot();
             final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
-            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
-                accessList.getAccess().put("player:" + player.getUniqueId(), "normal");
-                store.saveAccessList(accessList);
-                skullItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
-                skullItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                skullMeta.lore(List.of(
-                    ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
-                    ColorParser.of("<green>Trust has been granted").build().decoration(TextDecoration.ITALIC, false)
-                ));
-                skullItem.setItemMeta(skullMeta);
-                gui.updateItem(slot, skullItem);
-            });
+            final AccessList accessList = Objects.requireNonNullElse(store.loadAccessList(protection.getOwner()).join(), new AccessList(protection.getOwner(), new HashMap<>()));
+            accessList.getAccess().put("player:" + player.getUniqueId(), "normal");
+            store.saveAccessList(accessList);
+            skullItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+            skullItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            skullMeta.lore(List.of(
+                ColorParser.of("<gray>Player").build().decoration(TextDecoration.ITALIC, false),
+                ColorParser.of("<green>Trust has been granted").build().decoration(TextDecoration.ITALIC, false)
+            ));
+            skullItem.setItemMeta(skullMeta);
+            gui.updateItem(slot, skullItem);
         });
     }
 
@@ -230,8 +229,8 @@ public class GuiHelper {
         ItemMeta groupMeta = groupItem.getItemMeta();
         String groupMemberNames = String.join(", ",
             group.getMembers().stream()
-            .map(uuid -> Bukkit.getOfflinePlayer(uuid).getName())
-            .collect(Collectors.toSet())
+                .map(uuid -> Bukkit.getOfflinePlayer(uuid).getName())
+                .collect(Collectors.toSet())
         );
         groupMeta.displayName(ColorParser.of("<blue>" + group.getName()).build().decoration(TextDecoration.ITALIC, false));
         groupMeta.lore(List.of(
@@ -283,7 +282,7 @@ public class GuiHelper {
         });
     }
 
-    public static GuiItem groupToRemovableTrustIcon(PaginatedGui gui, Player viewer, Group group) {
+    public static GuiItem groupToRemovableTrustIcon(PaginatedGui gui, Protection protection, Group group) {
         ItemStack groupItem = new ItemStack(Material.CHEST);
         ItemMeta groupMeta = groupItem.getItemMeta();
         String groupMemberNames = String.join(", ",
@@ -302,16 +301,15 @@ public class GuiHelper {
         return ItemBuilder.from(groupItem).asGuiItem(event -> {
             final int slot = event.getSlot();
             final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
-            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
-                accessList.getAccess().remove("group:" + group.getName());
-                store.saveAccessList(accessList);
-                groupItem.setAmount(0);
-                gui.updateItem(slot, groupItem);
-            });
+            final AccessList accessList = Objects.requireNonNullElse(store.loadAccessList(protection.getOwner()).join(), new AccessList(protection.getOwner(), new HashMap<>()));
+            accessList.getAccess().remove("group:" + group.getName());
+            store.saveAccessList(accessList);
+            groupItem.setAmount(0);
+            gui.updateItem(slot, groupItem);
         });
     }
 
-    public static GuiItem groupToAddableTrustIcon(PaginatedGui gui, Player viewer, Group group) {
+    public static GuiItem groupToAddableTrustIcon(PaginatedGui gui, Protection protection, Group group) {
         ItemStack groupItem = new ItemStack(Material.CHEST);
         ItemMeta groupMeta = groupItem.getItemMeta();
         String groupMemberNames = String.join(", ",
@@ -329,20 +327,18 @@ public class GuiHelper {
         return ItemBuilder.from(groupItem).asGuiItem(event -> {
             final int slot = event.getSlot();
             final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
-            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
-                accessList.getAccess().put("group:" + group.getName(), "normal");
-                store.saveAccessList(accessList);
-                groupItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
-                groupItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                groupMeta.lore(List.of(
-                    ColorParser.of("<gray>Group").build().decoration(TextDecoration.ITALIC, false),
-                    ColorParser.of("<gray>Owner: " + Bukkit.getOfflinePlayer(group.getOwner()).getName()).build().decoration(TextDecoration.ITALIC, false),
-                    ColorParser.of("<gray>Members: " + groupMemberNames).build().decoration(TextDecoration.ITALIC, false),
-                    ColorParser.of("<green>Trust has been granted").build().decoration(TextDecoration.ITALIC, false)
-                ));
-                groupItem.setItemMeta(groupMeta);
-                gui.updateItem(slot, groupItem);
-            });
+            final AccessList accessList = Objects.requireNonNullElse(store.loadAccessList(protection.getOwner()).join(), new AccessList(protection.getOwner(), new HashMap<>()));
+            store.saveAccessList(accessList);
+            groupItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+            groupItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            groupMeta.lore(List.of(
+                ColorParser.of("<gray>Group").build().decoration(TextDecoration.ITALIC, false),
+                ColorParser.of("<gray>Owner: " + Bukkit.getOfflinePlayer(group.getOwner()).getName()).build().decoration(TextDecoration.ITALIC, false),
+                ColorParser.of("<gray>Members: " + groupMemberNames).build().decoration(TextDecoration.ITALIC, false),
+                ColorParser.of("<green>Trust has been granted").build().decoration(TextDecoration.ITALIC, false)
+            ));
+            groupItem.setItemMeta(groupMeta);
+            gui.updateItem(slot, groupItem);
         });
     }
 
@@ -389,7 +385,7 @@ public class GuiHelper {
         });
     }
 
-    public static GuiItem townToRemovableTrustIcon(PaginatedGui gui, Player viewer, Town town) {
+    public static GuiItem townToRemovableTrustIcon(PaginatedGui gui, Protection protection, Town town) {
         ItemStack townItem = new ItemStack(Material.ENDER_CHEST);
         ItemMeta townMeta = townItem.getItemMeta();
         townMeta.displayName(ColorParser.of("<green>" + town.getName()).build().decoration(TextDecoration.ITALIC, false));
@@ -400,16 +396,15 @@ public class GuiHelper {
         return ItemBuilder.from(townItem).asGuiItem(event -> {
             final int slot = event.getSlot();
             final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
-            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
-                accessList.getAccess().remove("town:" + town.getName());
-                store.saveAccessList(accessList);
-                townItem.setAmount(0);
-                gui.updateItem(slot, townItem);
-            });
+            final AccessList accessList = Objects.requireNonNullElse(store.loadAccessList(protection.getOwner()).join(), new AccessList(protection.getOwner(), new HashMap<>()));
+            accessList.getAccess().remove("town:" + town.getName());
+            store.saveAccessList(accessList);
+            townItem.setAmount(0);
+            gui.updateItem(slot, townItem);
         });
     }
 
-    public static GuiItem townToAddableTrustIcon(PaginatedGui gui, Player viewer, Town town) {
+    public static GuiItem townToAddableTrustIcon(PaginatedGui gui, Protection protection, Town town) {
         ItemStack townItem = new ItemStack(Material.ENDER_CHEST);
         ItemMeta townMeta = townItem.getItemMeta();
         townMeta.displayName(ColorParser.of("<green>" + town.getName()).build().decoration(TextDecoration.ITALIC, false));
@@ -420,18 +415,16 @@ public class GuiHelper {
         return ItemBuilder.from(townItem).asGuiItem(event -> {
             final int slot = event.getSlot();
             final Store store = BoltUX.getBoltPlugin().getBolt().getStore();
-            store.loadAccessList(viewer.getUniqueId()).thenAccept(accessList -> {
-                accessList.getAccess().put("town:" + town.getName(), "normal");
-                store.saveAccessList(accessList);
-                townItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
-                townItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                townMeta.lore(List.of(
-                    ColorParser.of("<gray>Town").build().decoration(TextDecoration.ITALIC, false),
-                    ColorParser.of("<green>Trust has been granted").build().decoration(TextDecoration.ITALIC, false)
-                ));
-                townItem.setItemMeta(townMeta);
-                gui.updateItem(slot, townItem);
-            });
+            final AccessList accessList = Objects.requireNonNullElse(store.loadAccessList(protection.getOwner()).join(), new AccessList(protection.getOwner(), new HashMap<>()));
+            store.saveAccessList(accessList);
+            townItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+            townItem.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            townMeta.lore(List.of(
+                ColorParser.of("<gray>Town").build().decoration(TextDecoration.ITALIC, false),
+                ColorParser.of("<green>Trust has been granted").build().decoration(TextDecoration.ITALIC, false)
+            ));
+            townItem.setItemMeta(townMeta);
+            gui.updateItem(slot, townItem);
         });
     }
 
