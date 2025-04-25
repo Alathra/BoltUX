@@ -11,6 +11,7 @@ LockItem:
   enabled: true
 
   # If the default crafting recipe should be enabled (loaded) when the plugin is enabled
+  # If using an item plugin this will automatically be disabled
   enableCraftingRecipe: true
 
   # If protected blocks/entities will drop a lock item when broken

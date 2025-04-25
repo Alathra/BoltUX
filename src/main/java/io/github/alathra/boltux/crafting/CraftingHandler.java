@@ -3,6 +3,7 @@ package io.github.alathra.boltux.crafting;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
+import io.github.alathra.boltux.data.ItemPlugin;
 import io.github.alathra.boltux.utility.Reloadable;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -23,7 +24,7 @@ public class CraftingHandler implements Reloadable {
 
     @Override
     public void onEnable() {
-        if (Settings.isDefaultLockCraftingRecipeEnabled() && Settings.isLockItemEnabled()) {
+        if (Settings.isDefaultLockCraftingRecipeEnabled() && Settings.isLockItemEnabled() && Settings.getItemPlugin().equals(ItemPlugin.NONE)) {
             loadLockRecipe();
         }
     }

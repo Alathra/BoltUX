@@ -2,6 +2,7 @@ package io.github.alathra.boltux.api;
 
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.config.Settings;
+import io.github.alathra.boltux.utility.Logger;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -40,7 +41,12 @@ public class BoltUXAPI {
             }
             default -> {itemStack = getDefaultLockItem();}
         }
-        Objects.requireNonNull(itemStack).setAmount(amount);
+        if (itemStack == null) {
+            Logger.get().error("Lock item failed to load! If you are using an item plugin make sure the ID is correct");
+            Logger.get().warn("Loading default lock item...");
+            return getLockItem();
+        }
+        itemStack.setAmount(amount);
         return itemStack;
     }
 

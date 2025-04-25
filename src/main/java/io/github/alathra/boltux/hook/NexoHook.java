@@ -36,10 +36,6 @@ public class NexoHook implements Hook {
     }
 
     public @Nullable ItemStack getLockItem() {
-        try {
-            return Objects.requireNonNull(NexoItems.itemFromId(Settings.getCustomLockItemID())).build();
-        } catch (NullPointerException e) {
-            return null;
-        }
+        return Objects.requireNonNull(NexoItems.itemFromId(Settings.getCustomLockItemID())).build();
     }
 }
