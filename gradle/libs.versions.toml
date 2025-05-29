@@ -1,11 +1,11 @@
 [versions]
 crate = "2.1.0"
-commandapi = "9.7.0"
+commandapi = "10.0.1"
 
 [libraries]
 # Core dependencies
 annotations = "org.jetbrains:annotations:26.0.2"
-paper-api = "io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT"
+paper-api = "io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT"
 
 # API dependencies
 crate-api = { module = "com.github.milkdrinkers:crate-api", version.ref = "crate" }
@@ -17,11 +17,11 @@ triumph-gui = "dev.triumphteam:triumph-gui:3.1.11"
 
 # Plugin dependencies
 boltbukkit = "org.popcraft:bolt-bukkit:1.1.52"
-packetevents = "com.github.retrooper:packetevents-spigot:2.7.0"
-entitylib = "me.tofaa.entitylib:spigot:3.0.3-SNAPSHOT"
+packetevents = "com.github.retrooper:packetevents-spigot:2.8.0"
+entitylib = "me.tofaa.entitylib:spigot:+630837f-SNAPSHOT"
 itemsadder = "dev.lone:api-itemsadder:4.0.9"
-nexo = "com.nexomc:nexo:1.1.0"
-oraxen = "io.th0rgal:oraxen:1.189.0"
+nexo = "com.nexomc:nexo:1.6.0"
+oraxen = "io.th0rgal:oraxen:1.190.0"
 towny = "com.palmergames.bukkit.towny:towny:0.101.1.6"
 
 # Testing
