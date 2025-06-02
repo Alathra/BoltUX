@@ -20,7 +20,7 @@ boltbukkit = "org.popcraft:bolt-bukkit:1.1.52"
 packetevents = "com.github.retrooper:packetevents-spigot:2.8.0"
 entitylib = "me.tofaa.entitylib:spigot:+630837f-SNAPSHOT"
 itemsadder = "dev.lone:api-itemsadder:4.0.10"
-nexo = "com.nexomc:nexo:1.6.0"
+nexo = "com.nexomc:nexo:1.7.3"
 oraxen = "io.th0rgal:oraxen:1.190.0"
 towny = "com.palmergames.bukkit.towny:towny:0.101.1.0"
 
