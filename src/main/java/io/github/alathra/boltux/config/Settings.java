@@ -78,6 +78,8 @@ public class Settings {
             return ItemPlugin.NONE;
         } else if (itemPluginString.equalsIgnoreCase("ItemsAdder")) {
             return ItemPlugin.ITEMSADDER;
+        } else if (itemPluginString.equalsIgnoreCase("MMOItems")) {
+            return ItemPlugin.MMOITEMS;
         } else if (itemPluginString.equalsIgnoreCase("Nexo")) {
             return ItemPlugin.NEXO;
         } else if (itemPluginString.equalsIgnoreCase("Oraxen")) {

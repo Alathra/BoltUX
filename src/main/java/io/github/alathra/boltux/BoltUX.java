@@ -32,6 +32,7 @@ public class BoltUX extends JavaPlugin {
     private static NexoHook nexoHook;
     private static OraxenHook oraxenHook;
     private static TownyHook townyHook;
+    private static MMOItemsHook mmoItemsHook;
 
     // Internal
     private static BoltPlugin boltPlugin;
@@ -51,6 +52,7 @@ public class BoltUX extends JavaPlugin {
         nexoHook = new NexoHook(instance);
         oraxenHook = new OraxenHook(instance);
         townyHook = new TownyHook(instance);
+        mmoItemsHook = new MMOItemsHook(instance);
 
         configHandler.onLoad();
         craftingHandler.onLoad();
@@ -146,5 +148,10 @@ public class BoltUX extends JavaPlugin {
     @NotNull
     public static TownyHook getTownyHook() {
         return townyHook;
+    }
+
+    @NotNull
+    public static MMOItemsHook getMMOItemsHook() {
+        return mmoItemsHook;
     }
 }

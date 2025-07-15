@@ -41,6 +41,7 @@ repositories {
     maven("https://repo.glaremasters.me/repository/towny/") { // Towny
         content { includeGroup("com.palmergames.bukkit.towny") }
     }
+    maven("https://nexus.phoenixdevt.fr/repository/maven-public") // Phoenix Development (MMOItems)
 
 }
 
@@ -70,6 +71,8 @@ dependencies {
     compileOnly(libs.nexo)
     compileOnly(libs.oraxen)
     compileOnly(libs.towny)
+    compileOnly(libs.mythiclib)
+    compileOnly(libs.mmoitems)
 
 }
 
@@ -159,7 +162,7 @@ bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
     // Misc properties
     load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
     depend = listOf("Bolt")
-    softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny")
+    softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny", "MMOItems")
 }
 
 fun applyCustomVersion() {

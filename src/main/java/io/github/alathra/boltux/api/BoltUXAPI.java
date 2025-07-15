@@ -25,6 +25,13 @@ public class BoltUXAPI {
                     itemStack = getDefaultLockItem();
                 }
             }
+            case MMOITEMS -> {
+                if (BoltUX.getMMOItemsHook().isHookLoaded()) {
+                    itemStack = BoltUX.getMMOItemsHook().getLockItem();
+                } else {
+                    itemStack = getDefaultLockItem();
+                }
+            }
             case NEXO -> {
                 if (BoltUX.getNexoHook().isHookLoaded()) {
                     itemStack = BoltUX.getNexoHook().getLockItem();
