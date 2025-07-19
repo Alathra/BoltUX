@@ -10,6 +10,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
+import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.utility.BoltUtil;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -97,7 +98,7 @@ public class TrustListMenu {
     }
 
     public static void populateContent(PaginatedGui gui, Protection protection, Player player) {
-        if (BoltUX.getTownyHook().isHookLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
+        if (Hook.Towny.isLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
             BoltUtil.getTrustedTowns(player).forEach(trustedTown -> gui.addItem(townToRemovableTrustIcon(gui, protection, trustedTown)));
         }
         BoltUtil.getTrustedGroups(player).forEach(trustedGroup -> gui.addItem(groupToRemovableTrustIcon(gui, protection, trustedGroup)));

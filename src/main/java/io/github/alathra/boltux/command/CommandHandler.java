@@ -21,7 +21,7 @@ public class CommandHandler implements Reloadable {
     }
 
     @Override
-    public void onLoad() {
+    public void onLoad(BoltUX plugin) {
         CommandAPI.onLoad(
             new CommandAPIBukkitConfig(plugin)
                 .shouldHookPaperReload(true)
@@ -31,7 +31,7 @@ public class CommandHandler implements Reloadable {
     }
 
     @Override
-    public void onEnable() {
+    public void onEnable(BoltUX plugin) {
         CommandAPI.onEnable();
 
         // Register commands here
@@ -39,7 +39,7 @@ public class CommandHandler implements Reloadable {
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(BoltUX plugin) {
         CommandAPI.getRegisteredCommands().forEach(registeredCommand -> CommandAPI.unregister(registeredCommand.namespace() + ':' + registeredCommand.commandName(), true));
         CommandAPI.onDisable();
     }

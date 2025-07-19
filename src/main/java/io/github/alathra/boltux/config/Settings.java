@@ -3,6 +3,7 @@ package io.github.alathra.boltux.config;
 import com.github.milkdrinkers.colorparser.ColorParser;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.data.ItemPlugin;
+import io.github.alathra.boltux.utility.Cfg;
 import io.github.alathra.boltux.utility.Logger;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -28,33 +29,33 @@ public class Settings {
      * @return The time in seconds a locked block/entity glows for when interact is denied
      */
     public static int getGlowBlockTime() {
-        return plugin.getConfigHandler().getConfig().getOrDefault("GeneralSettings.blockGlowTime", 5);
+        return Cfg.get().getOrDefault("GeneralSettings.blockGlowTime", 5);
     }
 
     public static int getNearbyPlayersRange() {
-        return plugin.getConfigHandler().getConfig().getOrDefault("GuiSettings.nearbyPlayersRange", 100);
+        return Cfg.get().getOrDefault("GuiSettings.nearbyPlayersRange", 100);
     }
 
     public static boolean isLockItemEnabled() {
-        return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.enabled", false);
+        return Cfg.get().getOrDefault("LockItem.enabled", false);
     }
 
     public static boolean isDefaultLockCraftingRecipeEnabled() {
-        return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.enableCraftingRecipe", false);
+        return Cfg.get().getOrDefault("LockItem.enableCraftingRecipe", false);
     }
 
     public static boolean isLockDroppingEnabled() {
-        return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.protectionsDropLocks", false);
+        return Cfg.get().getOrDefault("LockItem.protectionsDropLocks", false);
     }
 
     public static boolean isLockingSoundEnabled() {
-        return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.sound.enabled", false);
+        return Cfg.get().getOrDefault("LockItem.sound.enabled", false);
     }
 
     public static Sound getLockingSound() {
-        @Subst("minecraft:entity.zombie.attack_iron_door") String soundID = plugin.getConfigHandler().getConfig().getOrDefault("LockItem.sound.effect", "minecraft:entity.zombie.attack_iron_door");
-        float volume = plugin.getConfigHandler().getConfig().getOrDefault("LockItem.sound.volume", 1.0).floatValue();
-        float pitch = plugin.getConfigHandler().getConfig().getOrDefault("LockItem.sound.pitch", 1.0).floatValue();
+        @Subst("minecraft:entity.zombie.attack_iron_door") String soundID = Cfg.get().getOrDefault("LockItem.sound.effect", "minecraft:entity.zombie.attack_iron_door");
+        float volume = Cfg.get().getOrDefault("LockItem.sound.volume", 1.0).floatValue();
+        float pitch = Cfg.get().getOrDefault("LockItem.sound.pitch", 1.0).floatValue();
 
         return Sound.sound()
             .type(Key.key(soundID))
@@ -65,7 +66,7 @@ public class Settings {
     }
 
     public static List<World> getLockItemEnabledWorlds() {
-        return plugin.getConfigHandler().getConfig().getStringList("LockItem.enabledWorlds")
+        return Cfg.get().getStringList("LockItem.enabledWorlds")
             .stream()
             .map(Bukkit::getWorld)
             .collect(Collectors.toList());
@@ -73,7 +74,7 @@ public class Settings {
 
     public static ItemPlugin getItemPlugin() {
         // Default to empty String, no plugin
-        String itemPluginString = plugin.getConfigHandler().getConfig().getOrDefault("LockItem.itemPlugin", "");
+        String itemPluginString = Cfg.get().getOrDefault("LockItem.itemPlugin", "");
         if (itemPluginString.isEmpty() || itemPluginString.equalsIgnoreCase("None")) {
             return ItemPlugin.NONE;
         } else if (itemPluginString.equalsIgnoreCase("ItemsAdder")) {
@@ -91,11 +92,11 @@ public class Settings {
     }
 
     public static String getCustomLockItemID() {
-        return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.customLockItemID", "");
+        return Cfg.get().getOrDefault("LockItem.customLockItemID", "");
     }
 
     public static Material getDefaultLockItemMaterial() {
-        String materialString = plugin.getConfigHandler().getConfig().getOrDefault("LockItem.DefaultLockItem.material", "IRON_INGOT");
+        String materialString = Cfg.get().getOrDefault("LockItem.DefaultLockItem.material", "IRON_INGOT");
         try {
             return Material.valueOf(materialString);
         } catch (IllegalArgumentException e) {
@@ -104,17 +105,17 @@ public class Settings {
     }
 
     public static int getDefaultLockItemCustomModelData() {
-        return plugin.getConfigHandler().getConfig().getOrDefault("LockItem.DefaultLockItem.customModelData", 8792);
+        return Cfg.get().getOrDefault("LockItem.DefaultLockItem.customModelData", 8792);
     }
 
     public static Component getDefaultLockItemDisplayName() {
         return ColorParser.of(
-            plugin.getConfigHandler().getConfig().getOrDefault("LockItem.DefaultLockItem.displayName", "<gray>Iron Lock</gray>")
+            Cfg.get().getOrDefault("LockItem.DefaultLockItem.displayName", "<gray>Iron Lock</gray>")
         ).build().decoration(TextDecoration.ITALIC, false);
     }
 
     public static List<Component> getDefaultLockItemLore() {
-        List<String> loreStrings = plugin.getConfigHandler().getConfig().getStringList("LockItem.DefaultLockItem.lore");
+        List<String> loreStrings = Cfg.get().getStringList("LockItem.DefaultLockItem.lore");
         List<Component> loreComponents = new ArrayList<>();
         if (loreStrings == null || loreStrings.isEmpty()) {
             return List.of(Component.empty());
@@ -125,4 +126,13 @@ public class Settings {
         }
         return loreComponents;
     }
+
+    public static boolean isLockingDisabledInOtherTowns() {
+        return Cfg.get().getOrDefault("TownyCompatibility.disableLockingInOtherTowns", true);
+    }
+
+    public static boolean canMayorsAccessProtections() {
+        return Cfg.get().getOrDefault("TownyCompatibility.allowMayorsToAccessLocked", true);
+    }
+
 }

@@ -4,8 +4,8 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.config.Settings;
+import io.github.alathra.boltux.hook.Hook;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
@@ -15,26 +15,27 @@ import java.util.*;
 
 public class GuiHelper {
 
-    public static Set<UUID> getSuggestedPlayers(Player player) {
+    public static Set<UUID> getSuggestedPlayers(Player player, UUID owner) {
         // player, priority
         Map<UUID, Integer> players = new HashMap<>();
 
         // Get nearby players
         for (Entity entity : player.getNearbyEntities(Settings.getNearbyPlayersRange(), Settings.getNearbyPlayersRange(), Settings.getNearbyPlayersRange())) {
             if (entity instanceof Player nearbyPlayer) {
-                players.put(nearbyPlayer.getUniqueId(), 1);
+                if (!nearbyPlayer.getUniqueId().equals(owner))
+                    players.put(nearbyPlayer.getUniqueId(), 1);
             }
         }
 
         // Get players in town and nation
-        if (BoltUX.getTownyHook().isHookLoaded()) {
+        if (Hook.Towny.isLoaded()) {
             TownyAPI townyAPI = TownyAPI.getInstance();
             Resident playerResident = townyAPI.getResident(player.getUniqueId());
             if (playerResident != null) {
                 Town playerTown = playerResident.getTownOrNull();
                 if (playerTown != null) {
                     for (Resident resident : playerTown.getResidents()) {
-                        if (!resident.getUUID().equals(player.getUniqueId())) {
+                        if (!resident.getUUID().equals(owner)) {
                             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(resident.getUUID());
                             if (offlinePlayer.getName() != null) {
                                 players.put(resident.getUUID(), 2);
@@ -46,7 +47,7 @@ public class GuiHelper {
                         for (Town town : playerNation.getTowns()) {
                             if (town != playerTown) {
                                 for (Resident resident : town.getResidents()) {
-                                    if (!resident.getUUID().equals(player.getUniqueId())) {
+                                    if (!resident.getUUID().equals(owner)) {
                                         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(resident.getUUID());
                                         if (offlinePlayer.getName() != null) {
                                             players.put(resident.getUUID(), 3);
@@ -62,7 +63,7 @@ public class GuiHelper {
 
         // Get online players
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            if (!onlinePlayer.getUniqueId().equals(player.getUniqueId())) {
+            if (!onlinePlayer.getUniqueId().equals(owner)) {
                 players.put(onlinePlayer.getUniqueId(), 4);
             }
         }
@@ -78,7 +79,15 @@ public class GuiHelper {
             return Objects.requireNonNull(Bukkit.getOfflinePlayer(p1).getName()).compareToIgnoreCase(Objects.requireNonNull(Bukkit.getOfflinePlayer(p2).getName()));
         });
 
-        sortedPlayers.addAll(players.keySet());
+        Iterator<UUID> iterator = players.keySet().iterator();
+        while (iterator.hasNext()) {
+            UUID playerUUID = iterator.next();
+            if (Bukkit.getOfflinePlayer(playerUUID).getName() == null) {
+                iterator.remove();
+                continue;
+            }
+            sortedPlayers.add(playerUUID);
+        }
 
         return sortedPlayers;
     }

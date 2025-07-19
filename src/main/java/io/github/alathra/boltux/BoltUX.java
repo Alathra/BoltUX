@@ -1,16 +1,15 @@
 package io.github.alathra.boltux;
 
-import com.github.milkdrinkers.colorparser.ColorParser;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import io.github.alathra.boltux.command.CommandHandler;
 import io.github.alathra.boltux.config.ConfigHandler;
 import io.github.alathra.boltux.crafting.CraftingHandler;
-import io.github.alathra.boltux.hook.*;
+import io.github.alathra.boltux.hook.HookManager;
 import io.github.alathra.boltux.listener.ListenerHandler;
 import io.github.alathra.boltux.packets.GlowPacketListener;
-import io.github.alathra.boltux.utility.Logger;
 
+import io.github.alathra.boltux.utility.Reloadable;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.tofaa.entitylib.APIConfig;
 import me.tofaa.entitylib.EntityLib;
@@ -20,22 +19,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.popcraft.bolt.BoltPlugin;
 
+import java.util.List;
+
 public class BoltUX extends JavaPlugin {
+
     private static BoltUX instance;
+    private static BoltPlugin boltPlugin;
+
+    // Handlers/Managers
     private ConfigHandler configHandler;
     private CraftingHandler craftingHandler;
+    private HookManager hookManager;
     private CommandHandler commandHandler;
     private ListenerHandler listenerHandler;
 
-    // Hooks
-    private static ItemsAdderHook itemsAdderHook;
-    private static NexoHook nexoHook;
-    private static OraxenHook oraxenHook;
-    private static TownyHook townyHook;
-    private static MMOItemsHook mmoItemsHook;
+    // Handlers list (defines order of load/enable/disable)
+    private List<? extends Reloadable> handlers;
 
-    // Internal
-    private static BoltPlugin boltPlugin;
 
     public static BoltUX getInstance() {
         return instance;
@@ -46,22 +46,20 @@ public class BoltUX extends JavaPlugin {
         instance = this;
         configHandler = new ConfigHandler(instance);
         craftingHandler = new CraftingHandler(instance);
+        hookManager = new HookManager(this);
         commandHandler = new CommandHandler(instance);
         listenerHandler = new ListenerHandler(instance);
-        itemsAdderHook = new ItemsAdderHook(instance);
-        nexoHook = new NexoHook(instance);
-        oraxenHook = new OraxenHook(instance);
-        townyHook = new TownyHook(instance);
-        mmoItemsHook = new MMOItemsHook(instance);
 
-        configHandler.onLoad();
-        craftingHandler.onLoad();
-        commandHandler.onLoad();
-        listenerHandler.onLoad();
-        itemsAdderHook.onLoad();
-        nexoHook.onLoad();
-        oraxenHook.onLoad();
-        townyHook.onLoad();
+        handlers = List.of(
+            configHandler,
+            craftingHandler,
+            hookManager,
+            commandHandler,
+            listenerHandler
+        );
+
+        for (Reloadable handler : handlers)
+            handler.onLoad(instance);
 
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
         PacketEvents.getAPI().load();
@@ -69,12 +67,12 @@ public class BoltUX extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        configHandler.onEnable();
-        craftingHandler.onEnable();
-        itemsAdderHook.onEnable();
-        nexoHook.onEnable();
-        oraxenHook.onEnable();
-        townyHook.onEnable();
+
+        // Bolt initialization
+        boltPlugin = (BoltPlugin) Bukkit.getServer().getPluginManager().getPlugin("Bolt");
+
+        for (Reloadable handler : handlers)
+            handler.onEnable(instance);
 
         // PacketEvents + EntityLib initialization
         PacketEvents.getAPI().init();
@@ -84,39 +82,12 @@ public class BoltUX extends JavaPlugin {
             .usePlatformLogger();
         EntityLib.init(platform, settings);
         PacketEvents.getAPI().getEventManager().registerListener(new GlowPacketListener(), PacketListenerPriority.NORMAL);
-
-        boltPlugin = (BoltPlugin) Bukkit.getServer().getPluginManager().getPlugin("Bolt");
-
-        if (itemsAdderHook.isHookLoaded()) {
-            Logger.get().info(ColorParser.of("<green>ItemsAdder has been found on this server. ItemsAdder support enabled.").build());
-        }
-
-        if (nexoHook.isHookLoaded()) {
-            Logger.get().info(ColorParser.of("<green>Nexo has been found on this server. Nexo support enabled.").build());
-        }
-
-        if (oraxenHook.isHookLoaded()) {
-            Logger.get().info(ColorParser.of("<green>Oraxen has been found on this server. Oraxen support enabled.").build());
-        }
-
-        if (townyHook.isHookLoaded()) {
-            Logger.get().info(ColorParser.of("<green>Towny has been found on this server. Towny support enabled.").build());
-        }
-
-        commandHandler.onEnable();
-        listenerHandler.onEnable();
     }
 
     @Override
     public void onDisable() {
-        configHandler.onDisable();
-        craftingHandler.onDisable();
-        commandHandler.onDisable();
-        listenerHandler.onDisable();
-        itemsAdderHook.onDisable();
-        nexoHook.onDisable();
-        oraxenHook.onDisable();
-        townyHook.onDisable();
+        for (Reloadable handler : handlers.reversed())
+            handler.onDisable(instance);
 
         PacketEvents.getAPI().terminate();
     }
@@ -128,30 +99,5 @@ public class BoltUX extends JavaPlugin {
     @NotNull
     public ConfigHandler getConfigHandler() {
         return configHandler;
-    }
-
-    @NotNull
-    public static ItemsAdderHook getItemsAdderHook() {
-        return itemsAdderHook;
-    }
-
-    @NotNull
-    public static NexoHook getNexoHook() {
-        return nexoHook;
-    }
-
-    @NotNull
-    public static OraxenHook getOraxenHook() {
-        return oraxenHook;
-    }
-
-    @NotNull
-    public static TownyHook getTownyHook() {
-        return townyHook;
-    }
-
-    @NotNull
-    public static MMOItemsHook getMMOItemsHook() {
-        return mmoItemsHook;
     }
 }

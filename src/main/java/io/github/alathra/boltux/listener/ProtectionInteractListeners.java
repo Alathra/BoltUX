@@ -6,6 +6,7 @@ import io.github.alathra.boltux.data.EntityGroups;
 import io.github.alathra.boltux.data.MaterialGroups;
 import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.gui.GuiHandler;
+import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
 import io.github.alathra.boltux.utility.BlockUtil;
@@ -85,6 +86,18 @@ public class ProtectionInteractListeners implements Listener {
             return;
         }
 
+        // Towny Compat
+        if (Hook.Towny.isLoaded()) {
+            if (Hook.getTownyHook().canAccessProtection(false, player, block.getLocation())) {
+                if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+                    GuiHandler.generateMainMenu(player, protection, block.getLocation());
+                    event.setCancelled(true);
+                    return;
+                }
+                return;
+            }
+        }
+
         boolean canAccess = true;
         if (MaterialGroups.containerBlocks.contains(material)) {
             canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
@@ -123,6 +136,19 @@ public class ProtectionInteractListeners implements Listener {
             }
             return;
         }
+
+        // Towny Compat
+        if (Hook.Towny.isLoaded()) {
+            if (Hook.getTownyHook().canAccessProtection(false, player, entity.getLocation())) {
+                if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+                    GuiHandler.generateMainMenu(player, protection, entity.getLocation());
+                    event.setCancelled(true);
+                    return;
+                }
+                return;
+            }
+        }
+
         EntityType entityType = entity.getType();
 
         boolean canAccess = true;
@@ -170,6 +196,18 @@ public class ProtectionInteractListeners implements Listener {
                 return;
             }
             return;
+        }
+
+        // Towny Compat
+        if (Hook.Towny.isLoaded()) {
+            if (Hook.getTownyHook().canAccessProtection(false, player, entity.getLocation())) {
+                if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+                    GuiHandler.generateMainMenu(player, protection, entity.getLocation());
+                    event.setCancelled(true);
+                    return;
+                }
+                return;
+            }
         }
 
         boolean canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);

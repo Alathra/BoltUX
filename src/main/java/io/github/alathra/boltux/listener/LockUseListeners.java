@@ -6,6 +6,7 @@ import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
 import io.github.alathra.boltux.data.Permissions;
+import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -79,6 +80,14 @@ public class LockUseListeners implements Listener {
             return;
         }
 
+        // Towny Compat
+        if (Hook.Towny.isLoaded()) {
+            if (!Hook.getTownyHook().canCreateProtection(true, player, block.getLocation())) {
+                player.sendMessage(ColorParser.of("<red>You do not have permission to use locks here").build());
+                return;
+            }
+        }
+
         // Player is using lock item on a valid block
         GlowingBlock glowingBlock = new GlowingBlock(block, player);
         glowingBlock.glow(NamedTextColor.GREEN);
@@ -142,6 +151,14 @@ public class LockUseListeners implements Listener {
             return;
         }
 
+        // Towny Compat
+        if (Hook.Towny.isLoaded()) {
+            if (!Hook.getTownyHook().canCreateProtection(true, player, entity.getLocation())) {
+                player.sendMessage(ColorParser.of("<red>You do not have permission to use locks here").build());
+                return;
+            }
+        }
+
         GlowingEntity glowingEntity = new GlowingEntity(entity, player);
         glowingEntity.glow(NamedTextColor.GREEN);
         if (Settings.isLockingSoundEnabled()) {
@@ -197,6 +214,14 @@ public class LockUseListeners implements Listener {
         if (!player.hasPermission(Permissions.LOCK_PERMISSION)) {
             player.sendMessage(ColorParser.of("<red>You do not have permission to use locks").build());
             return;
+        }
+
+        // Towny Compat
+        if (Hook.Towny.isLoaded()) {
+            if (!Hook.getTownyHook().canCreateProtection(true, player, entity.getLocation())) {
+                player.sendMessage(ColorParser.of("<red>You do not have permission to use locks here").build());
+                return;
+            }
         }
 
         GlowingEntity glowingEntity = new GlowingEntity(entity, player);

@@ -11,6 +11,7 @@ import dev.triumphteam.gui.guis.PaginatedGui;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.gui.GuiHelper;
+import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.utility.BoltUtil;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -100,7 +101,7 @@ public class TrustAddMenu {
         final Store store = boltPlugin.getBolt().getStore();
 
         // Get untrusted suggested towns
-        if (BoltUX.getTownyHook().isHookLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
+        if (Hook.Towny.isLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
             Set<Town> suggestedTowns = new HashSet<>(GuiHelper.getSuggestedTowns(player));
             suggestedTowns.removeAll(BoltUtil.getTrustedTowns(player));
             suggestedTowns.forEach(suggestedTown -> gui.addItem(townToAddableTrustIcon(gui, protection, suggestedTown)));
@@ -116,7 +117,7 @@ public class TrustAddMenu {
         untrustedGroups.forEach(group -> gui.addItem(groupToAddableTrustIcon(gui, protection, group)));
 
         // Get untrusted suggested players
-        Set<UUID> suggestedPlayers = new HashSet<>(GuiHelper.getSuggestedPlayers(player));
+        Set<UUID> suggestedPlayers = new HashSet<>(GuiHelper.getSuggestedPlayers(player, protection.getOwner()));
         suggestedPlayers.removeAll(BoltUtil.getTrustedPlayers(player));
         suggestedPlayers.forEach(suggestedPlayer -> gui.addItem(playerToAddableTrustIcon(gui, protection, Bukkit.getOfflinePlayer(suggestedPlayer))));
     }

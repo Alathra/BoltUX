@@ -45,3 +45,10 @@ LockItem:
     lore:
     - "<yellow>Shift-Right Click to Use</yellow>"
     - "<yellow>Lockable Things: Containers, Doors, Gates, Trapdoors</yellow>"
+
+TownyCompatibility:
+  # Disable locking in towns that a player is not a part of
+  disableLockingInOtherTowns: true
+  # Allow Town mayors to access protections within their town claims
+  allowMayorsToAccessLocked: true
+

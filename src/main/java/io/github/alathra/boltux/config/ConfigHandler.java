@@ -24,17 +24,17 @@ public class ConfigHandler implements Reloadable {
     }
 
     @Override
-    public void onLoad() {
+    public void onLoad(BoltUX plugin) {
         cfg = new Config("config", plugin.getDataFolder().getPath(), plugin.getResource("config.yml")); // Create a config file from the template in our resources folder
         Settings.init(plugin);
     }
 
     @Override
-    public void onEnable() {
+    public void onEnable(BoltUX plugin) {
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(BoltUX plugin) {
     }
 
     /**

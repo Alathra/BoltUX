@@ -11,11 +11,11 @@ public class ListenerHandler implements Reloadable {
     }
 
     @Override
-    public void onLoad() {
+    public void onLoad(BoltUX plugin) {
     }
 
     @Override
-    public void onEnable() {
+    public void onEnable(BoltUX plugin) {
         plugin.getServer().getPluginManager().registerEvents(new LockUseListeners(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new LockReturnListeners(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new ProtectionDamageListeners(), plugin);
@@ -23,6 +23,6 @@ public class ListenerHandler implements Reloadable {
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(BoltUX plugin) {
     }
 }

@@ -11,6 +11,7 @@ import dev.triumphteam.gui.guis.PaginatedGui;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.gui.GuiHelper;
+import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.utility.BoltUtil;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -96,7 +97,7 @@ public class ProtectionAccessListMenu {
     }
 
     public static void populateContent(PaginatedGui gui, Protection protection) {
-        if (BoltUX.getTownyHook().isHookLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
+        if (Hook.Towny.isLoaded() && Bukkit.getPluginManager().isPluginEnabled("BoltTowny")) {
             BoltUtil.getTownAccessSet(protection).forEach(accessTown -> gui.addItem(townToRemovableAccessIcon(gui, protection, accessTown)));
         }
         BoltUtil.getGroupAccessSet(protection).forEach(accessGroup -> gui.addItem(groupToRemovableAccessIcon(gui, protection, accessGroup)));

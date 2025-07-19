@@ -2,11 +2,10 @@ package io.github.alathra.boltux.api;
 
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.config.Settings;
+import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.utility.Logger;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Objects;
 
 public class BoltUXAPI {
 
@@ -19,29 +18,29 @@ public class BoltUXAPI {
         ItemStack itemStack;
         switch (Settings.getItemPlugin()) {
             case ITEMSADDER -> {
-                if (BoltUX.getItemsAdderHook().isHookLoaded()) {
-                    itemStack = BoltUX.getItemsAdderHook().getLockItem();
+                if (Hook.ItemsAdder.isLoaded()) {
+                    itemStack = Hook.getItemsAdderHook().getLockItem();
                 } else {
                     itemStack = getDefaultLockItem();
                 }
             }
             case MMOITEMS -> {
-                if (BoltUX.getMMOItemsHook().isHookLoaded()) {
-                    itemStack = BoltUX.getMMOItemsHook().getLockItem();
+                if (Hook.MMOItems.isLoaded()) {
+                    itemStack = Hook.getMMOItemsHook().getLockItem();
                 } else {
                     itemStack = getDefaultLockItem();
                 }
             }
             case NEXO -> {
-                if (BoltUX.getNexoHook().isHookLoaded()) {
-                    itemStack = BoltUX.getNexoHook().getLockItem();
+                if (Hook.Nexo.isLoaded()) {
+                    itemStack = Hook.getNexoHook().getLockItem();
                 } else {
                     itemStack = getDefaultLockItem();
                 }
             }
             case ORAXEN -> {
-                if (BoltUX.getOraxenHook().isHookLoaded()) {
-                    itemStack = BoltUX.getOraxenHook().getLockItem();
+                if (Hook.Oraxen.isLoaded()) {
+                    itemStack = Hook.getOraxenHook().getLockItem();
                 } else {
                     itemStack = getDefaultLockItem();
                 }

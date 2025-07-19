@@ -1,43 +1,37 @@
-package io.github.alathra.boltux.hook;
+package io.github.alathra.boltux.hook.mmoitems;
 
-import com.nexomc.nexo.api.NexoItems;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.config.Settings;
+import io.github.alathra.boltux.hook.AbstractHook;
+import io.github.alathra.boltux.hook.Hook;
 import net.Indyuce.mmoitems.MMOItems;
-import net.Indyuce.mmoitems.api.Type;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class MMOItemsHook implements Hook {
-
-    private BoltUX plugin;
+public class MMOItemsHook extends AbstractHook {
 
     public MMOItemsHook(BoltUX plugin) {
-        this.plugin = plugin;
-    }
-
-    @Override
-    public void onLoad() {
-        if (!isHookLoaded())
-            return;
-    }
-
-    @Override
-    public void onEnable() {
-        if (!isHookLoaded())
-            return;
-    }
-
-    @Override
-    public void onDisable() {
-        if (!isHookLoaded())
-            return;
+        super(plugin);
     }
 
     @Override
     public boolean isHookLoaded() {
-        return Bukkit.getPluginManager().isPluginEnabled("MMOItems");
+        return isPluginEnabled(Hook.MMOItems.getPluginName());
+    }
+
+    @Override
+    public void onLoad(BoltUX plugin) {
+        if (!isHookLoaded()) return;
+    }
+
+    @Override
+    public void onEnable(BoltUX plugin) {
+        if (!isHookLoaded()) return;
+    }
+
+    @Override
+    public void onDisable(BoltUX plugin) {
+        if (!isHookLoaded()) return;
     }
 
     public @Nullable ItemStack getLockItem() {
