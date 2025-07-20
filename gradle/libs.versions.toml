@@ -27,7 +27,7 @@ mmoitems = "net.Indyuce:MMOItems-API:6.9.5-SNAPSHOT"
 mythiclib = "io.lumine:MythicLib-dist:1.7.1-SNAPSHOT"
 
 # Testing
-junit-bom = "org.junit:junit-bom:5.12.1"
+junit-bom = "org.junit:junit-bom:5.13.3"
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform = { module = "org.junit.platform:junit-platform-launcher" }
 slf4j = "org.slf4j:slf4j-simple:2.1.0-alpha1"
