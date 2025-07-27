@@ -4,6 +4,7 @@ import io.github.alathra.boltux.hook.itemsadder.ItemsAdderHook;
 import io.github.alathra.boltux.hook.mmoitems.MMOItemsHook;
 import io.github.alathra.boltux.hook.nexo.NexoHook;
 import io.github.alathra.boltux.hook.oraxen.OraxenHook;
+import io.github.alathra.boltux.hook.quickshop.QuickShopHook;
 import io.github.alathra.boltux.hook.towny.TownyHook;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,8 @@ public enum Hook {
     ItemsAdder(ItemsAdderHook.class, "ItemsAdder", true),
     Nexo(NexoHook.class, "Nexo", true),
     Oraxen(OraxenHook.class, "Oraxen", true),
-    MMOItems(MMOItemsHook.class, "MMOItems", true);
+    MMOItems(MMOItemsHook.class, "MMOItems", true),
+    QuickShop(QuickShopHook.class, "QuickShop-Hikari", true);
 
     private final @NotNull Class<? extends AbstractHook> hookClass; // The hook class used by this hook
     private final @Nullable String pluginName; // The plugin name used by this hook or null if not applicable
@@ -129,6 +131,11 @@ public enum Hook {
     @NotNull
     public static MMOItemsHook getMMOItemsHook() {
         return (MMOItemsHook) Hook.MMOItems.get();
+    }
+
+    @NotNull
+    public static QuickShopHook getQuickShopHook() {
+        return (QuickShopHook) Hook.QuickShop.get();
     }
 
 

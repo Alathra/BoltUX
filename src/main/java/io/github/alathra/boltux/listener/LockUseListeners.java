@@ -7,6 +7,7 @@ import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
 import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.hook.Hook;
+import io.github.alathra.boltux.hook.quickshop.QuickShopHook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -80,10 +81,18 @@ public class LockUseListeners implements Listener {
             return;
         }
 
-        // Towny Compat
+        // Towny Compatibility
         if (Hook.Towny.isLoaded()) {
             if (!Hook.getTownyHook().canCreateProtection(true, player, block.getLocation())) {
                 player.sendMessage(ColorParser.of("<red>You do not have permission to use locks here").build());
+                return;
+            }
+        }
+
+        // QuickShop Compatibility
+        if (Hook.QuickShop.isLoaded()) {
+            if(Hook.getQuickShopHook().isQuickShop(block.getLocation()) && Settings.isQuickShopLockingDisabled()) {
+                player.sendMessage(ColorParser.of("<red>You cannot lock a QuickShop!").build());
                 return;
             }
         }
@@ -151,10 +160,18 @@ public class LockUseListeners implements Listener {
             return;
         }
 
-        // Towny Compat
+        // Towny Compatibility
         if (Hook.Towny.isLoaded()) {
             if (!Hook.getTownyHook().canCreateProtection(true, player, entity.getLocation())) {
                 player.sendMessage(ColorParser.of("<red>You do not have permission to use locks here").build());
+                return;
+            }
+        }
+
+        // QuickShop Compatibility
+        if (Hook.QuickShop.isLoaded()) {
+            if(Hook.getQuickShopHook().isQuickShop(entity.getLocation()) && Settings.isQuickShopLockingDisabled()) {
+                player.sendMessage(ColorParser.of("<red>You cannot lock a QuickShop!").build());
                 return;
             }
         }
@@ -216,10 +233,18 @@ public class LockUseListeners implements Listener {
             return;
         }
 
-        // Towny Compat
+        // Towny Compatibility
         if (Hook.Towny.isLoaded()) {
             if (!Hook.getTownyHook().canCreateProtection(true, player, entity.getLocation())) {
                 player.sendMessage(ColorParser.of("<red>You do not have permission to use locks here").build());
+                return;
+            }
+        }
+
+        // QuickShop Compatibility
+        if (Hook.QuickShop.isLoaded()) {
+            if(Hook.getQuickShopHook().isQuickShop(entity.getLocation()) && Settings.isQuickShopLockingDisabled()) {
+                player.sendMessage(ColorParser.of("<red>You cannot lock a QuickShop!").build());
                 return;
             }
         }

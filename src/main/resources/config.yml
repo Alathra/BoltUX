@@ -52,3 +52,6 @@ TownyCompatibility:
   # Allow Town mayors to access protections within their town claims
   allowMayorsToAccessLocked: true
 
+QuickShopCompatibility:
+  # Disable locking of QuickShop shops
+  disableLockingShops: true

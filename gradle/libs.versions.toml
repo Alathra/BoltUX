@@ -1,6 +1,7 @@
 [versions]
 crate = "2.1.0"
 commandapi = "10.1.1"
+quickshop = "6.2.0.9-RELEASE-1"
 
 [libraries]
 # Core dependencies
@@ -25,6 +26,8 @@ oraxen = "io.th0rgal:oraxen:1.190.0"
 towny = "com.palmergames.bukkit.towny:towny:0.101.2.0"
 mmoitems = "net.Indyuce:MMOItems-API:6.9.5-SNAPSHOT"
 mythiclib = "io.lumine:MythicLib-dist:1.7.1-SNAPSHOT"
+quickshop-bukkit = { module = "com.ghostchu:quickshop-bukkit", version.ref = "quickshop" }
+quickshop-api = { module = "com.ghostchu:quickshop-api", version.ref = "quickshop" }
 
 # Testing
 junit-bom = "org.junit:junit-bom:5.13.3"

@@ -135,4 +135,8 @@ public class Settings {
         return Cfg.get().getOrDefault("TownyCompatibility.allowMayorsToAccessLocked", true);
     }
 
+    public static boolean isQuickShopLockingDisabled() {
+        return Cfg.get().getOrDefault("QuickShopCompatibility.disableLockingShops", true);
+    }
+
 }
