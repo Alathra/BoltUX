@@ -42,6 +42,6 @@ junit = ["junit-jupiter", "junit-platform"]
 testcontainers = ["testcontainers-jupiter"]
 
 [plugins]
-shadow = "com.gradleup.shadow:8.3.6"
+shadow = "com.gradleup.shadow:9.0.0"
 run-paper = "xyz.jpenilla.run-paper:2.3.1"
 plugin-yml = "net.minecrell.plugin-yml.bukkit:0.6.0"
