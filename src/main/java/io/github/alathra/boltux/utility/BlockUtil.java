@@ -3,6 +3,7 @@ package io.github.alathra.boltux.utility;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +35,33 @@ public class BlockUtil {
 
     // Helper function to check if the chest is part of a double chest
     public static boolean isDoubleChest(Inventory inventory) {
-        return inventory.getSize() == 54;  // Double chest size is 54 (27 slots each for two chests)
+        return inventory instanceof DoubleChestInventory || inventory.getSize() == 54;
+    }
+
+    //Normalize a chest block so both halves of a double chest map to the same "base" block
+    public static Block normalizeChestBlock(Block block) {
+        if (!(block.getType() == Material.CHEST || block.getType() == Material.TRAPPED_CHEST)) {
+            return block;
+        }
+
+        Chest chest = (Chest) block.getState();
+        if (chest.getInventory() instanceof DoubleChestInventory dblInv) {
+            Block left = ((Chest) dblInv.getLeftSide()).getBlock();
+            Block right = ((Chest) dblInv.getRightSide()).getBlock();
+            return getLowerCoordinateBlock(left, right);
+        }
+
+        return block;
+    }
+
+    //Returns the "lower" of two blocks by comparing coordinates in order: X, then Z, then Y
+    private static Block getLowerCoordinateBlock(Block a, Block b) {
+        if (a.getX() != b.getX()) {
+            return a.getX() < b.getX() ? a : b;
+        }
+        if (a.getZ() != b.getZ()) {
+            return a.getZ() < b.getZ() ? a : b;
+        }
+        return a.getY() <= b.getY() ? a : b;
     }
 }
