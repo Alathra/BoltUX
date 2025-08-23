@@ -30,7 +30,7 @@ quickshop-bukkit = { module = "com.ghostchu:quickshop-bukkit", version.ref = "qu
 quickshop-api = { module = "com.ghostchu:quickshop-api", version.ref = "quickshop" }
 
 # Testing
-junit-bom = "org.junit:junit-bom:5.13.3"
+junit-bom = "org.junit:junit-bom:5.13.4"
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform = { module = "org.junit.platform:junit-platform-launcher" }
 slf4j = "org.slf4j:slf4j-simple:2.1.0-alpha1"
