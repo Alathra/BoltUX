@@ -1,14 +1,15 @@
 package io.github.alathra.boltux;
 
+import com.github.milkdrinkers.colorparser.ColorParser;
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import io.github.alathra.boltux.command.CommandHandler;
 import io.github.alathra.boltux.config.ConfigHandler;
 import io.github.alathra.boltux.crafting.CraftingHandler;
+import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.hook.HookManager;
 import io.github.alathra.boltux.listener.ListenerHandler;
-import io.github.alathra.boltux.packets.GlowPacketListener;
 
+import io.github.alathra.boltux.utility.Logger;
 import io.github.alathra.boltux.utility.Reloadable;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.tofaa.entitylib.APIConfig;
@@ -60,9 +61,6 @@ public class BoltUX extends JavaPlugin {
 
         for (Reloadable handler : handlers)
             handler.onLoad(instance);
-
-        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
-        PacketEvents.getAPI().load();
     }
 
     @Override
@@ -74,22 +72,22 @@ public class BoltUX extends JavaPlugin {
         for (Reloadable handler : handlers)
             handler.onEnable(instance);
 
-        // PacketEvents + EntityLib initialization
-        PacketEvents.getAPI().init();
-        SpigotEntityLibPlatform platform = new SpigotEntityLibPlatform(this);
-        APIConfig settings = new APIConfig(PacketEvents.getAPI())
-            .tickTickables()
-            .usePlatformLogger();
-        EntityLib.init(platform, settings);
-        PacketEvents.getAPI().getEventManager().registerListener(new GlowPacketListener(), PacketListenerPriority.NORMAL);
+        if (Hook.PacketEvents.isLoaded()) {
+            // EntityLib initialization
+            SpigotEntityLibPlatform platform = new SpigotEntityLibPlatform(this);
+            APIConfig settings = new APIConfig(PacketEvents.getAPI())
+                .tickTickables()
+                .usePlatformLogger();
+            EntityLib.init(platform, settings);
+        } else {
+            Logger.get().warn(ColorParser.of("You are running BoltUX but you do not have PacketEvents installed. Plugin functionality will be limited!").build());
+        }
     }
 
     @Override
     public void onDisable() {
         for (Reloadable handler : handlers.reversed())
             handler.onDisable(instance);
-
-        PacketEvents.getAPI().terminate();
     }
 
     public static BoltPlugin getBoltPlugin() {

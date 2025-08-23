@@ -98,8 +98,11 @@ public class LockUseListeners implements Listener {
         }
 
         // Player is using lock item on a valid block
-        GlowingBlock glowingBlock = new GlowingBlock(block, player);
-        glowingBlock.glow(NamedTextColor.GREEN);
+        if (Hook.PacketEvents.isLoaded()) {
+            GlowingBlock glowingBlock = new GlowingBlock(block, player);
+            glowingBlock.glow(NamedTextColor.GREEN);
+        }
+
         if (Settings.isLockingSoundEnabled()) {
             player.playSound(Settings.getLockingSound());
         }
@@ -176,8 +179,11 @@ public class LockUseListeners implements Listener {
             }
         }
 
-        GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-        glowingEntity.glow(NamedTextColor.GREEN);
+        if (Hook.PacketEvents.isLoaded()) {
+            GlowingEntity glowingEntity = new GlowingEntity(entity, player);
+            glowingEntity.glow(NamedTextColor.GREEN);
+        }
+
         if (Settings.isLockingSoundEnabled()) {
             player.playSound(Settings.getLockingSound());
         }
@@ -249,8 +255,11 @@ public class LockUseListeners implements Listener {
             }
         }
 
-        GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-        glowingEntity.glow(NamedTextColor.GREEN);
+        if (Hook.PacketEvents.isLoaded()) {
+            GlowingEntity glowingEntity = new GlowingEntity(entity, player);
+            glowingEntity.glow(NamedTextColor.GREEN);
+        }
+
         if (Settings.isLockingSoundEnabled()) {
             player.playSound(Settings.getLockingSound());
         }

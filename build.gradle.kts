@@ -60,7 +60,7 @@ dependencies {
 
     // Plugin dependencies
     compileOnly(libs.boltbukkit)
-    implementation(libs.packetevents)
+    compileOnly(libs.packetevents)
     implementation(libs.entitylib)
     compileOnly(libs.itemsadder)
     compileOnly(libs.nexo)
@@ -114,7 +114,6 @@ tasks {
         reloc("com.github.milkdrinkers.colorparser", "colorparser")
         reloc("dev.jorel.commandapi", "commandapi")
         reloc("dev.triumphteam.gui", "gui")
-        reloc("com.github.retrooper", "packetevents")
         reloc("me.tofaa.entitylib", "entitylib")
 
         minimize()
@@ -159,7 +158,7 @@ bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
     // Misc properties
     load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
     depend = listOf("Bolt")
-    softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny", "MMOItems", "QuickShop-Hikari")
+    softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny", "MMOItems", "QuickShop-Hikari", "PacketEvents")
 }
 
 fun applyCustomVersion() {

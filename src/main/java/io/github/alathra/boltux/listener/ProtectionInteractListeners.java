@@ -7,6 +7,7 @@ import io.github.alathra.boltux.data.MaterialGroups;
 import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.hook.Hook;
+import io.github.alathra.boltux.hook.packetevents.PacketEventsHook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
 import io.github.alathra.boltux.utility.BlockUtil;
@@ -109,8 +110,10 @@ public class ProtectionInteractListeners implements Listener {
 
         // Display red glowing block if player does not have access
         if (!canAccess) {
-            GlowingBlock glowingBlock = new GlowingBlock(block, player);
-            glowingBlock.glow(NamedTextColor.RED);
+            if (Hook.PacketEvents.isLoaded()) {
+                GlowingBlock glowingBlock = new GlowingBlock(block, player);
+                glowingBlock.glow(NamedTextColor.RED);
+            }
         }
     }
 
@@ -164,11 +167,13 @@ public class ProtectionInteractListeners implements Listener {
 
         // Make entity glow red if player does not have access
         if (!canAccess) {
-            if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
-                return;
+            if (Hook.PacketEvents.isLoaded()) {
+                if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
+                    return;
+                }
+                GlowingEntity glowingEntity = new GlowingEntity(entity, player);
+                glowingEntity.glow(NamedTextColor.RED);
             }
-            GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-            glowingEntity.glow(NamedTextColor.RED);
         }
     }
 
@@ -214,11 +219,13 @@ public class ProtectionInteractListeners implements Listener {
 
         // Make entity glow red if player does not have access
         if (!canAccess) {
-            if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
-                return;
+            if (Hook.PacketEvents.isLoaded()) {
+                if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
+                    return;
+                }
+                GlowingEntity glowingEntity = new GlowingEntity(entity, player);
+                glowingEntity.glow(NamedTextColor.RED);
             }
-            GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-            glowingEntity.glow(NamedTextColor.RED);
         }
     }
 
