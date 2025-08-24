@@ -158,7 +158,7 @@ bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
     // Misc properties
     load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
     depend = listOf("Bolt")
-    softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny", "MMOItems", "QuickShop-Hikari", "PacketEvents")
+    softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny", "MMOItems", "QuickShop-Hikari", "packetevents")
 }
 
 fun applyCustomVersion() {

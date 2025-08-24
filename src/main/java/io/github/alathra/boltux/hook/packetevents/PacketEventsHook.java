@@ -25,12 +25,12 @@ public class PacketEventsHook extends AbstractHook {
     @Override
     public void onLoad(BoltUX plugin) {
         if (!isHookLoaded()) return;
-        PacketEvents.getAPI().init();
     }
 
     @Override
     public void onEnable(BoltUX plugin) {
         if (!isHookLoaded()) return;
+        PacketEvents.getAPI().init();
         PacketEvents.getAPI().getEventManager().registerListener(new GlowPacketListener(), PacketListenerPriority.NORMAL);
     }
 
