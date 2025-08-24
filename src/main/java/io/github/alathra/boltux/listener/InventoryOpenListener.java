@@ -26,6 +26,10 @@ public class InventoryOpenListener implements Listener {
     public void onInventoryOpen(InventoryOpenEvent event) {
         if (!(event.getPlayer() instanceof Player player)) return;
 
+        if(event.getInventory() == null || event.getInventory().getHolder() == null) {
+            return;
+        }
+
         // CHESTS
         if (event.getInventory().getHolder() instanceof Chest chest) {
             Block chestBlock = chest.getBlock();
