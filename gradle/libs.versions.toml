@@ -1,6 +1,6 @@
 [versions]
 crate = "2.1.0"
-commandapi = "10.1.1"
+commandapi = "10.1.2"
 quickshop = "6.2.0.9-RELEASE-1"
 
 [libraries]
