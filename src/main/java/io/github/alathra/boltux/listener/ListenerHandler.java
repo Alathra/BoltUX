@@ -1,6 +1,7 @@
 package io.github.alathra.boltux.listener;
 
 import io.github.alathra.boltux.BoltUX;
+import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.utility.Reloadable;
 
 public class ListenerHandler implements Reloadable {
@@ -20,6 +21,8 @@ public class ListenerHandler implements Reloadable {
         plugin.getServer().getPluginManager().registerEvents(new LockReturnListeners(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new ProtectionDamageListeners(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new ProtectionInteractListeners(), plugin);
+        if (Hook.PacketEvents.isLoaded())
+            plugin.getServer().getPluginManager().registerEvents(new PacketEventsListeners(), plugin);
     }
 
     @Override

@@ -10,6 +10,7 @@ import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.hook.packetevents.PacketEventsHook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
+import io.github.alathra.boltux.packets.GlowingEntityTracker;
 import io.github.alathra.boltux.utility.BlockUtil;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
@@ -168,11 +169,7 @@ public class ProtectionInteractListeners implements Listener {
         // Make entity glow red if player does not have access
         if (!canAccess) {
             if (Hook.PacketEvents.isLoaded()) {
-                if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
-                    return;
-                }
-                GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-                glowingEntity.glow(NamedTextColor.RED);
+                new GlowingEntity(entity, player, NamedTextColor.RED);
             }
         }
     }
@@ -220,11 +217,7 @@ public class ProtectionInteractListeners implements Listener {
         // Make entity glow red if player does not have access
         if (!canAccess) {
             if (Hook.PacketEvents.isLoaded()) {
-                if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
-                    return;
-                }
-                GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-                glowingEntity.glow(NamedTextColor.RED);
+                new GlowingEntity(entity, player, NamedTextColor.RED);
             }
         }
     }

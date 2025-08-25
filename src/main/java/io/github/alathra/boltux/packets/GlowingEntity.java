@@ -9,98 +9,74 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-
 public class GlowingEntity {
-
-    // Map of EntityID, EntityUUID
-    public static final Map<Integer, UUID> glowingEntitiesRawMap = new HashMap<>();
-    public static final Set<GlowingEntity> glowingEntities = new HashSet<>();
-
     private final Entity entity;
     private final Player player;
-    private EntityMeta entityMeta = null;
-    private BukkitTask stopGlowTimer;
-    private Team team;
+    private final EntityMeta entityMeta;
 
-    public GlowingEntity(Entity entity, Player player) {
+    public GlowingEntity(Entity entity, Player player, NamedTextColor color) {
         this.entity = entity;
         this.player = player;
-    }
+        this.entityMeta = EntityMeta.createMeta(entity.getEntityId(), SpigotConversionUtil.fromBukkitEntityType(entity.getType()));
 
-    public void glow(NamedTextColor color) {
-        glowingEntities.add(this);
-        entityMeta = EntityMeta.createMeta(entity.getEntityId(), SpigotConversionUtil.fromBukkitEntityType(entity.getType()));
-        setGlowColor(color);
-        // Without this 1-tick delay, this will have no effect, for some reason
-        Bukkit.getScheduler().runTaskLater(BoltUX.getInstance(), () -> {
+        // Only executes if this entity is not already glowing
+        if (!GlowingEntityTracker.getInstance().isGlowing(player, entity)) {
+            // Set this entity as glowing
+            GlowingEntityTracker.getInstance().track(player, entity);
+
+            setTeam(color);
             entityMeta.setGlowing(true);
             PacketEvents.getAPI().getPlayerManager().sendPacket(player, entityMeta.createPacket());
-            glowingEntitiesRawMap.put(entity.getEntityId(), entity.getUniqueId());
-        }, 1L);
 
-        // Clear glow effect after glow time is reached
-        stopGlowTimer = Bukkit.getScheduler().runTaskLater(BoltUX.getInstance(), () -> {
-            entityMeta.setGlowing(false);
-            PacketEvents.getAPI().getPlayerManager().sendPacket(player, entityMeta.createPacket());
-            glowingEntitiesRawMap.remove(entity.getEntityId());
-            // Remove from team so glow color is not persistent
-            team.removeEntity(entity);
-            glowingEntities.remove(this);
-        }, Settings.getGlowBlockTime() * 20L);
-    }
-
-    public void cancelStopGlowTimer() {
-        stopGlowTimer.cancel();
-        glowingEntities.remove(this);
-    }
-
-    public void stopGlowNow() {
-        stopGlowTimer.cancel();
-        entityMeta.setGlowing(false);
-        PacketEvents.getAPI().getPlayerManager().sendPacket(player, entityMeta.createPacket());
-        glowingEntitiesRawMap.remove(entity.getEntityId());
-        // Remove from team so glow color is not persistent
-        team.removeEntity(entity);
-        glowingEntities.remove(this);
-    }
-
-    private void setGlowColor(NamedTextColor color) {
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
-        Scoreboard scoreboard = manager.getMainScoreboard();
-        String teamName = "boltux_color_" + color.toString();
-        team = scoreboard.getTeam(teamName);
-        if (team == null) {
-            team = scoreboard.registerNewTeam(teamName);
-            team.color(color);
+            // Clear glow effect after glow time is reached
+            Bukkit.getScheduler().runTaskLaterAsynchronously(BoltUX.getInstance(), () -> {
+                GlowingEntityTracker.getInstance().untrack(player, entity);
+                entityMeta.setGlowing(false);
+                PacketEvents.getAPI().getPlayerManager().sendPacket(player, entityMeta.createPacket());
+                removeTeam();
+            }, Settings.getGlowBlockTime() * 20L);
         }
-        if (entity == null) {
+    }
+
+
+
+    private void setTeam(NamedTextColor color) {
+        if(!entity.isValid())
             return;
+
+        // Only allow untracked
+        if (!TeamTracker.getInstance().isTracked(entity.getUniqueId())) { // Only allow tracked
+            TeamsPacketUtil.addToTeam(
+                player,
+                color,
+                List.of(entity.getUniqueId().toString())
+            );
+            TeamTracker.getInstance().setTracked(entity.getUniqueId(), color);
         }
-        team.addEntity(entity);
     }
 
-    public int getEntityID() {
-        return entity.getEntityId();
-    }
-
-    public Entity getEntity() {
-        return entity;
-    }
-
-    public static @Nullable GlowingEntity getGlowingEntityByEntityID(int entityID) {
-        for (GlowingEntity glowingEntity : glowingEntities) {
-            if (glowingEntity.getEntityID() == entityID) {
-                return glowingEntity;
-            }
+    private void removeTeam() {
+        if (TeamTracker.getInstance().isTracked(entity.getUniqueId())) { // Only allow tracked
+            TeamsPacketUtil.removeFromTeam(
+                player,
+                TeamTracker.getInstance().getTrackedColor(entity.getUniqueId()),
+                List.of(entity.getUniqueId().toString())
+            );
+            TeamTracker.getInstance().unTrack(entity.getUniqueId());
         }
-        return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof GlowingEntity that)) return false;
+        return Objects.equals(entity, that.entity);
+    }
+
+    @Override
+    public int hashCode() {
+        return entity.hashCode();
     }
 }
