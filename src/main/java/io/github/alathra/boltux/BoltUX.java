@@ -11,7 +11,6 @@ import io.github.alathra.boltux.listener.ListenerHandler;
 
 import io.github.alathra.boltux.utility.Logger;
 import io.github.alathra.boltux.utility.Reloadable;
-import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.tofaa.entitylib.APIConfig;
 import me.tofaa.entitylib.EntityLib;
 import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;
