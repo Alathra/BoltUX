@@ -17,30 +17,27 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GlowingBlock {
-
     private final Block block;
     private final Player player;
-    private final List<WrapperEntity> entities;
-    private Team team;
+    private final Set<WrapperEntity> entities = ConcurrentHashMap.newKeySet();
 
     public GlowingBlock (Block block, Player player) {
         this.block = block;
         this.player = player;
-        entities = new ArrayList<>();
     }
 
     public void glow(NamedTextColor color) {
         placeEntities();
-        setGlowColor(color);
-        Bukkit.getScheduler().runTaskLater(BoltUX.getInstance(), this::removeEntities, Settings.getGlowBlockTime() * 20L);
+        setTeam(color);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(BoltUX.getInstance(), () -> removeEntities(color), Settings.getGlowBlockTime() * 20L);
     }
 
     private void placeEntities() {
@@ -80,34 +77,45 @@ public class GlowingBlock {
         }
     }
 
-    public void removeEntities() {
-        for (WrapperEntity entity : entities) {
-            if (entity == null)
-                return;
-            team.removeEntry(entity.getUuid().toString());
-            entity.despawn();
-            entity = null;
-        }
+    public void removeEntities(NamedTextColor color) {
+        entities.stream()
+            .filter(Objects::nonNull)
+            .forEach(WrapperEntity::despawn);
+        removeTeam(color);
     }
 
-    private void setGlowColor(NamedTextColor color) {
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
-        Scoreboard scoreboard = manager.getMainScoreboard();
-        String teamName = "boltux_color_" + color.toString();
-        team = scoreboard.getTeam(teamName);
-        if (team == null) {
-            team = scoreboard.registerNewTeam(teamName);
-            team.color(color);
-            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
-            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-        }
-
-        for (WrapperEntity entity : entities) {
-            if (entity == null) {
-                continue;
-            }
-            team.addEntry(entity.getUuid().toString());
-        }
+    private void setTeam(NamedTextColor color) {
+        TeamsPacketUtil.addToTeam(
+            player,
+            color,
+            entities.stream()
+                .filter(Objects::nonNull)
+                .filter(entity -> !TeamTracker.getInstance().isTracked(entity.getUuid())) // Only include untracked
+                .map(entity -> entity.getUuid().toString())
+                .toList()
+        );
     }
 
+    private void removeTeam(NamedTextColor color) {
+        TeamsPacketUtil.removeFromTeam(
+            player,
+            color,
+            entities.stream()
+                .filter(Objects::nonNull)
+                .filter(entity -> TeamTracker.getInstance().isTracked(entity.getUuid())) // Only include tracked
+                .map(entity -> entity.getUuid().toString())
+                .toList()
+        );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof GlowingBlock that)) return false;
+        return Objects.equals(block, that.block);
+    }
+
+    @Override
+    public int hashCode() {
+        return block.hashCode();
+    }
 }

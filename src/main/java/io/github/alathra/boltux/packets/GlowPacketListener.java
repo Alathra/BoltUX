@@ -1,48 +1,55 @@
 package io.github.alathra.boltux.packets;
 
 import com.github.retrooper.packetevents.event.PacketListener;
-import com.github.retrooper.packetevents.event.PacketReceiveEvent;
+import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.User;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
-import io.github.alathra.boltux.BoltUX;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
+import io.github.retrooper.packetevents.util.SpigotConversionUtil;
+import me.tofaa.entitylib.meta.EntityMeta;
+import me.tofaa.entitylib.meta.Metadata;
 import org.bukkit.entity.Entity;
-import org.popcraft.bolt.protection.EntityProtection;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * Fixes interaction with glowing entities.
+ * @author darksaid98
+ */
 public class GlowPacketListener implements PacketListener {
-
+    /**
+     * When interacting with a entity that has custom metadata, the client requests an update packet for the entity.
+     * This would break our glowing mechanic as said update packet would not include our ephemeral "glowing" metadata.
+     * This listener modifies the outgoing metadata packets and includes the glowing.
+     * @param event packet event
+     */
     @Override
-    public void onPacketReceive(PacketReceiveEvent event) {
-        if (!event.getPacketType().equals(PacketType.Play.Client.INTERACT_ENTITY)) {
+    public void onPacketSend(@NotNull PacketSendEvent event) {
+        // Only catch client bound entity metadata packets
+        if (!event.getPacketType().equals(PacketType.Play.Server.ENTITY_METADATA)) {
             return;
         }
-        User user = event.getUser();
-        // They interacted with an entity.
-        WrapperPlayClientInteractEntity packet = new WrapperPlayClientInteractEntity(event);
-        // Retrieve that entity's ID
-        final int entityId = packet.getEntityId();
-        if (!GlowingEntity.glowingEntitiesRawMap.containsKey(entityId)) {
+
+        final WrapperPlayServerEntityMetadata packet = new WrapperPlayServerEntityMetadata(event);
+        final Player player = event.getPlayer();
+
+        // Get the bukkit entity from the entity id
+        final Entity entity = SpigotConversionUtil.getEntityById(player.getWorld(), packet.getEntityId());
+        if (entity == null)
+            return;
+
+        // If this entity isn't tracked by us, it is not a glowing entity
+        if (!GlowingEntityTracker.getInstance().isGlowing(player, entity)) {
             return;
         }
-        // Cancel the current glow, stop it from removing glow
-        GlowingEntity oldGlowingEntity = GlowingEntity.getGlowingEntityByEntityID(entityId);
-        if (oldGlowingEntity == null) {
-            return;
-        }
-        Entity entity = oldGlowingEntity.getEntity();
-        oldGlowingEntity.stopGlowNow();
-        // Create a new glow effect
-        EntityProtection protection = BoltUX.getBoltPlugin().loadProtection(entity);
-        if (protection == null) {
-            return;
-        }
-        GlowingEntity glowingEntity = new GlowingEntity(entity, Bukkit.getPlayer(user.getUUID()));
-        if (protection.getOwner().equals(user.getUUID())) {
-            glowingEntity.glow(NamedTextColor.GREEN);
-        } else {
-            glowingEntity.glow(NamedTextColor.RED);
-        }
+
+        // Modify existing metadata to enable glowing
+        final Metadata metadata = new Metadata(packet.getEntityId());
+        metadata.setMetaFromPacket(packet);
+
+        final EntityMeta entityMeta = new EntityMeta(packet.getEntityId(), metadata);
+        entityMeta.setGlowing(true);
+
+        // Replace metadata of entity with modified metadata
+        packet.setEntityMetadata(entityMeta);
     }
 }

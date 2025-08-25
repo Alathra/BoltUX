@@ -7,6 +7,7 @@ import io.github.alathra.boltux.data.MaterialGroups;
 import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
+import io.github.alathra.boltux.packets.GlowingEntityTracker;
 import io.github.alathra.boltux.utility.BlockUtil;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -121,11 +122,7 @@ public class ProtectionDamageListeners implements Listener {
 
         // Make entity glow red if player does not have access
         if (!canBreak) {
-            if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
-                return;
-            }
-            GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-            glowingEntity.glow(NamedTextColor.RED);
+            new GlowingEntity(entity, player, NamedTextColor.RED);
         }
     }
 
@@ -155,11 +152,7 @@ public class ProtectionDamageListeners implements Listener {
         // Make entity glow red if player does not have access
         if (!canBreak) {
             if (Hook.PacketEvents.isLoaded()) {
-                if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
-                    return;
-                }
-                GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-                glowingEntity.glow(NamedTextColor.RED);
+                new GlowingEntity(entity, player, NamedTextColor.RED);
             }
         }
     }
@@ -192,11 +185,7 @@ public class ProtectionDamageListeners implements Listener {
         // Make entity glow red if player does not have access
         if (!canBreak) {
             if (Hook.PacketEvents.isLoaded())  {
-                if (GlowingEntity.glowingEntitiesRawMap.containsKey(entity.getEntityId())) {
-                    return;
-                }
-                GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-                glowingEntity.glow(NamedTextColor.RED);
+                new GlowingEntity(entity, player, NamedTextColor.RED);
             }
         }
     }
