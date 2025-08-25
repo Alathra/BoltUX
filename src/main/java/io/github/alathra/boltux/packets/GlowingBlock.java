@@ -84,7 +84,7 @@ public class GlowingBlock {
         for (WrapperEntity entity : entities) {
             if (entity == null)
                 return;
-            team.removeEntry(entity.toString());
+            team.removeEntry(entity.getUuid().toString());
             entity.despawn();
             entity = null;
         }

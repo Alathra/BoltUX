@@ -138,6 +138,8 @@ tasks {
             modrinth("Bolt", "1.1.52")
             modrinth("BoltTowny", "1.0.1")
             github("MilkBowl", "Vault", "1.7.3", "Vault.jar")
+            modrinth("PacketEvents", "2.9.4+spigot")
+            modrinth("Towny", "0.101.2.0")
         }
     }
 }

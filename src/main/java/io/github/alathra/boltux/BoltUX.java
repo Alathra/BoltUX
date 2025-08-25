@@ -15,8 +15,12 @@ import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import me.tofaa.entitylib.APIConfig;
 import me.tofaa.entitylib.EntityLib;
 import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.popcraft.bolt.BoltPlugin;
 
@@ -82,12 +86,20 @@ public class BoltUX extends JavaPlugin {
         } else {
             Logger.get().warn(ColorParser.of("You are running BoltUX but you do not have PacketEvents installed. Plugin functionality will be limited!").build());
         }
+
+        // clear team data (scoreboard.dat)
+        clearColorScoreboardData(NamedTextColor.RED);
+        clearColorScoreboardData(NamedTextColor.GREEN);
     }
 
     @Override
     public void onDisable() {
         for (Reloadable handler : handlers.reversed())
             handler.onDisable(instance);
+
+        // clear team data (scoreboard.dat)
+        clearColorScoreboardData(NamedTextColor.RED);
+        clearColorScoreboardData(NamedTextColor.GREEN);
     }
 
     public static BoltPlugin getBoltPlugin() {
@@ -97,5 +109,16 @@ public class BoltUX extends JavaPlugin {
     @NotNull
     public ConfigHandler getConfigHandler() {
         return configHandler;
+    }
+
+    public void clearColorScoreboardData(NamedTextColor color) {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard scoreboard = manager.getMainScoreboard();
+        String teamName = "boltux_color_" + color.toString();
+        Team team = scoreboard.getTeam(teamName);
+        if (team == null) {
+            return;
+        }
+        team.removeEntries(team.getEntries());
     }
 }
