@@ -10,6 +10,7 @@ import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.hook.quickshop.QuickShopHook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
+import io.github.alathra.boltux.packets.GlowingEntityTracker;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -180,8 +181,7 @@ public class LockUseListeners implements Listener {
         }
 
         if (Hook.PacketEvents.isLoaded()) {
-            GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-            glowingEntity.glow(NamedTextColor.GREEN);
+            new GlowingEntity(entity, player, NamedTextColor.GREEN);
         }
 
         if (Settings.isLockingSoundEnabled()) {
@@ -256,8 +256,7 @@ public class LockUseListeners implements Listener {
         }
 
         if (Hook.PacketEvents.isLoaded()) {
-            GlowingEntity glowingEntity = new GlowingEntity(entity, player);
-            glowingEntity.glow(NamedTextColor.GREEN);
+            new GlowingEntity(entity, player, NamedTextColor.GREEN);
         }
 
         if (Settings.isLockingSoundEnabled()) {
