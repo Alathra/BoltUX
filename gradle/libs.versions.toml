@@ -23,7 +23,7 @@ entitylib = "me.tofaa.entitylib:spigot:+d6a3cb7-SNAPSHOT"
 itemsadder = "dev.lone:api-itemsadder:4.0.10"
 nexo = "com.nexomc:nexo:1.10.0"
 oraxen = "io.th0rgal:oraxen:1.192.0"
-towny = "com.palmergames.bukkit.towny:towny:0.101.2.0"
+towny = "com.palmergames.bukkit.towny:towny:0.101.2.4"
 mmoitems = "net.Indyuce:MMOItems-API:6.10.1-SNAPSHOT"
 mythiclib = "io.lumine:MythicLib-dist:1.7.1-SNAPSHOT"
 quickshop-bukkit = { module = "com.ghostchu:quickshop-bukkit", version.ref = "quickshop" }
