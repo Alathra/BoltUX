@@ -18,7 +18,7 @@ triumph-gui = "dev.triumphteam:triumph-gui:3.1.12"
 
 # Plugin dependencies
 boltbukkit = "org.popcraft:bolt-bukkit:1.1.79"
-packetevents = "com.github.retrooper:packetevents-spigot:2.9.4"
+packetevents = "com.github.retrooper:packetevents-spigot:2.10.0"
 entitylib = "me.tofaa.entitylib:spigot:+d6a3cb7-SNAPSHOT"
 itemsadder = "dev.lone:api-itemsadder:4.0.10"
 nexo = "com.nexomc:nexo:1.10.0"
