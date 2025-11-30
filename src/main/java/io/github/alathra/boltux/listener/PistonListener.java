@@ -19,6 +19,7 @@ public class PistonListener implements Listener {
         this.boltPlugin = BoltUX.getBoltPlugin();
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPistonExtend(BlockPistonExtendEvent event) {
         for (Block moved : event.getBlocks()) {
@@ -29,6 +30,7 @@ public class PistonListener implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPistonRetract(BlockPistonRetractEvent event) {
         for (Block moved : event.getBlocks()) {

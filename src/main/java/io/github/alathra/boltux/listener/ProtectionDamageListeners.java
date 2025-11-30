@@ -7,7 +7,6 @@ import io.github.alathra.boltux.data.MaterialGroups;
 import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
-import io.github.alathra.boltux.packets.GlowingEntityTracker;
 import io.github.alathra.boltux.utility.BlockUtil;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -38,25 +37,26 @@ public class ProtectionDamageListeners implements Listener {
         boltPlugin = BoltUX.getBoltPlugin();
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onProtectedBlockDamage(PlayerInteractEvent event) {
-        if (!event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+    public void onProtectedBlockDamage(PlayerInteractEvent e) {
+        if (!e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             return;
         }
-        if (event.getHand() == null) {
+        if (e.getHand() == null) {
             return;
         }
-        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+        if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        Block block = event.getClickedBlock();
+        Block block = e.getClickedBlock();
         if (block == null) {
             return;
         }
         if (!boltPlugin.isProtected(block)) {
             return;
         }
-        Player player = event.getPlayer();
+        Player player = e.getPlayer();
         Material material = block.getType();
         BlockProtection protection = boltPlugin.loadProtection(block);
         if (protection == null) {
@@ -95,12 +95,13 @@ public class ProtectionDamageListeners implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onProtectedEntityDamage(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player player)) {
+    public void onProtectedEntityDamage(EntityDamageByEntityEvent e) {
+        if (!(e.getDamager() instanceof Player player)) {
             return;
         }
-        Entity entity = event.getEntity();
+        Entity entity = e.getEntity();
         if (!boltPlugin.isProtected(entity)) {
             return;
         }
@@ -126,15 +127,16 @@ public class ProtectionDamageListeners implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onProtectedEntityAttack(PrePlayerAttackEntityEvent event) {
-        Entity entity = event.getAttacked();
+    public void onProtectedEntityAttack(PrePlayerAttackEntityEvent e) {
+        Entity entity = e.getAttacked();
         if (!boltPlugin.isProtected(entity)) {
             return;
         }
         EntityType entityType = entity.getType();
         EntityProtection protection = boltPlugin.loadProtection(entity);
-        Player player = event.getPlayer();
+        Player player = e.getPlayer();
         if (protection == null) {
             return;
         }
@@ -157,12 +159,13 @@ public class ProtectionDamageListeners implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onHangingEntityBreak(HangingBreakByEntityEvent event) {
-        if (!(event.getRemover() instanceof Player player)) {
+    public void onHangingEntityBreak(HangingBreakByEntityEvent e) {
+        if (!(e.getRemover() instanceof Player player)) {
             return;
         }
-        Entity entity = event.getEntity();
+        Entity entity = e.getEntity();
         if (!boltPlugin.isProtected(entity)) {
             return;
         }

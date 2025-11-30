@@ -22,35 +22,36 @@ public class InventoryOpenListener implements Listener {
         this.boltPlugin = BoltUX.getBoltPlugin();
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onInventoryOpen(InventoryOpenEvent event) {
-        if (!(event.getPlayer() instanceof Player player)) return;
+    public void onInventoryOpen(InventoryOpenEvent e) {
+        if (!(e.getPlayer() instanceof Player player)) return;
 
-        if(event.getInventory() == null || event.getInventory().getHolder() == null) {
+        if(e.getInventory() == null || e.getInventory().getHolder() == null) {
             return;
         }
 
         // CHESTS
-        if (event.getInventory().getHolder() instanceof Chest chest) {
+        if (e.getInventory().getHolder() instanceof Chest chest) {
             Block chestBlock = chest.getBlock();
             BlockProtection protection = loadChestProtection(chestBlock);
             if (protection == null) return;
 
             boolean allowed = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
             if (!allowed) {
-                event.setCancelled(true);
+                e.setCancelled(true);
             }
             return;
         }
 
         // BARRELS
-        if (event.getInventory().getHolder() instanceof Barrel barrel) {
+        if (e.getInventory().getHolder() instanceof Barrel barrel) {
             BlockProtection protection = boltPlugin.loadProtection(barrel.getBlock());
             if (protection == null) return;
 
             boolean allowed = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
             if (!allowed) {
-                event.setCancelled(true);
+                e.setCancelled(true);
             }
         }
     }

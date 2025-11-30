@@ -38,9 +38,10 @@ public class LockReturnListeners implements Listener {
         protectedVehicleUUIDs = new HashSet<>();
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOW)
-    public void onProtectedBlockBreak(BlockBreakEvent event) {
-        if (event.isCancelled()) {
+    public void onProtectedBlockBreak(BlockBreakEvent e) {
+        if (e.isCancelled()) {
             return;
         }
         if (!Settings.isLockItemEnabled()) {
@@ -49,7 +50,7 @@ public class LockReturnListeners implements Listener {
         if (!Settings.isLockDroppingEnabled()) {
             return;
         }
-        Block block = event.getBlock();
+        Block block = e.getBlock();
         if (!Settings.getLockItemEnabledWorlds().contains(block.getWorld())) {
             return;
         }
@@ -68,7 +69,7 @@ public class LockReturnListeners implements Listener {
         if (protection == null) {
             return;
         }
-        Player player = event.getPlayer();
+        Player player = e.getPlayer();
         if (!protection.getOwner().equals(player.getUniqueId())) {
             if (!boltPlugin.canAccess(block, player, Permission.DESTROY)) {
                 return;
@@ -84,9 +85,10 @@ public class LockReturnListeners implements Listener {
         block.getWorld().dropItemNaturally(block.getLocation(), BoltUXAPI.getLockItem());
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOW)
-    public void onProtectedEntityDeath(EntityDeathEvent event) {
-        if (event.isCancelled()) {
+    public void onProtectedEntityDeath(EntityDeathEvent e) {
+        if (e.isCancelled()) {
             return;
         }
         if (!Settings.isLockItemEnabled()) {
@@ -95,7 +97,7 @@ public class LockReturnListeners implements Listener {
         if (!Settings.isLockDroppingEnabled()) {
             return;
         }
-        Entity entity = event.getEntity();
+        Entity entity = e.getEntity();
         if (!Settings.getLockItemEnabledWorlds().contains(entity.getWorld())) {
             return;
         }
@@ -107,9 +109,10 @@ public class LockReturnListeners implements Listener {
         entity.getWorld().dropItemNaturally(entity.getLocation(), BoltUXAPI.getLockItem());
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOW)
-    public void onProtectedHangingEntityBreak(HangingBreakByEntityEvent event) {
-        if (event.isCancelled()) {
+    public void onProtectedHangingEntityBreak(HangingBreakByEntityEvent e) {
+        if (e.isCancelled()) {
             return;
         }
         if (!Settings.isLockItemEnabled()) {
@@ -118,10 +121,10 @@ public class LockReturnListeners implements Listener {
         if (!Settings.isLockDroppingEnabled()) {
             return;
         }
-        if (!(event.getRemover() instanceof Player player)) {
+        if (!(e.getRemover() instanceof Player player)) {
             return;
         }
-        Entity entity = event.getEntity();
+        Entity entity = e.getEntity();
         if (!Settings.getLockItemEnabledWorlds().contains(entity.getWorld())) {
             return;
         }
@@ -140,13 +143,14 @@ public class LockReturnListeners implements Listener {
     }
 
     // BoltAPI can track the entity here, but not in VehicleDestroyEvent. Chaining events is needed.
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOW)
-    public void onProtectedVehicleDamage(VehicleDamageEvent event) {
-        if (event.isCancelled()) {
+    public void onProtectedVehicleDamage(VehicleDamageEvent e) {
+        if (e.isCancelled()) {
             return;
         }
         // Prevents potential duplication of lock item
-        Vehicle vehicle = event.getVehicle();
+        Vehicle vehicle = e.getVehicle();
         protectedVehicleUUIDs.remove(vehicle.getUniqueId());
         if (!Settings.isLockItemEnabled()) {
             return;
@@ -154,7 +158,7 @@ public class LockReturnListeners implements Listener {
         if (!Settings.isLockDroppingEnabled()) {
             return;
         }
-        if (!(event.getAttacker() instanceof Player)) {
+        if (!(e.getAttacker() instanceof Player)) {
             return;
         }
         if (!Settings.getLockItemEnabledWorlds().contains(vehicle.getWorld())) {
@@ -165,9 +169,10 @@ public class LockReturnListeners implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOW)
-    public void onProtectedVehicleDestroy(VehicleDestroyEvent event) {
-        if (event.isCancelled()) {
+    public void onProtectedVehicleDestroy(VehicleDestroyEvent e) {
+        if (e.isCancelled()) {
             return;
         }
         if (!Settings.isLockItemEnabled()) {
@@ -176,10 +181,10 @@ public class LockReturnListeners implements Listener {
         if (!Settings.isLockDroppingEnabled()) {
             return;
         }
-        if (!(event.getAttacker() instanceof Player)) {
+        if (!(e.getAttacker() instanceof Player)) {
             return;
         }
-        Vehicle vehicle = event.getVehicle();
+        Vehicle vehicle = e.getVehicle();
         if (!Settings.getLockItemEnabledWorlds().contains(vehicle.getWorld())) {
             return;
         }
@@ -191,9 +196,10 @@ public class LockReturnListeners implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOW)
-    public void onProtectedLeadInteract(PlayerInteractEntityEvent event) {
-        if (event.isCancelled()) {
+    public void onProtectedLeadInteract(PlayerInteractEntityEvent e) {
+        if (e.isCancelled()) {
             return;
         }
         if (!Settings.isLockItemEnabled()) {
@@ -202,10 +208,10 @@ public class LockReturnListeners implements Listener {
         if (!Settings.isLockDroppingEnabled()) {
             return;
         }
-        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+        if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        Entity entity = event.getRightClicked();
+        Entity entity = e.getRightClicked();
         if (!entity.getType().equals(EntityType.LEASH_KNOT)) {
             return;
         }
@@ -219,8 +225,8 @@ public class LockReturnListeners implements Listener {
         if (protection == null) {
             return;
         }
-        Player player = event.getPlayer();
-        if (boltPlugin.canAccess(protection, event.getPlayer(), Permission.INTERACT)) {
+        Player player = e.getPlayer();
+        if (boltPlugin.canAccess(protection, e.getPlayer(), Permission.INTERACT)) {
             // Drop a lock item at the broken block location
             entity.getWorld().dropItemNaturally(entity.getLocation(), BoltUXAPI.getLockItem());
         }

@@ -7,10 +7,8 @@ import io.github.alathra.boltux.data.MaterialGroups;
 import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.hook.Hook;
-import io.github.alathra.boltux.hook.packetevents.PacketEventsHook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
-import io.github.alathra.boltux.packets.GlowingEntityTracker;
 import io.github.alathra.boltux.utility.BlockUtil;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
@@ -40,25 +38,26 @@ public class ProtectionInteractListeners implements Listener {
         boltPlugin = BoltUX.getBoltPlugin();
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onProtectedBlockRightClick(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+    public void onProtectedBlockRightClick(PlayerInteractEvent e) {
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
-        if (event.getHand() == null) {
+        if (e.getHand() == null) {
             return;
         }
-        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+        if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        Block block = event.getClickedBlock();
+        Block block = e.getClickedBlock();
         if (block == null) {
             return;
         }
         if (!boltPlugin.isProtected(block)) {
             return;
         }
-        Player player = event.getPlayer();
+        Player player = e.getPlayer();
         Material material = block.getType();
         BlockProtection protection = boltPlugin.loadProtection(block);
         if (protection == null) {
@@ -82,7 +81,7 @@ public class ProtectionInteractListeners implements Listener {
         if (isOwner || player.hasPermission(Permissions.ADMIN_PERMISSION)) {
             if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                 GuiHandler.generateMainMenu(player, protection, block.getLocation());
-                event.setCancelled(true);
+                e.setCancelled(true);
                 return;
             }
             return;
@@ -93,7 +92,7 @@ public class ProtectionInteractListeners implements Listener {
             if (Hook.getTownyHook().canAccessProtection(false, player, block.getLocation())) {
                 if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                     GuiHandler.generateMainMenu(player, protection, block.getLocation());
-                    event.setCancelled(true);
+                    e.setCancelled(true);
                     return;
                 }
                 return;
@@ -118,13 +117,14 @@ public class ProtectionInteractListeners implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onProtectedEntityRightClick(PlayerInteractEntityEvent event) {
-        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+    public void onProtectedEntityRightClick(PlayerInteractEntityEvent e) {
+        if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        Entity entity = event.getRightClicked();
-        Player player = event.getPlayer();
+        Entity entity = e.getRightClicked();
+        Player player = e.getPlayer();
         EntityProtection protection = boltPlugin.loadProtection(entity);
         if (protection == null) {
             return;
@@ -135,7 +135,7 @@ public class ProtectionInteractListeners implements Listener {
         if (isOwner || player.hasPermission(Permissions.ADMIN_PERMISSION)) {
             if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                 GuiHandler.generateMainMenu(player, protection, entity.getLocation());
-                event.setCancelled(true);
+                e.setCancelled(true);
                 return;
             }
             return;
@@ -146,7 +146,7 @@ public class ProtectionInteractListeners implements Listener {
             if (Hook.getTownyHook().canAccessProtection(false, player, entity.getLocation())) {
                 if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                     GuiHandler.generateMainMenu(player, protection, entity.getLocation());
-                    event.setCancelled(true);
+                    e.setCancelled(true);
                     return;
                 }
                 return;
@@ -174,16 +174,17 @@ public class ProtectionInteractListeners implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onProtectedEntityRightClick(PlayerInteractAtEntityEvent event) {
-        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+    public void onProtectedEntityRightClick(PlayerInteractAtEntityEvent e) {
+        if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        Entity entity = event.getRightClicked();
+        Entity entity = e.getRightClicked();
         if (entity.getType() != EntityType.ARMOR_STAND) {
             return;
         }
-        Player player = event.getPlayer();
+        Player player = e.getPlayer();
         EntityProtection protection = boltPlugin.loadProtection(entity);
         if (protection == null) {
             return;
@@ -194,7 +195,7 @@ public class ProtectionInteractListeners implements Listener {
         if (isOwner || player.hasPermission(Permissions.ADMIN_PERMISSION)) {
             if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                 GuiHandler.generateMainMenu(player, protection, entity.getLocation());
-                event.setCancelled(true);
+                e.setCancelled(true);
                 return;
             }
             return;
@@ -205,7 +206,7 @@ public class ProtectionInteractListeners implements Listener {
             if (Hook.getTownyHook().canAccessProtection(false, player, entity.getLocation())) {
                 if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                     GuiHandler.generateMainMenu(player, protection, entity.getLocation());
-                    event.setCancelled(true);
+                    e.setCancelled(true);
                     return;
                 }
                 return;

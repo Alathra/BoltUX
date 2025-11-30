@@ -42,28 +42,29 @@ public class LockUseListeners implements Listener {
         boltPlugin = BoltUX.getBoltPlugin();
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLockUseOnBlock(PlayerInteractEvent event) {
+    public void onLockUseOnBlock(PlayerInteractEvent e) {
         if (!Settings.isLockItemEnabled()) {
             return;
         }
-        Player player = event.getPlayer();
+        Player player = e.getPlayer();
         if (!Settings.getLockItemEnabledWorlds().contains(player.getWorld())) {
             return;
         }
-        if (!event.getAction().equals(org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK)) {
+        if (!e.getAction().equals(org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
-        if (event.getHand() == null) {
+        if (e.getHand() == null) {
             return;
         }
-        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+        if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
         if (!BoltUXAPI.isLockItem(player.getInventory().getItemInMainHand())) {
             return;
         }
-        Block block = event.getClickedBlock();
+        Block block = e.getClickedBlock();
         if (block == null) {
             return;
         }
@@ -126,24 +127,25 @@ public class LockUseListeners implements Listener {
 
         player.sendMessage(ColorParser.of("<green>Protection has been created").build());
 
-        event.setCancelled(true);
+        e.setCancelled(true);
     }
 
     // For anything but armor stands
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLockUseOnEntity(PlayerInteractEntityEvent event) {
-        if (event.isCancelled()) {
+    public void onLockUseOnEntity(PlayerInteractEntityEvent e) {
+        if (e.isCancelled()) {
             return;
         }
         if (!Settings.isLockItemEnabled()) {
             return;
         }
-        Player player = event.getPlayer();
+        Player player = e.getPlayer();
         if (!Settings.getLockItemEnabledWorlds().contains(player.getWorld())) {
             return;
         }
-        Entity entity = event.getRightClicked();
-        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+        Entity entity = e.getRightClicked();
+        if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
         if (!BoltUXAPI.isLockItem(player.getInventory().getItemInMainHand())) {
@@ -198,27 +200,28 @@ public class LockUseListeners implements Listener {
 
         player.sendMessage(ColorParser.of("<green>Protection has been created").build());
 
-        event.setCancelled(true);
+        e.setCancelled(true);
     }
 
     // For anything but armor stands
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLockUseOnEntity(PlayerInteractAtEntityEvent event) {
-        if (event.isCancelled()) {
+    public void onLockUseOnEntity(PlayerInteractAtEntityEvent e) {
+        if (e.isCancelled()) {
             return;
         }
         if (!Settings.isLockItemEnabled()) {
             return;
         }
-        Player player = event.getPlayer();
+        Player player = e.getPlayer();
         if (!Settings.getLockItemEnabledWorlds().contains(player.getWorld())) {
             return;
         }
-        Entity entity = event.getRightClicked();
+        Entity entity = e.getRightClicked();
         if (entity.getType() != EntityType.ARMOR_STAND) {
             return;
         }
-        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+        if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
         if (!BoltUXAPI.isLockItem(player.getInventory().getItemInMainHand())) {
@@ -273,6 +276,6 @@ public class LockUseListeners implements Listener {
 
         player.sendMessage(ColorParser.of("<green>Protection has been created").build());
 
-        event.setCancelled(true);
+        e.setCancelled(true);
     }
 }

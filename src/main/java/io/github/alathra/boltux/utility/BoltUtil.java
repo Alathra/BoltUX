@@ -6,6 +6,7 @@ import io.github.alathra.boltux.BoltUX;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.data.Store;
 import org.popcraft.bolt.protection.Protection;
@@ -14,22 +15,27 @@ import org.popcraft.bolt.source.SourceTypes;
 import org.popcraft.bolt.util.Group;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class BoltUtil {
-
+@ApiStatus.Internal
+public final class BoltUtil {
     public static Set<UUID> getPlayerAccessSet(Protection protection) {
-        final Set<UUID> accessPlayerSet = new HashSet<>();
-        for (String rawSource : protection.getAccess().keySet()) {
-            Source source = Source.parse(rawSource);
-            if (source.getType().equals(SourceTypes.PLAYER)) {
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(source.getIdentifier());
-                if (offlinePlayer.getName() == null) {
-                    continue;
-                }
-                accessPlayerSet.add(UUID.fromString(source.getIdentifier()));
-            }
-        }
-        return accessPlayerSet;
+        return protection.getAccess().keySet()
+            .stream()
+            .map(rawSource -> {
+                final Source source = Source.parse(rawSource);
+
+                if (!source.getType().equals(SourceTypes.PLAYER))
+                    return null;
+
+                final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(source.getIdentifier());
+                if (offlinePlayer.getName() == null)
+                    return null;
+
+                return UUID.fromString(source.getIdentifier());
+            })
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
     }
 
     public static Set<Group> getGroupAccessSet(Protection protection) {
@@ -121,5 +127,4 @@ public class BoltUtil {
         }
         return groups;
     }
-
 }

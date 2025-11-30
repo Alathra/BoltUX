@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.CraftItemEvent;
 
 public class LockCraftingListener {
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
     public void CraftListener(CraftItemEvent event) {
         if (event.getCurrentItem() == null) {
