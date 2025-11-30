@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public final class BlockUtil {
     /**
      * Get the block of the other chest in the double chest.
+     *
      * @param chestBlock a block containing a chesty
      * @return the 2nd chest block or null
      */
@@ -40,6 +41,7 @@ public final class BlockUtil {
 
     /**
      * Check if an inventory is part of a double chest.
+     *
      * @param inventory inventory
      * @return true if a double chest
      */
@@ -67,6 +69,7 @@ public final class BlockUtil {
 
     /**
      * Returns the "lower" of two blocks by comparing coordinates in order: X, then Z, then Y.
+     *
      * @param a a
      * @param b b
      * @return the smallest of two blocks

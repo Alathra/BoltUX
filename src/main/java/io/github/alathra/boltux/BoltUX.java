@@ -1,22 +1,17 @@
 package io.github.alathra.boltux;
 
-import com.github.retrooper.packetevents.PacketEvents;
 import io.github.alathra.boltux.command.CommandHandler;
 import io.github.alathra.boltux.config.ConfigHandler;
-import io.github.alathra.boltux.lock.CraftingHandler;
 import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.hook.HookManager;
 import io.github.alathra.boltux.listener.ListenerHandler;
-
+import io.github.alathra.boltux.lock.CraftingHandler;
 import io.github.alathra.boltux.lock.LockHandler;
 import io.github.alathra.boltux.threadutil.SchedulerHandler;
 import io.github.alathra.boltux.translation.TranslationHandler;
 import io.github.alathra.boltux.updatechecker.UpdateHandler;
 import io.github.alathra.boltux.utility.Logger;
 import io.github.milkdrinkers.colorparser.paper.ColorParser;
-import me.tofaa.entitylib.APIConfig;
-import me.tofaa.entitylib.EntityLib;
-import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;

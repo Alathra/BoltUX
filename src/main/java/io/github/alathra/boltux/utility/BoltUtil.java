@@ -14,7 +14,10 @@ import org.popcraft.bolt.source.Source;
 import org.popcraft.bolt.source.SourceTypes;
 import org.popcraft.bolt.util.Group;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @ApiStatus.Internal

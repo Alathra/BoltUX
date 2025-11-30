@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Used to track whether an entity is in a scoreboard team or not.
+ *
  * @author darksaid98
  */
 public class TeamTracker {
@@ -19,7 +20,8 @@ public class TeamTracker {
         return INSTANCE;
     }
 
-    private TeamTracker() {}
+    private TeamTracker() {
+    }
 
     private final Map<UUID, NamedTextColor> entityMap = new ConcurrentHashMap<>();
 

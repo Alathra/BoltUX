@@ -8,7 +8,10 @@ import io.github.alathra.boltux.utility.BlockUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -42,6 +45,7 @@ public final class LockDropListener implements Listener {
 
     /**
      * Drop a lock item when a protected block breaks.
+     *
      * @param e event
      */
     @SuppressWarnings("unused")
@@ -100,6 +104,7 @@ public final class LockDropListener implements Listener {
 
     /**
      * Drop lock item when a locked entity dies.
+     *
      * @param e event
      */
     @SuppressWarnings("unused")
@@ -132,6 +137,7 @@ public final class LockDropListener implements Listener {
 
     /**
      * Drop lock item when a locked block is destroyed.
+     *
      * @param e event
      */
     @SuppressWarnings("unused")
@@ -175,6 +181,7 @@ public final class LockDropListener implements Listener {
 
     /**
      * Track protected vehicles, preventing dropping lock item twice.
+     *
      * @param e event
      * @apiNote BoltAPI can track the entity here, but not in VehicleDestroyEvent. Chaining events is needed.
      */
@@ -212,6 +219,7 @@ public final class LockDropListener implements Listener {
 
     /**
      * Drop lock item when a locked vehicle is destroyed.
+     *
      * @param e event
      */
     @SuppressWarnings("unused")
@@ -248,6 +256,7 @@ public final class LockDropListener implements Listener {
 
     /**
      * Drop lock item when a locked lead is destroyed.
+     *
      * @param e event
      */
     @SuppressWarnings("unused")

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Fixes interaction with glowing entities.
+ *
  * @author darksaid98
  */
 public class GlowPacketListener implements PacketListener {
@@ -20,6 +21,7 @@ public class GlowPacketListener implements PacketListener {
      * When interacting with a entity that has custom metadata, the client requests an update packet for the entity.
      * This would break our glowing mechanic as said update packet would not include our ephemeral "glowing" metadata.
      * This listener modifies the outgoing metadata packets and includes the glowing.
+     *
      * @param event packet event
      */
     @Override

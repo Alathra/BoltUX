@@ -7,15 +7,19 @@ public interface Reloadable {
     /**
      * On plugin load.
      */
-    default void onLoad(BoltUX plugin) {};
+    default void onLoad(BoltUX plugin) {
+    }
 
     /**
      * On plugin enable.
      */
-    default void onEnable(BoltUX plugin) {}
+    default void onEnable(BoltUX plugin) {
+    }
 
     /**
      * On plugin disable.
      */
-    default void onDisable(BoltUX plugin) {};
+    default void onDisable(BoltUX plugin) {
+    }
+
 }

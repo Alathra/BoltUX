@@ -14,7 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.popcraft.bolt.protection.Protection;
 
-public class GuiHandler {
+public final class GuiHandler {
     public static void generateMainMenu(Player player, Protection protection, Location protectionLocation) {
         Gui mainMenu = MainMenu.generateBase();
         MainMenu.generateButtons(mainMenu, player, protection, protectionLocation);
@@ -63,5 +63,4 @@ public class GuiHandler {
         TrustAddMenu.populateContent(trustAddMenu, protection, player);
         trustAddMenu.open(player);
     }
-
 }

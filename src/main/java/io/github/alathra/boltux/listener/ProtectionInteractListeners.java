@@ -106,7 +106,7 @@ public final class ProtectionInteractListeners implements Listener {
         boolean canAccess = true;
         if (MaterialGroups.containerBlocks.contains(material)) {
             canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
-        } else if(MaterialGroups.interactableBlocks.contains(material)) {
+        } else if (MaterialGroups.interactableBlocks.contains(material)) {
             canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);
         } else if (MaterialGroups.otherBlocks.contains(material)) {
             canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);

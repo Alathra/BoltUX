@@ -1,7 +1,6 @@
 package io.github.alathra.boltux.lock.listener;
 
 import com.destroystokyo.paper.MaterialTags;
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
@@ -9,6 +8,7 @@ import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -29,7 +29,7 @@ import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.Protection;
 import org.popcraft.bolt.util.BoltPlayer;
 
-import java.util.*;
+import java.util.UUID;
 
 /**
  * Handles using lock item.
@@ -43,6 +43,7 @@ public final class LockUseListeners implements Listener {
 
     /**
      * Handle locking blocks.
+     *
      * @param e event
      */
     @SuppressWarnings("unused")
@@ -106,7 +107,7 @@ public final class LockUseListeners implements Listener {
 
         // QuickShop Compatibility
         if (Hook.QuickShop.isLoaded()) {
-            if(Hook.getQuickShopHook().isQuickShop(block.getLocation()) && Settings.isQuickShopLockingDisabled()) {
+            if (Hook.getQuickShopHook().isQuickShop(block.getLocation()) && Settings.isQuickShopLockingDisabled()) {
                 player.sendMessage(ColorParser.of("<red>You cannot lock a QuickShop!").build());
                 return;
             }
@@ -144,6 +145,7 @@ public final class LockUseListeners implements Listener {
 
     /**
      * Handle locking entities (with the exception of armor stands).
+     *
      * @param e event
      */
     @SuppressWarnings("unused")
@@ -199,7 +201,7 @@ public final class LockUseListeners implements Listener {
 
         // QuickShop Compatibility
         if (Hook.QuickShop.isLoaded()) {
-            if(Hook.getQuickShopHook().isQuickShop(entity.getLocation()) && Settings.isQuickShopLockingDisabled()) {
+            if (Hook.getQuickShopHook().isQuickShop(entity.getLocation()) && Settings.isQuickShopLockingDisabled()) {
                 player.sendMessage(ColorParser.of("<red>You cannot lock a QuickShop!").build());
                 return;
             }
@@ -227,6 +229,7 @@ public final class LockUseListeners implements Listener {
 
     /**
      * Handle locking armor stand entities.
+     *
      * @param e event
      */
     @SuppressWarnings("unused")
@@ -286,7 +289,7 @@ public final class LockUseListeners implements Listener {
 
         // QuickShop Compatibility
         if (Hook.QuickShop.isLoaded()) {
-            if(Hook.getQuickShopHook().isQuickShop(entity.getLocation()) && Settings.isQuickShopLockingDisabled()) {
+            if (Hook.getQuickShopHook().isQuickShop(entity.getLocation()) && Settings.isQuickShopLockingDisabled()) {
                 player.sendMessage(ColorParser.of("<red>You cannot lock a QuickShop!").build());
                 return;
             }

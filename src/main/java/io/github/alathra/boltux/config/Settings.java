@@ -1,10 +1,10 @@
 package io.github.alathra.boltux.config;
 
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.data.ItemPlugin;
 import io.github.alathra.boltux.utility.Cfg;
 import io.github.alathra.boltux.utility.Logger;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;

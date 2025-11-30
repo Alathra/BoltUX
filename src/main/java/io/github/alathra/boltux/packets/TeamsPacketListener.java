@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 /**
  * Creates all scoreboard teams used by the plugin for each player on login.
+ *
  * @author darksaid98
  */
 public class TeamsPacketListener implements PacketListener {

@@ -29,7 +29,7 @@ public class GlowingBlock {
     private final Player player;
     private final Set<WrapperEntity> entities = ConcurrentHashMap.newKeySet();
 
-    public GlowingBlock (Block block, Player player) {
+    public GlowingBlock(Block block, Player player) {
         this.block = block;
         this.player = player;
     }
@@ -42,14 +42,14 @@ public class GlowingBlock {
 
     private void placeEntities() {
         List<Location> entityLocations = new ArrayList<>();
-        entityLocations.add(block.getLocation().add(0.5, 0.0,0.5));
+        entityLocations.add(block.getLocation().add(0.5, 0.0, 0.5));
 
         if (MaterialTags.DOORS.isTagged(block.getType())) {
             Door door = (Door) block.getBlockData();
-            if(door.getHalf().equals(Bisected.Half.TOP)) {
-                entityLocations.add(block.getLocation().add(0.0, -1.0, 0.0).add(0.5, 0.0,0.5));
+            if (door.getHalf().equals(Bisected.Half.TOP)) {
+                entityLocations.add(block.getLocation().add(0.0, -1.0, 0.0).add(0.5, 0.0, 0.5));
             } else {
-                entityLocations.add(block.getLocation().add(0.0, 1.0, 0.0).add(0.5, 0.0,0.5));
+                entityLocations.add(block.getLocation().add(0.0, 1.0, 0.0).add(0.5, 0.0, 0.5));
             }
         } else if (block.getType().equals(Material.CHEST) || block.getType().equals(Material.TRAPPED_CHEST)) {
             Chest chest = (Chest) block.getState();
@@ -58,7 +58,7 @@ public class GlowingBlock {
                 if (connectedChest == null) {
                     return;
                 }
-                entityLocations.add(connectedChest.getLocation().add(0.5, 0.0,0.5));
+                entityLocations.add(connectedChest.getLocation().add(0.5, 0.0, 0.5));
             }
         }
         for (Location location : entityLocations) {

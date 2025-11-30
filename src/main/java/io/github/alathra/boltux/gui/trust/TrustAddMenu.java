@@ -2,7 +2,6 @@ package io.github.alathra.boltux.gui.trust;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import com.palmergames.bukkit.towny.object.Town;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
@@ -13,6 +12,7 @@ import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.gui.GuiHelper;
 import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.utility.BoltUtil;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -33,8 +33,7 @@ import org.popcraft.bolt.util.Group;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TrustAddMenu {
-
+public final class TrustAddMenu {
     private static BoltPlugin boltPlugin;
 
     public static PaginatedGui generateBase(Player player, Protection protection, Location protectionLocation) {

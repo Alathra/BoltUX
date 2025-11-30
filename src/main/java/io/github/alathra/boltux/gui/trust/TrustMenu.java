@@ -1,25 +1,20 @@
 package io.github.alathra.boltux.gui.trust;
 
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
-import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.Protection;
 
 import java.util.List;
 
-public class TrustMenu {
-
-    private static BoltPlugin boltPlugin;
-
+public final class TrustMenu {
     public static Gui generateBase() {
         Gui base = Gui.gui()
             .title(ColorParser.of("Trust Options").build())
@@ -29,7 +24,6 @@ public class TrustMenu {
             .disableItemDrop()
             .disableItemTake()
             .create();
-        boltPlugin = BoltUX.getBoltPlugin();
 
         // Apply gray glass pane border
         ItemStack grayBorder = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);

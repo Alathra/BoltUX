@@ -1,25 +1,20 @@
 package io.github.alathra.boltux.gui.edit;
 
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
-import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.Protection;
 
 import java.util.List;
 
-public class ProtectionAccessMenu {
-
-    private static BoltPlugin boltPlugin;
-
+public final class ProtectionAccessMenu {
     public static Gui generateBase() {
         Gui base = Gui.gui()
             .title(ColorParser.of("Access Options").build())
@@ -29,7 +24,6 @@ public class ProtectionAccessMenu {
             .disableItemDrop()
             .disableItemTake()
             .create();
-        boltPlugin = BoltUX.getBoltPlugin();
 
         // Apply gray glass pane border
         ItemStack grayBorder = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
@@ -80,6 +74,5 @@ public class ProtectionAccessMenu {
         gui.setItem(3, 1, ItemBuilder.from(backButton).asGuiItem(event -> {
             GuiHandler.generateMainMenu(player, protection, protectionLocation);
         }));
-
     }
 }

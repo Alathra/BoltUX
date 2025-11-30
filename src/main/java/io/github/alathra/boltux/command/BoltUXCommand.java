@@ -1,12 +1,12 @@
 package io.github.alathra.boltux.command;
 
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.data.Permissions;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

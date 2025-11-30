@@ -1,6 +1,5 @@
 package io.github.alathra.boltux.hook.quickshop;
 
-import com.ghostchu.quickshop.QuickShop;
 import com.ghostchu.quickshop.api.QuickShopAPI;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.hook.AbstractHook;
@@ -19,17 +18,20 @@ public final class QuickShopHook extends AbstractHook {
 
     @Override
     public void onLoad(BoltUX plugin) {
-        if (!isHookLoaded()) return;
+        if (!isHookLoaded()) {
+        }
     }
 
     @Override
     public void onEnable(BoltUX plugin) {
-        if (!isHookLoaded()) return;
+        if (!isHookLoaded()) {
+        }
     }
 
     @Override
     public void onDisable(BoltUX plugin) {
-        if (!isHookLoaded()) return;
+        if (!isHookLoaded()) {
+        }
     }
 
     public boolean isQuickShop(Location location) {

@@ -12,6 +12,7 @@ public class BoltUXAPI {
 
     /**
      * Get the lock item
+     *
      * @param amount The amount of lock items in the resulting itemstack
      * @return The lock item from the specified item plugin or the default (native) lock item
      */
@@ -46,7 +47,9 @@ public class BoltUXAPI {
                     itemStack = getDefaultLockItem();
                 }
             }
-            default -> {itemStack = getDefaultLockItem();}
+            default -> {
+                itemStack = getDefaultLockItem();
+            }
         }
         if (itemStack == null) {
             Logger.get().error("Lock item failed to load! If you are using an item plugin make sure the ID is correct");
@@ -59,6 +62,7 @@ public class BoltUXAPI {
 
     /**
      * Get the lock item
+     *
      * @return The lock item from the specified item plugin or the default (native) lock item
      */
     public static ItemStack getLockItem() {
@@ -67,6 +71,7 @@ public class BoltUXAPI {
 
     /**
      * Get if the provided ItemStack is a lock
+     *
      * @return If the ItemStack consists of lock items
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -76,6 +81,7 @@ public class BoltUXAPI {
 
     /**
      * Get the default lock item
+     *
      * @return The default (native) lock item if no item plugin is specified
      */
     private static ItemStack getDefaultLockItem() {

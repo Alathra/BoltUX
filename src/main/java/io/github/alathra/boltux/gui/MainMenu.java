@@ -1,11 +1,11 @@
 package io.github.alathra.boltux.gui;
 
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,8 +18,7 @@ import org.popcraft.bolt.protection.Protection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainMenu {
-
+public final class MainMenu {
     private static BoltPlugin boltPlugin;
     private static final List<String> modes = new LinkedList<>(List.of("deposit", "display", "private", "public", "withdrawal"));
 
@@ -45,7 +44,6 @@ public class MainMenu {
     }
 
     public static void generateButtons(Gui gui, Player player, Protection protection, Location protectionLocation) {
-
         // Access (Edit) Button
         ItemStack editPlayerAccessButton = new ItemStack(Material.OAK_FENCE_GATE);
         ItemMeta editPlayerAccessButtonMeta = editPlayerAccessButton.getItemMeta();

@@ -8,7 +8,8 @@ public final class LockHandler implements Reloadable {
     private ListenerHandler listenerHandler;
     private CraftingHandler craftingHandler;
 
-    public LockHandler(BoltUX plugin) {}
+    public LockHandler(BoltUX plugin) {
+    }
 
     @Override
     public void onLoad(BoltUX plugin) {

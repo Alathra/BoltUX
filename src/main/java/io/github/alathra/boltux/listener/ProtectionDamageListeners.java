@@ -200,7 +200,7 @@ public final class ProtectionDamageListeners implements Listener {
 
         // Make entity glow red if player does not have access
         if (!canBreak) {
-            if (Hook.PacketEvents.isLoaded())  {
+            if (Hook.PacketEvents.isLoaded()) {
                 new GlowingEntity(entity, player, NamedTextColor.RED);
             }
         }

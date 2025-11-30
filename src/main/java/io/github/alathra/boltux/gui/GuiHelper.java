@@ -13,8 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class GuiHelper {
-
+public final class GuiHelper {
     public static Set<UUID> getSuggestedPlayers(Player player, UUID owner) {
         // player, priority
         Map<UUID, Integer> players = new HashMap<>();

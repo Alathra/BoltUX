@@ -41,8 +41,8 @@ public final class EntityGroups {
             EntityType.LEASH_KNOT
         ));
 
-        otherEntities.addAll(Set.of(
+        otherEntities.add(
             EntityType.PAINTING
-        ));
+        );
     }
 }

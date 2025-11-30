@@ -1,8 +1,8 @@
 package io.github.alathra.boltux.lock.listener;
 
+import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.lock.CraftingHandler;
 import io.github.milkdrinkers.colorparser.paper.ColorParser;
-import io.github.alathra.boltux.data.Permissions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

@@ -10,7 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 public class GlowingEntity {
     private final Entity entity;
@@ -42,9 +43,8 @@ public class GlowingEntity {
     }
 
 
-
     private void setTeam(NamedTextColor color) {
-        if(!entity.isValid())
+        if (!entity.isValid())
             return;
 
         // Only allow untracked

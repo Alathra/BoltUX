@@ -23,17 +23,20 @@ public class NexoHook extends AbstractHook {
 
     @Override
     public void onLoad(BoltUX plugin) {
-        if (!isHookLoaded()) return;
+        if (!isHookLoaded()) {
+        }
     }
 
     @Override
     public void onEnable(BoltUX plugin) {
-        if (!isHookLoaded()) return;
+        if (!isHookLoaded()) {
+        }
     }
 
     @Override
     public void onDisable(BoltUX plugin) {
-        if (!isHookLoaded()) return;
+        if (!isHookLoaded()) {
+        }
     }
 
     public @Nullable ItemStack getLockItem() {

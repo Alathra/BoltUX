@@ -2,7 +2,6 @@ package io.github.alathra.boltux.gui.transfer;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
@@ -10,6 +9,7 @@ import dev.triumphteam.gui.guis.PaginatedGui;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.gui.GuiHelper;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,15 +19,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.Protection;
+
 import java.util.List;
 import java.util.UUID;
 
-public class TransferMenu {
-
-    private static BoltPlugin boltPlugin;
-
+public final class TransferMenu {
     public static PaginatedGui generateBase(Player player, Protection protection, Location protectionLocation) {
         PaginatedGui base = Gui.paginated()
             .title(ColorParser.of("Transfer Ownership").build())
@@ -37,7 +34,6 @@ public class TransferMenu {
             .disableItemDrop()
             .disableItemTake()
             .create();
-        boltPlugin = BoltUX.getBoltPlugin();
 
         // Apply gray glass pane border
         ItemStack grayBorder = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);

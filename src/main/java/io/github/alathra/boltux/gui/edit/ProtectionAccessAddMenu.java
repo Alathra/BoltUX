@@ -2,7 +2,6 @@ package io.github.alathra.boltux.gui.edit;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import com.palmergames.bukkit.towny.object.Town;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
@@ -13,6 +12,7 @@ import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.gui.GuiHelper;
 import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.utility.BoltUtil;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,7 +24,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.Protection;
 import org.popcraft.bolt.util.Group;
 
@@ -34,10 +33,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class ProtectionAccessAddMenu {
-
-    private static BoltPlugin boltPlugin;
-
+public final class ProtectionAccessAddMenu {
     public static PaginatedGui generateBase(Player player, Protection protection, Location protectionLocation) {
         PaginatedGui base = Gui.paginated()
             .title(ColorParser.of("Add Access").build())
@@ -47,7 +43,6 @@ public class ProtectionAccessAddMenu {
             .disableItemDrop()
             .disableItemTake()
             .create();
-        boltPlugin = BoltUX.getBoltPlugin();
 
         // Apply gray glass pane border
         ItemStack grayBorder = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
@@ -199,5 +194,4 @@ public class ProtectionAccessAddMenu {
             gui.updateItem(slot, skullItem);
         });
     }
-
 }

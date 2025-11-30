@@ -2,7 +2,6 @@ package io.github.alathra.boltux.gui.trust;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import com.palmergames.bukkit.towny.object.Town;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
@@ -12,6 +11,7 @@ import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.gui.GuiHandler;
 import io.github.alathra.boltux.hook.Hook;
 import io.github.alathra.boltux.utility.BoltUtil;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.access.AccessList;
 import org.popcraft.bolt.data.Store;
 import org.popcraft.bolt.protection.Protection;
@@ -33,10 +32,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class TrustListMenu {
-
-    private static BoltPlugin boltPlugin;
-
+public final class TrustListMenu {
     public static PaginatedGui generateBase(Player player, Protection protection, Location protectionLocation) {
         PaginatedGui base = Gui.paginated()
             .title(ColorParser.of("List/Remove Trusted").build())
@@ -46,7 +42,6 @@ public class TrustListMenu {
             .disableItemDrop()
             .disableItemTake()
             .create();
-        boltPlugin = BoltUX.getBoltPlugin();
 
         // Apply gray glass pane border
         ItemStack grayBorder = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);

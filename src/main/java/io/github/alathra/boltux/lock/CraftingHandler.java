@@ -13,7 +13,7 @@ import org.bukkit.inventory.ShapedRecipe;
 public final class CraftingHandler implements Reloadable {
     private final BoltUX plugin;
 
-    public CraftingHandler (BoltUX plugin) {
+    public CraftingHandler(BoltUX plugin) {
         this.plugin = plugin;
     }
 

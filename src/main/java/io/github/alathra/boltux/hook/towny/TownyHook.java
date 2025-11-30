@@ -25,7 +25,8 @@ public final class TownyHook extends AbstractHook {
 
     @Override
     public void onLoad(BoltUX plugin) {
-        if (!isHookLoaded()) return;
+        if (!isHookLoaded()) {
+        }
     }
 
     @Override
@@ -36,7 +37,8 @@ public final class TownyHook extends AbstractHook {
 
     @Override
     public void onDisable(BoltUX plugin) {
-        if (!isHookLoaded()) return;
+        if (!isHookLoaded()) {
+        }
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

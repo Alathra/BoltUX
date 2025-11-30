@@ -11,11 +11,13 @@ import java.util.List;
 
 /**
  * A class for managing/interacting with scoreboard teams using PacketEvents.
+ *
  * @author darksaid98
  */
 final class TeamsPacketUtil {
     /**
      * Generates a team name based on the team color
+     *
      * @param color the team color
      * @return team name
      */
@@ -25,6 +27,7 @@ final class TeamsPacketUtil {
 
     /**
      * Generates a team-info object based on the team color
+     *
      * @param color the team color
      * @return team info
      */
@@ -42,8 +45,9 @@ final class TeamsPacketUtil {
 
     /**
      * Creates a team containing the player and team color.
+     *
      * @param player the player
-     * @param color the team color
+     * @param color  the team color
      * @implNote The player is automatically added to this team.
      */
     public static void createTeam(Player player, NamedTextColor color) {
@@ -60,8 +64,9 @@ final class TeamsPacketUtil {
 
     /**
      * Removes a team.
+     *
      * @param player the player
-     * @param color the team color
+     * @param color  the team color
      */
     public static void removeTeam(Player player, NamedTextColor color) {
         PacketEvents.getAPI().getPlayerManager().sendPacket(
@@ -76,8 +81,9 @@ final class TeamsPacketUtil {
 
     /**
      * Adds a collection of entity {@link java.util.UUID}s to the team members list.
-     * @param player the player
-     * @param color the team color
+     *
+     * @param player   the player
+     * @param color    the team color
      * @param entities the collection of {@link java.util.UUID}s
      */
     public static void addToTeam(Player player, NamedTextColor color, Collection<String> entities) {
@@ -94,8 +100,9 @@ final class TeamsPacketUtil {
 
     /**
      * Removes a collection of entity {@link java.util.UUID}s from the team members list.
-     * @param player the player
-     * @param color the team color
+     *
+     * @param player   the player
+     * @param color    the team color
      * @param entities the collection of {@link java.util.UUID}s
      */
     public static void removeFromTeam(Player player, NamedTextColor color, Collection<String> entities) {

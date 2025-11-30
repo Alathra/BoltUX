@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Tracks all glowing entities for a player. Used to prevent duplicate glowing entities.
+ *
  * @author darksaid98
  */
 public class GlowingEntityTracker {
