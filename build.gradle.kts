@@ -5,7 +5,8 @@ plugins {
 
     alias(libs.plugins.shadow) // Shades and relocates dependencies, see https://gradleup.com/shadow/
     alias(libs.plugins.run.paper) // Built in test server using runServer and runMojangMappedServer tasks
-    alias(libs.plugins.plugin.yml) // Automatic plugin.yml generation
+//    alias(libs.plugins.plugin.yml.bukkit) // Automatic plugin.yml generation
+//    alias(libs.plugins.plugin.yml.paper) // Automatic plugin.yml generation
 
     eclipse
     idea
@@ -26,9 +27,6 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://mvn-repo.arim.space/lesser-gpl3/")
 
-    maven("https://maven.athyrium.eu/releases")
-
-    maven("https://maven.evokegames.gg/snapshots") // EntityLib
     maven("https://repo.codemc.io/repository/maven-public/") // PacketEvents, Bolt, Quickshop
     maven("https://maven.devs.beer/") // ItemsAdderAPI
     maven("https://repo.nexomc.com/releases") // Nexo
@@ -37,6 +35,7 @@ repositories {
         content { includeGroup("com.palmergames.bukkit.towny") }
     }
     maven("https://nexus.phoenixdevt.fr/repository/maven-public") // Phoenix Development (MMOItems)
+    maven { url = uri("https://jitpack.io") }
 
 }
 
@@ -47,18 +46,23 @@ dependencies {
     compileOnly(libs.paper.api)
 
     // API
+    implementation(libs.javasemver) // Required by VersionWatch
+    implementation(libs.versionwatch)
+    implementation(libs.wordweaver)
     implementation(libs.crate.api)
     implementation(libs.crate.yaml)
     implementation(libs.colorparser) {
         exclude("net.kyori")
     }
+    implementation(libs.threadutil.bukkit)
     implementation(libs.commandapi.shade)
-    //annotationProcessor(libs.commandapi.annotations) // Uncomment if you want to use command annotations
     implementation(libs.triumph.gui) {
         exclude("net.kyori")
     }
 
     // Plugin dependencies
+    implementation(libs.bstats)
+    compileOnly(libs.vault)
     compileOnly(libs.boltbukkit)
     compileOnly(libs.packetevents)
     implementation(libs.entitylib)
@@ -74,7 +78,6 @@ dependencies {
 }
 
 tasks {
-
     build {
         dependsOn(shadowJar)
     }
@@ -110,10 +113,19 @@ tasks {
         // Shadow classes
         fun reloc(originPkg: String, targetPkg: String) = relocate(originPkg, "${mainPackage}.lib.${targetPkg}")
 
-        reloc("com.github.milkdrinkers.crate", "crate")
-        reloc("com.github.milkdrinkers.colorparser", "colorparser")
+        reloc("space.arim.morepaperlib", "morepaperlib")
+        reloc("io.github.milkdrinkers.javasemver", "javasemver")
+        reloc("io.github.milkdrinkers.versionwatch", "versionwatch")
+        reloc("io.github.milkdrinkers.wordweaver", "wordweaver")
+        reloc("io.github.milkdrinkers.crate", "crate")
+        reloc("io.github.milkdrinkers.colorparser", "colorparser")
+        reloc("io.github.milkdrinkers.threadutil", "threadutil")
+        reloc("org.snakeyaml", "snakeyaml")
+        reloc("org.json", "json")
         reloc("dev.jorel.commandapi", "commandapi")
-        reloc("dev.triumphteam.gui", "gui")
+        reloc("dev.triumphteam.gui", "triumphgui")
+        reloc("com.zaxxer.hikari", "hikaricp")
+        reloc("org.bstats", "bstats")
         reloc("me.tofaa.entitylib", "entitylib")
 
         minimize()
@@ -126,7 +138,7 @@ tasks {
 
     runServer {
         // Configure the Minecraft version for our task.
-        minecraftVersion("1.21.7")
+        minecraftVersion("1.21.10")
 
         // IntelliJ IDEA debugger setup: https://docs.papermc.io/paper/dev/debugging#using-a-remote-debugger
         jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-DPaper.IgnoreJavaVersion=true", "-Dcom.mojang.eula.agree=true", "-DIReallyKnowWhatIAmDoingISwear", "-Dpaper.playerconnection.keepalive=6000")
@@ -138,30 +150,30 @@ tasks {
             modrinth("Bolt", "1.1.52")
             modrinth("BoltTowny", "1.0.1")
             github("MilkBowl", "Vault", "1.7.3", "Vault.jar")
-            modrinth("PacketEvents", "2.9.4+spigot")
+            modrinth("PacketEvents", "2.10.1+spigot")
             modrinth("Towny", "0.101.2.0")
         }
     }
 }
 
-bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
-    // Plugin main class (required)
-    main = "${mainPackage}.${project.name}"
-
-    // Plugin Information
-    name = project.name
-    prefix = project.name
-    version = "${project.version}"
-    description = "${project.description}"
-    authors = listOf("ShermansWorld", "darksaid98")
-    contributors = listOf()
-    apiVersion = "1.21"
-
-    // Misc properties
-    load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
-    depend = listOf("Bolt")
-    softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny", "MMOItems", "QuickShop-Hikari", "packetevents")
-}
+//bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
+//    // Plugin main class (required)
+//    main = "${mainPackage}.${project.name}"
+//
+//    // Plugin Information
+//    name = project.name
+//    prefix = project.name
+//    version = "${project.version}"
+//    description = "${project.description}"
+//    authors = listOf("ShermansWorld", "darksaid98")
+//    contributors = listOf()
+//    apiVersion = "1.21"
+//
+//    // Misc properties
+//    load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
+//    depend = listOf("Bolt")
+//    softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny", "MMOItems", "QuickShop-Hikari", "packetevents")
+//}
 
 fun applyCustomVersion() {
     // Apply custom version arg or append snapshot version

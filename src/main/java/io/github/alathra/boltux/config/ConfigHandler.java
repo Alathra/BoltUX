@@ -1,6 +1,6 @@
 package io.github.alathra.boltux.config;
 
-import com.github.milkdrinkers.crate.Config;
+import io.github.milkdrinkers.crate.Config;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.utility.Reloadable;
 
@@ -25,7 +25,10 @@ public class ConfigHandler implements Reloadable {
 
     @Override
     public void onLoad(BoltUX plugin) {
-        cfg = new Config("config", plugin.getDataFolder().getPath(), plugin.getResource("config.yml")); // Create a config file from the template in our resources folder
+        cfg = Config.builderConfig()
+            .path(plugin.getDataFolder().toPath().resolve("config.yml"))
+            .defaults(plugin.getResource("config.yml"))
+            .build();
         Settings.init(plugin);
     }
 

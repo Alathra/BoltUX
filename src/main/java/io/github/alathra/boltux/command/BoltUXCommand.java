@@ -1,6 +1,6 @@
 package io.github.alathra.boltux.command;
 
-import com.github.milkdrinkers.colorparser.ColorParser;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.IntegerArgument;
@@ -10,15 +10,16 @@ import io.github.alathra.boltux.data.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-class BoltUXCommand {
-
-    protected BoltUXCommand() {
+final class BoltUXCommand {
+    BoltUXCommand() {
         new CommandAPICommand("boltux")
             .withFullDescription("BoltUX commands.")
             .withShortDescription("BoltUX commands.")
             .withPermission(Permissions.ADMIN_PERMISSION)
             .withSubcommands(
-                getLockCommand()
+                getLockCommand(),
+                new DumpCommand().command(),
+                new TranslationCommand().command()
             )
             .executes(this::helpMenu)
             .register();

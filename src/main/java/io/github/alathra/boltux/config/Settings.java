@@ -1,6 +1,6 @@
 package io.github.alathra.boltux.config;
 
-import com.github.milkdrinkers.colorparser.ColorParser;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.data.ItemPlugin;
 import io.github.alathra.boltux.utility.Cfg;

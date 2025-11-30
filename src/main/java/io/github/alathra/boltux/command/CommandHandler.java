@@ -1,7 +1,7 @@
 package io.github.alathra.boltux.command;
 
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIPaperConfig;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.utility.Reloadable;
 
@@ -9,6 +9,7 @@ import io.github.alathra.boltux.utility.Reloadable;
  * A class to handle registration of commands.
  */
 public class CommandHandler implements Reloadable {
+    public static final String BASE_PERM = "boltux.command";
     private final BoltUX plugin;
 
     /**
@@ -23,15 +24,16 @@ public class CommandHandler implements Reloadable {
     @Override
     public void onLoad(BoltUX plugin) {
         CommandAPI.onLoad(
-            new CommandAPIBukkitConfig(plugin)
-                .shouldHookPaperReload(true)
+            new CommandAPIPaperConfig(plugin)
                 .silentLogs(true)
-                .beLenientForMinorVersions(true)
         );
     }
 
     @Override
     public void onEnable(BoltUX plugin) {
+        if (!CommandAPI.isLoaded())
+            return;
+
         CommandAPI.onEnable();
 
         // Register commands here
@@ -40,7 +42,9 @@ public class CommandHandler implements Reloadable {
 
     @Override
     public void onDisable(BoltUX plugin) {
-        CommandAPI.getRegisteredCommands().forEach(registeredCommand -> CommandAPI.unregister(registeredCommand.namespace() + ':' + registeredCommand.commandName(), true));
+        if (!CommandAPI.isLoaded())
+            return;
+
         CommandAPI.onDisable();
     }
 }

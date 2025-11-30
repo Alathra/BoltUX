@@ -1,6 +1,8 @@
 [versions]
-crate = "2.1.0"
-commandapi = "10.1.2"
+paper-api = "1.21.10-R0.1-SNAPSHOT"
+paper-run = "1.21.10"
+crate = "4.0.0-RC.5"
+commandapi = "11.0.0"
 quickshop = "6.2.0.10"
 
 [libraries]
@@ -9,17 +11,22 @@ annotations = "org.jetbrains:annotations:26.0.2"
 paper-api = "io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT"
 
 # API dependencies
-crate-api = { module = "com.github.milkdrinkers:crate-api", version.ref = "crate" }
-crate-yaml = { module = "com.github.milkdrinkers:crate-yaml", version.ref = "crate" }
-colorparser = "com.github.milkdrinkers:colorparser:2.0.3"
-commandapi-shade = { module = "dev.jorel:commandapi-bukkit-shade", version.ref = "commandapi" }
-commandapi-annotations = { module = "dev.jorel:commandapi-annotations", version.ref = "commandapi" }
-triumph-gui = "dev.triumphteam:triumph-gui:3.1.12"
+javasemver = "io.github.milkdrinkers:javasemver:1.0.2"
+versionwatch = "io.github.milkdrinkers:versionwatch:1.1.0"
+wordweaver = "io.github.milkdrinkers:wordweaver:0.0.7"
+crate-api = { module = "io.github.milkdrinkers:crate-api", version.ref = "crate" }
+crate-yaml = { module = "io.github.milkdrinkers:crate-yaml", version.ref = "crate" }
+colorparser = "io.github.milkdrinkers:colorparser-paper:4.1.0"
+threadutil-bukkit = "io.github.milkdrinkers:threadutil-bukkit:1.4.0"
+commandapi-shade = { module = "dev.jorel:commandapi-paper-shade", version.ref = "commandapi" }
+triumph-gui = "dev.triumphteam:triumph-gui-paper:3.1.13"
 
 # Plugin dependencies
+bstats = "org.bstats:bstats-bukkit:3.1.0"
+vault = "com.github.MilkBowl:VaultAPI:1.7.1"
+packetevents = "com.github.retrooper:packetevents-spigot:2.10.1"
 boltbukkit = "org.popcraft:bolt-bukkit:1.1.79"
-packetevents = "com.github.retrooper:packetevents-spigot:2.9.4"
-entitylib = "me.tofaa.entitylib:spigot:+d6a3cb7-SNAPSHOT"
+entitylib = "com.github.Tofaa2.EntityLib:spigot:master-SNAPSHOT"
 itemsadder = "dev.lone:api-itemsadder:4.0.10"
 nexo = "com.nexomc:nexo:1.10.0"
 oraxen = "io.th0rgal:oraxen:1.192.0"
@@ -30,18 +37,19 @@ quickshop-bukkit = { module = "com.ghostchu:quickshop-bukkit", version.ref = "qu
 quickshop-api = { module = "com.ghostchu:quickshop-api", version.ref = "quickshop" }
 
 # Testing
-junit-bom = "org.junit:junit-bom:5.13.4"
+junit-bom = "org.junit:junit-bom:6.0.1"
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform = { module = "org.junit.platform:junit-platform-launcher" }
-slf4j = "org.slf4j:slf4j-simple:2.1.0-alpha1"
-testcontainers-bom = "org.testcontainers:testcontainers-bom:1.21.3"
-testcontainers-jupiter = { module = "org.testcontainers:junit-jupiter" }
+slf4j = "org.slf4j:slf4j-simple:2.0.17"
+testcontainers-bom = "org.testcontainers:testcontainers-bom:2.0.2"
+testcontainers-jupiter = { module = "org.testcontainers:testcontainers-junit-jupiter" }
 
 [bundles]
 junit = ["junit-jupiter", "junit-platform"]
 testcontainers = ["testcontainers-jupiter"]
 
 [plugins]
-shadow = "com.gradleup.shadow:8.3.6"
-run-paper = "xyz.jpenilla.run-paper:2.3.1"
-plugin-yml = "net.minecrell.plugin-yml.bukkit:0.6.0"
+shadow = "com.gradleup.shadow:9.2.2"
+run-paper = "xyz.jpenilla.run-paper:3.0.2"
+plugin-yml-bukkit = "de.eldoria.plugin-yml.bukkit:0.8.0"
+plugin-yml-paper = "de.eldoria.plugin-yml.paper:0.8.0"

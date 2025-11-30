@@ -1,6 +1,6 @@
 package io.github.alathra.boltux.listener;
 
-import com.github.milkdrinkers.colorparser.ColorParser;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import io.github.alathra.boltux.crafting.CraftingHandler;
 import io.github.alathra.boltux.data.Permissions;
 import org.bukkit.entity.Player;

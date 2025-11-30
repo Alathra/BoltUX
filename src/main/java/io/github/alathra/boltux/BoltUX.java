@@ -1,6 +1,5 @@
 package io.github.alathra.boltux;
 
-import com.github.milkdrinkers.colorparser.ColorParser;
 import com.github.retrooper.packetevents.PacketEvents;
 import io.github.alathra.boltux.command.CommandHandler;
 import io.github.alathra.boltux.config.ConfigHandler;
@@ -11,6 +10,7 @@ import io.github.alathra.boltux.listener.ListenerHandler;
 
 import io.github.alathra.boltux.utility.Logger;
 import io.github.alathra.boltux.utility.Reloadable;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import me.tofaa.entitylib.APIConfig;
 import me.tofaa.entitylib.EntityLib;
 import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;

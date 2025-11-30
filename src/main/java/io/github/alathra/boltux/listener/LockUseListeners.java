@@ -1,7 +1,7 @@
 package io.github.alathra.boltux.listener;
 
 import com.destroystokyo.paper.MaterialTags;
-import com.github.milkdrinkers.colorparser.ColorParser;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
