@@ -11,8 +11,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.popcraft.bolt.BoltPlugin;
 
-public class PistonListener implements Listener {
-
+public final class PistonListener implements Listener {
     private final BoltPlugin boltPlugin;
 
     public PistonListener() {

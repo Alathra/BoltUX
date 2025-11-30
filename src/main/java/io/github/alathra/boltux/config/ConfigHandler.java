@@ -1,15 +1,13 @@
 package io.github.alathra.boltux.config;
 
-import io.github.milkdrinkers.crate.Config;
 import io.github.alathra.boltux.BoltUX;
-import io.github.alathra.boltux.utility.Reloadable;
-
-import javax.inject.Singleton;
+import io.github.alathra.boltux.Reloadable;
+import io.github.milkdrinkers.crate.Config;
+import io.github.milkdrinkers.crate.internal.settings.ReloadSetting;
 
 /**
  * A class that generates/loads {@literal &} provides access to a configuration file.
  */
-@Singleton
 public class ConfigHandler implements Reloadable {
     private final BoltUX plugin;
     private Config cfg;
@@ -28,16 +26,8 @@ public class ConfigHandler implements Reloadable {
         cfg = Config.builderConfig()
             .path(plugin.getDataFolder().toPath().resolve("config.yml"))
             .defaults(plugin.getResource("config.yml"))
+            .reload(ReloadSetting.MANUALLY)
             .build();
-        Settings.init(plugin);
-    }
-
-    @Override
-    public void onEnable(BoltUX plugin) {
-    }
-
-    @Override
-    public void onDisable(BoltUX plugin) {
     }
 
     /**
@@ -48,5 +38,4 @@ public class ConfigHandler implements Reloadable {
     public Config getConfig() {
         return cfg;
     }
-
 }

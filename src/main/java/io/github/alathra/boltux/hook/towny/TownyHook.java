@@ -11,8 +11,7 @@ import io.github.alathra.boltux.hook.Hook;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class TownyHook extends AbstractHook {
-
+public final class TownyHook extends AbstractHook {
     private TownyAPI townyAPI;
 
     public TownyHook(BoltUX plugin) {
@@ -40,26 +39,44 @@ public class TownyHook extends AbstractHook {
         if (!isHookLoaded()) return;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean canCreateProtection(boolean state, Player player, Location location) {
-        if (!Settings.isLockingDisabledInOtherTowns()) return state;
-        if (townyAPI == null) return state;
-        Resident resident = townyAPI.getResident(player);
-        if (resident == null) return state;
-        Town town = townyAPI.getTown(location);
-        if (town == null) return state;
+        if (!Settings.isLockingDisabledInOtherTowns())
+            return state;
+
+        if (townyAPI == null)
+            return state;
+
+        final Resident resident = townyAPI.getResident(player);
+        if (resident == null)
+            return state;
+
+        final Town town = townyAPI.getTown(location);
+        if (town == null)
+            return state;
+
         return town.hasResident(resident);
     }
 
     public boolean canAccessProtection(boolean state, Player player, Location location) {
-        if (townyAPI == null) return state;
-        Resident resident = townyAPI.getResident(player);
-        if (resident == null) return state;
-        Town town = townyAPI.getTown(location);
-        if (town == null) return state;
+        if (townyAPI == null)
+            return state;
+
+        final Resident resident = townyAPI.getResident(player);
+        if (resident == null)
+            return state;
+
+        final Town town = townyAPI.getTown(location);
+        if (town == null)
+            return state;
+
         if (town.hasResident(resident)) {
-            if (town.getMayor().equals(resident) && Settings.canMayorsAccessProtections()) return true;
+            if (town.getMayor().equals(resident) && Settings.canMayorsAccessProtections())
+                return true;
+
             return resident.hasPermissionNode(Permissions.ACCESS_OWN_TOWN_LOCKS_PERMISSION);
         }
+
         return state;
     }
 }

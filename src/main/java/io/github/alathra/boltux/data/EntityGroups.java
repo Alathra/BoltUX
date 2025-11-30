@@ -5,8 +5,7 @@ import org.bukkit.entity.EntityType;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EntityGroups {
-
+public final class EntityGroups {
     public static Set<EntityType> chestBoats = new HashSet<>();
 
     public static Set<EntityType> containerMinecarts = new HashSet<>();

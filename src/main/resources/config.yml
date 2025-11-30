@@ -1,3 +1,12 @@
+# Update Checker Settings
+update-checker:
+  enable: true
+  console: true # Post message to console
+  op: true # Send update notification to opped players on join
+
+# Language, specify the language file to use, for example `en_US` which will load `/lang/en_US.json`
+language: "en_US"
+
 GeneralSettings:
   # Amount of seconds the block glow effect lasts when the use of a locked item is denied
   blockGlowTime: 5
@@ -10,7 +19,7 @@ LockItem:
   # If the lock item is enabled. All following settings this to false will make lock items do nothing
   enabled: true
 
-  # If the default crafting recipe should be enabled (loaded) when the plugin is enabled
+  # If the default lock recipe should be enabled (loaded) when the plugin is enabled
   # If using an item plugin this will automatically be disabled
   enableCraftingRecipe: true
 

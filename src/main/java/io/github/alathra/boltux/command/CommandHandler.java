@@ -3,13 +3,12 @@ package io.github.alathra.boltux.command;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIPaperConfig;
 import io.github.alathra.boltux.BoltUX;
-import io.github.alathra.boltux.utility.Reloadable;
+import io.github.alathra.boltux.Reloadable;
 
 /**
  * A class to handle registration of commands.
  */
 public class CommandHandler implements Reloadable {
-    public static final String BASE_PERM = "boltux.command";
     private final BoltUX plugin;
 
     /**

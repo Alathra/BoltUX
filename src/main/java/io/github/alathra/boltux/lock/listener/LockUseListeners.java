@@ -1,4 +1,4 @@
-package io.github.alathra.boltux.listener;
+package io.github.alathra.boltux.lock.listener;
 
 import com.destroystokyo.paper.MaterialTags;
 import io.github.milkdrinkers.colorparser.paper.ColorParser;
@@ -7,10 +7,8 @@ import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.config.Settings;
 import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.hook.Hook;
-import io.github.alathra.boltux.hook.quickshop.QuickShopHook;
 import io.github.alathra.boltux.packets.GlowingBlock;
 import io.github.alathra.boltux.packets.GlowingEntity;
-import io.github.alathra.boltux.packets.GlowingEntityTracker;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -33,51 +31,66 @@ import org.popcraft.bolt.util.BoltPlayer;
 
 import java.util.*;
 
-public class LockUseListeners implements Listener {
-
+/**
+ * Handles using lock item.
+ */
+public final class LockUseListeners implements Listener {
     private final BoltPlugin boltPlugin;
-    // Player UUID, entity UUID
 
     public LockUseListeners() {
         boltPlugin = BoltUX.getBoltPlugin();
     }
 
+    /**
+     * Handle locking blocks.
+     * @param e event
+     */
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLockUseOnBlock(PlayerInteractEvent e) {
         if (!Settings.isLockItemEnabled()) {
             return;
         }
-        Player player = e.getPlayer();
+
+        final Player player = e.getPlayer();
         if (!Settings.getLockItemEnabledWorlds().contains(player.getWorld())) {
             return;
         }
+
         if (!e.getAction().equals(org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
+
         if (e.getHand() == null) {
             return;
         }
+
         if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
+
         if (!BoltUXAPI.isLockItem(player.getInventory().getItemInMainHand())) {
             return;
         }
-        Block block = e.getClickedBlock();
+
+        final Block block = e.getClickedBlock();
         if (block == null) {
             return;
         }
-        ItemStack lockItem = player.getInventory().getItemInMainHand();
+
+        final ItemStack lockItem = player.getInventory().getItemInMainHand();
         if (!player.isSneaking()) {
             return;
         }
+
         if (boltPlugin.isProtected(block)) {
             return;
         }
+
         if (!boltPlugin.isProtectable(block)) {
             return;
         }
+
         if (!player.hasPermission(Permissions.LOCK_PERMISSION)) {
             player.sendMessage(ColorParser.of("<red>You do not have permission to use locks").build());
             return;
@@ -101,7 +114,7 @@ public class LockUseListeners implements Listener {
 
         // Player is using lock item on a valid block
         if (Hook.PacketEvents.isLoaded()) {
-            GlowingBlock glowingBlock = new GlowingBlock(block, player);
+            final GlowingBlock glowingBlock = new GlowingBlock(block, player);
             glowingBlock.glow(NamedTextColor.GREEN);
         }
 
@@ -119,48 +132,58 @@ public class LockUseListeners implements Listener {
         }
 
         // Create new protection
-        BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
+        final BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
         final UUID protectionUUID = boltPlayer.isLockNil() ? org.popcraft.bolt.util.Profiles.NIL_UUID : player.getUniqueId();
         final Protection protection = boltPlugin.createProtection(protectionBlock, protectionUUID, "private");
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
 
         player.sendMessage(ColorParser.of("<green>Protection has been created").build());
-
         e.setCancelled(true);
     }
 
-    // For anything but armor stands
+    /**
+     * Handle locking entities (with the exception of armor stands).
+     * @param e event
+     */
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLockUseOnEntity(PlayerInteractEntityEvent e) {
         if (e.isCancelled()) {
             return;
         }
+
         if (!Settings.isLockItemEnabled()) {
             return;
         }
-        Player player = e.getPlayer();
+
+        final Player player = e.getPlayer();
         if (!Settings.getLockItemEnabledWorlds().contains(player.getWorld())) {
             return;
         }
-        Entity entity = e.getRightClicked();
+
+        final Entity entity = e.getRightClicked();
         if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
+
         if (!BoltUXAPI.isLockItem(player.getInventory().getItemInMainHand())) {
             return;
         }
-        ItemStack lockItem = player.getInventory().getItemInMainHand();
+
+        final ItemStack lockItem = player.getInventory().getItemInMainHand();
         if (!player.isSneaking()) {
             return;
         }
+
         if (boltPlugin.isProtected(entity)) {
             return;
         }
+
         if (!boltPlugin.isProtectable(entity)) {
             return;
         }
+
         if (!player.hasPermission(Permissions.LOCK_PERMISSION)) {
             player.sendMessage(ColorParser.of("<red>You do not have permission to use locks").build());
             return;
@@ -192,51 +215,62 @@ public class LockUseListeners implements Listener {
         lockItem.setAmount(lockItem.getAmount() - 1);
 
         // Create new protection
-        BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
+        final BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
         final UUID protectionUUID = boltPlayer.isLockNil() ? org.popcraft.bolt.util.Profiles.NIL_UUID : player.getUniqueId();
         final Protection protection = boltPlugin.createProtection(entity, protectionUUID, "private");
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
 
         player.sendMessage(ColorParser.of("<green>Protection has been created").build());
-
         e.setCancelled(true);
     }
 
-    // For anything but armor stands
+    /**
+     * Handle locking armor stand entities.
+     * @param e event
+     */
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLockUseOnEntity(PlayerInteractAtEntityEvent e) {
         if (e.isCancelled()) {
             return;
         }
+
         if (!Settings.isLockItemEnabled()) {
             return;
         }
-        Player player = e.getPlayer();
+
+        final Player player = e.getPlayer();
         if (!Settings.getLockItemEnabledWorlds().contains(player.getWorld())) {
             return;
         }
-        Entity entity = e.getRightClicked();
+
+        final Entity entity = e.getRightClicked();
         if (entity.getType() != EntityType.ARMOR_STAND) {
             return;
         }
+
         if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
+
         if (!BoltUXAPI.isLockItem(player.getInventory().getItemInMainHand())) {
             return;
         }
-        ItemStack lockItem = player.getInventory().getItemInMainHand();
+
+        final ItemStack lockItem = player.getInventory().getItemInMainHand();
         if (!player.isSneaking()) {
             return;
         }
+
         if (boltPlugin.isProtected(entity)) {
             return;
         }
+
         if (!boltPlugin.isProtectable(entity)) {
             return;
         }
+
         if (!player.hasPermission(Permissions.LOCK_PERMISSION)) {
             player.sendMessage(ColorParser.of("<red>You do not have permission to use locks").build());
             return;
@@ -268,14 +302,13 @@ public class LockUseListeners implements Listener {
         lockItem.setAmount(lockItem.getAmount() - 1);
 
         // Create new protection
-        BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
+        final BoltPlayer boltPlayer = boltPlugin.player(player.getUniqueId());
         final UUID protectionUUID = boltPlayer.isLockNil() ? org.popcraft.bolt.util.Profiles.NIL_UUID : player.getUniqueId();
         final Protection protection = boltPlugin.createProtection(entity, protectionUUID, "private");
         boltPlugin.saveProtection(protection);
         boltPlayer.setLockNil(false);
 
         player.sendMessage(ColorParser.of("<green>Protection has been created").build());
-
         e.setCancelled(true);
     }
 }

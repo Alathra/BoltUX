@@ -1,11 +1,11 @@
 package io.github.alathra.boltux.hook;
 
 import io.github.alathra.boltux.BoltUX;
-import io.github.alathra.boltux.utility.Reloadable;
+import io.github.alathra.boltux.Reloadable;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Nullable;
 
-public class AbstractHook implements Reloadable {
+public abstract class AbstractHook implements Reloadable {
     private final BoltUX plugin;
 
     protected AbstractHook(BoltUX plugin) {
@@ -14,6 +14,7 @@ public class AbstractHook implements Reloadable {
 
     /**
      * Get the plugin instance.
+     *
      * @return plugin instance
      */
     protected BoltUX getPlugin() {

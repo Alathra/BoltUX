@@ -1,5 +1,6 @@
 package io.github.alathra.boltux.hook;
 
+import io.github.alathra.boltux.hook.bstats.BStatsHook;
 import io.github.alathra.boltux.hook.itemsadder.ItemsAdderHook;
 import io.github.alathra.boltux.hook.mmoitems.MMOItemsHook;
 import io.github.alathra.boltux.hook.nexo.NexoHook;
@@ -7,6 +8,7 @@ import io.github.alathra.boltux.hook.oraxen.OraxenHook;
 import io.github.alathra.boltux.hook.packetevents.PacketEventsHook;
 import io.github.alathra.boltux.hook.quickshop.QuickShopHook;
 import io.github.alathra.boltux.hook.towny.TownyHook;
+import io.github.alathra.boltux.hook.vault.VaultHook;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,13 +17,15 @@ import org.jetbrains.annotations.Nullable;
  * Enum of all hooks used by the plugin.
  */
 public enum Hook {
+    BStats(BStatsHook.class, null, false),
+    PacketEvents(PacketEventsHook.class, "PacketEvents", true),
+    Vault(VaultHook.class, "Vault", true),
     Towny(TownyHook.class, "Towny", true),
     ItemsAdder(ItemsAdderHook.class, "ItemsAdder", true),
     Nexo(NexoHook.class, "Nexo", true),
     Oraxen(OraxenHook.class, "Oraxen", true),
     MMOItems(MMOItemsHook.class, "MMOItems", true),
-    QuickShop(QuickShopHook.class, "QuickShop-Hikari", true),
-    PacketEvents(PacketEventsHook.class, "packetevents", true);
+    QuickShop(QuickShopHook.class, "QuickShop-Hikari", true);
 
     private final @NotNull Class<? extends AbstractHook> hookClass; // The hook class used by this hook
     private final @Nullable String pluginName; // The plugin name used by this hook or null if not applicable
@@ -36,6 +40,7 @@ public enum Hook {
 
     /**
      * Get the hook class.
+     *
      * @return the hook class
      */
     @NotNull Class<? extends AbstractHook> getHookClass() {
@@ -44,6 +49,7 @@ public enum Hook {
 
     /**
      * Get the plugin name used by this hook. Can be null for hooks that do not use a plugin to provide functionality.
+     *
      * @return the plugin name
      */
     public @Nullable String getPluginName() {
@@ -52,6 +58,7 @@ public enum Hook {
 
     /**
      * Check if this hook is required for the plugin to enable.
+     *
      * @return whether this hook is required
      */
     public boolean isOptional() {
@@ -60,10 +67,11 @@ public enum Hook {
 
     /**
      * Get the hook object.
+     *
      * @return the hook object
+     * @throws IllegalStateException if the hook has not been loaded yet
      * @implNote Cast this {@link AbstractHook} into the correct hook class.
      * @implSpec You should check {@link #isLoaded()} before using this method.
-     * @throws IllegalStateException if the hook has not been loaded yet
      */
     public AbstractHook get() {
         if (loadedHook == null)
@@ -74,6 +82,7 @@ public enum Hook {
 
     /**
      * Check if the hook is loaded.
+     *
      * @return whether the hook is loaded
      * @implNote This check is a guarantee that the hook and its dependencies have loaded. It also checks {@link AbstractHook#isHookLoaded()}.
      */
@@ -86,6 +95,7 @@ public enum Hook {
 
     /**
      * Sets a weak reference to a hook
+     *
      * @param hook the hook object
      */
     @ApiStatus.Internal
@@ -110,9 +120,44 @@ public enum Hook {
             hooks.clearHook();
     }
 
+    /**
+     * Gets bStats hook.
+     *
+     * @return the bStats hook
+     */
+    @NotNull
+    public static BStatsHook getBStatsHook() {
+        return (BStatsHook) Hook.BStats.get();
+    }
+
+    /**
+     * Gets vault hook.
+     *
+     * @return the vault hook
+     */
+    @NotNull
+    public static VaultHook getVaultHook() {
+        return (VaultHook) Hook.Vault.get();
+    }
+
+    /**
+     * Gets PacketEvents hook.
+     *
+     * @return the PacketEvents hook
+     */
+    @NotNull
+    public static PacketEventsHook getPacketEventsHook() {
+        return (PacketEventsHook) Hook.PacketEvents.get();
+    }
+
     @NotNull
     public static TownyHook getTownyHook() {
         return (TownyHook) Hook.Towny.get();
+    }
+
+    @NotNull
+    public static QuickShopHook getQuickShopHook() {
+        return (QuickShopHook) Hook.QuickShop.get();
     }
 
     @NotNull
@@ -134,11 +179,4 @@ public enum Hook {
     public static MMOItemsHook getMMOItemsHook() {
         return (MMOItemsHook) Hook.MMOItems.get();
     }
-
-    @NotNull
-    public static QuickShopHook getQuickShopHook() {
-        return (QuickShopHook) Hook.QuickShop.get();
-    }
-
-
 }

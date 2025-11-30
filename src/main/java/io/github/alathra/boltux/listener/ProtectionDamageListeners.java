@@ -29,8 +29,7 @@ import org.popcraft.bolt.protection.BlockProtection;
 import org.popcraft.bolt.protection.EntityProtection;
 import org.popcraft.bolt.util.Permission;
 
-public class ProtectionDamageListeners implements Listener {
-
+public final class ProtectionDamageListeners implements Listener {
     private final BoltPlugin boltPlugin;
 
     public ProtectionDamageListeners() {
@@ -43,21 +42,26 @@ public class ProtectionDamageListeners implements Listener {
         if (!e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             return;
         }
+
         if (e.getHand() == null) {
             return;
         }
+
         if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        Block block = e.getClickedBlock();
+
+        final Block block = e.getClickedBlock();
         if (block == null) {
             return;
         }
+
         if (!boltPlugin.isProtected(block)) {
             return;
         }
-        Player player = e.getPlayer();
-        Material material = block.getType();
+
+        final Player player = e.getPlayer();
+        final Material material = block.getType();
         BlockProtection protection = boltPlugin.loadProtection(block);
         if (protection == null) {
             if (MaterialTags.DOORS.isTagged(material)) {
@@ -74,6 +78,7 @@ public class ProtectionDamageListeners implements Listener {
                 return;
             }
         }
+
         if (protection.getOwner().equals(player.getUniqueId())) {
             return;
         }
@@ -101,15 +106,18 @@ public class ProtectionDamageListeners implements Listener {
         if (!(e.getDamager() instanceof Player player)) {
             return;
         }
-        Entity entity = e.getEntity();
+
+        final Entity entity = e.getEntity();
         if (!boltPlugin.isProtected(entity)) {
             return;
         }
-        EntityType entityType = entity.getType();
-        EntityProtection protection = boltPlugin.loadProtection(entity);
+
+        final EntityType entityType = entity.getType();
+        final EntityProtection protection = boltPlugin.loadProtection(entity);
         if (protection == null) {
             return;
         }
+
         if (protection.getOwner().equals(player.getUniqueId())) {
             return;
         }
@@ -130,16 +138,18 @@ public class ProtectionDamageListeners implements Listener {
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOWEST)
     public void onProtectedEntityAttack(PrePlayerAttackEntityEvent e) {
-        Entity entity = e.getAttacked();
+        final Entity entity = e.getAttacked();
         if (!boltPlugin.isProtected(entity)) {
             return;
         }
-        EntityType entityType = entity.getType();
-        EntityProtection protection = boltPlugin.loadProtection(entity);
-        Player player = e.getPlayer();
+
+        final EntityType entityType = entity.getType();
+        final EntityProtection protection = boltPlugin.loadProtection(entity);
+        final Player player = e.getPlayer();
         if (protection == null) {
             return;
         }
+
         if (protection.getOwner().equals(player.getUniqueId())) {
             return;
         }
@@ -165,15 +175,18 @@ public class ProtectionDamageListeners implements Listener {
         if (!(e.getRemover() instanceof Player player)) {
             return;
         }
-        Entity entity = e.getEntity();
+
+        final Entity entity = e.getEntity();
         if (!boltPlugin.isProtected(entity)) {
             return;
         }
-        EntityType entityType = entity.getType();
-        EntityProtection protection = boltPlugin.loadProtection(entity);
+
+        final EntityType entityType = entity.getType();
+        final EntityProtection protection = boltPlugin.loadProtection(entity);
         if (protection == null) {
             return;
         }
+
         if (protection.getOwner().equals(player.getUniqueId())) {
             return;
         }
@@ -192,5 +205,4 @@ public class ProtectionDamageListeners implements Listener {
             }
         }
     }
-
 }

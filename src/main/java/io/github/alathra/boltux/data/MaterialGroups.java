@@ -6,8 +6,7 @@ import org.bukkit.Material;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MaterialGroups {
-
+public final class MaterialGroups {
     public static Set<Material> containerBlocks = new HashSet<>();
     public static Set<Material> interactableBlocks = new HashSet<>();
     public static Set<Material> otherBlocks = new HashSet<>();
@@ -83,5 +82,4 @@ public class MaterialGroups {
             Material.YELLOW_WALL_BANNER
         ));
     }
-
 }

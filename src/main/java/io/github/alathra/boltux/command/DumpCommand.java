@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
 import io.github.alathra.boltux.BoltUX;
+import io.github.alathra.boltux.data.Permissions;
 import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import io.github.milkdrinkers.threadutil.Scheduler;
 import io.github.milkdrinkers.wordweaver.Translation;
@@ -28,8 +29,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static io.github.alathra.boltux.command.CommandHandler.BASE_PERM;
-
 /**
  * Class containing the code for the dump command.
  * <p>
@@ -52,12 +51,10 @@ final class DumpCommand {
     );
     private static final boolean INCLUDE_LOGS = true; // Whether to include the latest log in dumps
 
-    private static final String DUMP_PERM = BASE_PERM + ".dump";
-
     CommandAPICommand command() {
         return new CommandAPICommand("dump")
             .withHelp("Upload server & plugin configs and logs to mclo.gs.", "Upload server & plugin configs and logs to mclo.gs.")
-            .withPermission(DUMP_PERM)
+            .withPermission(Permissions.ADMIN_PERMISSION)
             .executes(this::executorDump);
     }
 

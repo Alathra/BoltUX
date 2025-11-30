@@ -30,8 +30,7 @@ import org.popcraft.bolt.protection.BlockProtection;
 import org.popcraft.bolt.protection.EntityProtection;
 import org.popcraft.bolt.util.Permission;
 
-public class ProtectionInteractListeners implements Listener {
-
+public final class ProtectionInteractListeners implements Listener {
     private final BoltPlugin boltPlugin;
 
     public ProtectionInteractListeners() {
@@ -44,21 +43,26 @@ public class ProtectionInteractListeners implements Listener {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
+
         if (e.getHand() == null) {
             return;
         }
+
         if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        Block block = e.getClickedBlock();
+
+        final Block block = e.getClickedBlock();
         if (block == null) {
             return;
         }
+
         if (!boltPlugin.isProtected(block)) {
             return;
         }
-        Player player = e.getPlayer();
-        Material material = block.getType();
+
+        final Player player = e.getPlayer();
+        final Material material = block.getType();
         BlockProtection protection = boltPlugin.loadProtection(block);
         if (protection == null) {
             if (MaterialTags.DOORS.isTagged(material)) {
@@ -77,7 +81,7 @@ public class ProtectionInteractListeners implements Listener {
         }
 
         // Determine if player is protection owner
-        boolean isOwner = protection.getOwner().equals(player.getUniqueId());
+        final boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner || player.hasPermission(Permissions.ADMIN_PERMISSION)) {
             if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                 GuiHandler.generateMainMenu(player, protection, block.getLocation());
@@ -123,15 +127,16 @@ public class ProtectionInteractListeners implements Listener {
         if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        Entity entity = e.getRightClicked();
-        Player player = e.getPlayer();
-        EntityProtection protection = boltPlugin.loadProtection(entity);
+
+        final Entity entity = e.getRightClicked();
+        final Player player = e.getPlayer();
+        final EntityProtection protection = boltPlugin.loadProtection(entity);
         if (protection == null) {
             return;
         }
 
         // Determine if player is protection owner
-        boolean isOwner = protection.getOwner().equals(player.getUniqueId());
+        final boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner || player.hasPermission(Permissions.ADMIN_PERMISSION)) {
             if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                 GuiHandler.generateMainMenu(player, protection, entity.getLocation());
@@ -153,7 +158,7 @@ public class ProtectionInteractListeners implements Listener {
             }
         }
 
-        EntityType entityType = entity.getType();
+        final EntityType entityType = entity.getType();
 
         boolean canAccess = true;
         if (EntityGroups.chestBoats.contains(entityType)) {
@@ -180,18 +185,20 @@ public class ProtectionInteractListeners implements Listener {
         if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
             return;
         }
-        Entity entity = e.getRightClicked();
+
+        final Entity entity = e.getRightClicked();
         if (entity.getType() != EntityType.ARMOR_STAND) {
             return;
         }
-        Player player = e.getPlayer();
-        EntityProtection protection = boltPlugin.loadProtection(entity);
+
+        final Player player = e.getPlayer();
+        final EntityProtection protection = boltPlugin.loadProtection(entity);
         if (protection == null) {
             return;
         }
 
         // Determine if player is protection owner
-        boolean isOwner = protection.getOwner().equals(player.getUniqueId());
+        final boolean isOwner = protection.getOwner().equals(player.getUniqueId());
         if (isOwner || player.hasPermission(Permissions.ADMIN_PERMISSION)) {
             if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                 GuiHandler.generateMainMenu(player, protection, entity.getLocation());
@@ -213,7 +220,7 @@ public class ProtectionInteractListeners implements Listener {
             }
         }
 
-        boolean canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);
+        final boolean canAccess = boltPlugin.canAccess(protection, player, Permission.INTERACT);
 
         // Make entity glow red if player does not have access
         if (!canAccess) {
@@ -222,5 +229,4 @@ public class ProtectionInteractListeners implements Listener {
             }
         }
     }
-
 }

@@ -1,19 +1,18 @@
-import java.time.Instant
+import net.minecrell.pluginyml.paper.PaperPluginDescription
 
 plugins {
     `java-library`
 
     alias(libs.plugins.shadow) // Shades and relocates dependencies, see https://gradleup.com/shadow/
     alias(libs.plugins.run.paper) // Built in test server using runServer and runMojangMappedServer tasks
-//    alias(libs.plugins.plugin.yml.bukkit) // Automatic plugin.yml generation
-//    alias(libs.plugins.plugin.yml.paper) // Automatic plugin.yml generation
+    alias(libs.plugins.plugin.yml.bukkit) // Automatic plugin.yml generation
+    alias(libs.plugins.plugin.yml.paper) // Automatic plugin.yml generation
+    projectextensions
+    versioning
 
     eclipse
     idea
 }
-
-val mainPackage = "${project.group}.${project.name.lowercase()}"
-applyCustomVersion()
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21)) // Configure the java toolchain. This allows gradle to auto-provision JDK 21 on systems that only have JDK 8 installed for example.
@@ -111,7 +110,7 @@ tasks {
         archiveClassifier.set("")
 
         // Shadow classes
-        fun reloc(originPkg: String, targetPkg: String) = relocate(originPkg, "${mainPackage}.lib.${targetPkg}")
+        fun reloc(originPkg: String, targetPkg: String) = relocate(originPkg, "${project.relocationPackage}.${targetPkg}")
 
         reloc("space.arim.morepaperlib", "morepaperlib")
         reloc("io.github.milkdrinkers.javasemver", "javasemver")
@@ -138,7 +137,7 @@ tasks {
 
     runServer {
         // Configure the Minecraft version for our task.
-        minecraftVersion("1.21.10")
+        minecraftVersion(libs.versions.paper.run.get())
 
         // IntelliJ IDEA debugger setup: https://docs.papermc.io/paper/dev/debugging#using-a-remote-debugger
         jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-DPaper.IgnoreJavaVersion=true", "-Dcom.mojang.eula.agree=true", "-DIReallyKnowWhatIAmDoingISwear", "-Dpaper.playerconnection.keepalive=6000")
@@ -156,29 +155,89 @@ tasks {
     }
 }
 
-//bukkit { // Options: https://github.com/Minecrell/plugin-yml#bukkit
-//    // Plugin main class (required)
-//    main = "${mainPackage}.${project.name}"
-//
-//    // Plugin Information
-//    name = project.name
-//    prefix = project.name
-//    version = "${project.version}"
-//    description = "${project.description}"
-//    authors = listOf("ShermansWorld", "darksaid98")
-//    contributors = listOf()
-//    apiVersion = "1.21"
-//
-//    // Misc properties
-//    load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
-//    depend = listOf("Bolt")
-//    softDepend = listOf("ItemsAdder", "Nexo", "Oraxen", "Towny", "MMOItems", "QuickShop-Hikari", "packetevents")
-//}
+bukkit { // Options: https://docs.eldoria.de/pluginyml/bukkit/
+    // Plugin main class (required)
+    main = project.entryPointClass
 
-fun applyCustomVersion() {
-    // Apply custom version arg or append snapshot version
-    val ver = properties["altVer"]?.toString() ?: "${rootProject.version}-SNAPSHOT-${Instant.now().epochSecond}"
+    // Plugin Information
+    name = project.name
+    prefix = project.name
+    version = "${project.version}"
+    description = "${project.description}"
+    authors = project.authors
+    contributors = project.contributors
+    apiVersion = libs.versions.paper.api.get().substringBefore("-R")
+    foliaSupported = true
 
-    // Strip prefixed "v" from version tag
-    rootProject.version = (if (ver.first().equals('v', true)) ver.substring(1) else ver.uppercase()).uppercase()
+    // Misc properties
+    load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD // STARTUP or POSTWORLD
+    depend = listOf("Bolt")
+    softDepend = listOf("Vault", "PacketEvents", "PlaceholderAPI", "Towny", "QuickShop-Hikari","ItemsAdder", "Nexo", "Oraxen", "MMOItems")
+    loadBefore = listOf()
+    provides = listOf()
+}
+
+paper { // Options: https://docs.eldoria.de/pluginyml/paper/
+    main = project.entryPointClass
+    loader = project.entryPointClass + "PluginLoader"
+    generateLibrariesJson = true
+    load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.POSTWORLD
+
+    // Info
+    name = project.name
+    prefix = project.name
+    version = "${project.version}"
+    description = "${project.description}"
+    authors = project.authors
+    contributors = project.contributors
+    apiVersion = libs.versions.paper.api.get().substringBefore("-R")
+    foliaSupported = false
+
+    // Dependencies
+    hasOpenClassloader = true
+    bootstrapDependencies {}
+    serverDependencies {
+        register("Bolt") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+
+        register("Vault") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+        }
+        register("PacketEvents") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+        }
+        register("PlaceholderAPI") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+        }
+        register("Towny") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+        }
+        register("QuickShop-Hikari") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+        }
+        register("ItemsAdder") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+        }
+        register("Nexo") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+        }
+        register("Oraxen") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+        }
+        register("MMOItems") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+        }
+    }
+    provides = listOf()
 }

@@ -7,8 +7,7 @@ import io.github.alathra.boltux.hook.AbstractHook;
 import io.github.alathra.boltux.hook.Hook;
 import org.bukkit.Location;
 
-public class QuickShopHook extends AbstractHook {
-
+public final class QuickShopHook extends AbstractHook {
     public QuickShopHook(BoltUX plugin) {
         super(plugin);
     }

@@ -10,12 +10,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.jetbrains.annotations.Nullable;
 import org.popcraft.bolt.BoltPlugin;
 import org.popcraft.bolt.protection.BlockProtection;
 import org.popcraft.bolt.util.Permission;
 
-public class InventoryOpenListener implements Listener {
-
+public final class InventoryOpenListener implements Listener {
     private final BoltPlugin boltPlugin;
 
     public InventoryOpenListener() {
@@ -25,19 +25,21 @@ public class InventoryOpenListener implements Listener {
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onInventoryOpen(InventoryOpenEvent e) {
-        if (!(e.getPlayer() instanceof Player player)) return;
+        if (!(e.getPlayer() instanceof Player player))
+            return;
 
-        if(e.getInventory() == null || e.getInventory().getHolder() == null) {
+        if (e.getInventory().getHolder() == null) {
             return;
         }
 
         // CHESTS
         if (e.getInventory().getHolder() instanceof Chest chest) {
-            Block chestBlock = chest.getBlock();
-            BlockProtection protection = loadChestProtection(chestBlock);
-            if (protection == null) return;
+            final Block chestBlock = chest.getBlock();
+            final BlockProtection protection = loadChestProtection(chestBlock);
+            if (protection == null)
+                return;
 
-            boolean allowed = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
+            final boolean allowed = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
             if (!allowed) {
                 e.setCancelled(true);
             }
@@ -46,24 +48,26 @@ public class InventoryOpenListener implements Listener {
 
         // BARRELS
         if (e.getInventory().getHolder() instanceof Barrel barrel) {
-            BlockProtection protection = boltPlugin.loadProtection(barrel.getBlock());
-            if (protection == null) return;
+            final BlockProtection protection = boltPlugin.loadProtection(barrel.getBlock());
+            if (protection == null)
+                return;
 
-            boolean allowed = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
+            final boolean allowed = boltPlugin.canAccess(protection, player, Permission.INTERACT, Permission.OPEN);
             if (!allowed) {
                 e.setCancelled(true);
             }
         }
     }
 
-    private BlockProtection loadChestProtection(Block chestBlock) {
+    private @Nullable BlockProtection loadChestProtection(Block chestBlock) {
         // Try canonical half first
-        Block norm = BlockUtil.normalizeChestBlock(chestBlock);
-        BlockProtection p = boltPlugin.loadProtection(norm);
-        if (p != null) return p;
+        final Block norm = BlockUtil.normalizeChestBlock(chestBlock);
+        final BlockProtection protection = boltPlugin.loadProtection(norm);
+        if (protection != null)
+            return protection;
 
         // Fallback: other half (covers legacy protections saved on the opposite side)
-        Block other = BlockUtil.getConnectedDoubleChest(chestBlock);
+        final Block other = BlockUtil.getConnectedDoubleChest(chestBlock);
         if (other != null) {
             return boltPlugin.loadProtection(BlockUtil.normalizeChestBlock(other));
         }

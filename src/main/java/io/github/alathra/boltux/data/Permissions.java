@@ -1,6 +1,6 @@
 package io.github.alathra.boltux.data;
 
-public class Permissions {
+public final class Permissions {
     // Base Permissions
     public static final String ADMIN_PERMISSION = "boltux.admin";
     public static final String LOCK_PERMISSION = "boltux.lock";

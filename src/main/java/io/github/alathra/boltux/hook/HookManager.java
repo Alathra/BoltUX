@@ -1,9 +1,9 @@
 package io.github.alathra.boltux.hook;
 
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import io.github.alathra.boltux.BoltUX;
+import io.github.alathra.boltux.Reloadable;
 import io.github.alathra.boltux.utility.Logger;
-import io.github.alathra.boltux.utility.Reloadable;
+import io.github.milkdrinkers.colorparser.paper.ColorParser;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 
@@ -96,6 +96,7 @@ public class HookManager implements Reloadable {
 
     /**
      * Get a list of all hooks.
+     *
      * @return the hooks
      */
     public HashMap<Class<? extends AbstractHook>, AbstractHook> getHooks() {
