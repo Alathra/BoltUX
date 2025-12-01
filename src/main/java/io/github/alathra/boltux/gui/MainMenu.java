@@ -59,8 +59,8 @@ public final class MainMenu extends AbstractGui {
                 .stream()
                 .map(s -> {
                     return ColorParser.of(s)
-                        .with("mode_name", Translation.as("gui.main.modes." + protection + ".name"))
-                        .with("mode_description", Translation.as("gui.main.modes." + protection + ".description"))
+                        .with("mode_name", Translation.as("gui.main.modes." + protection.getType() + ".name"))
+                        .with("mode_description", Translation.as("gui.main.modes." + protection.getType() + ".description"))
                         .build();
                 })
                 .toList()
@@ -78,8 +78,8 @@ public final class MainMenu extends AbstractGui {
                     .stream()
                     .map(s -> {
                         return ColorParser.of(s)
-                            .with("mode_name", Translation.as("gui.main.modes." + protection + ".name"))
-                            .with("mode_description", Translation.as("gui.main.modes." + protection + ".description"))
+                            .with("mode_name", Translation.as("gui.main.modes." + protection.getType() + ".name"))
+                            .with("mode_description", Translation.as("gui.main.modes." + protection.getType() + ".description"))
                             .build();
                     })
                     .toList()
