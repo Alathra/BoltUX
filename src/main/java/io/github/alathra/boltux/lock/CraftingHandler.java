@@ -20,7 +20,9 @@ public final class CraftingHandler implements Reloadable {
     @Override
     public void onEnable(BoltUX plugin) {
         if (Settings.isDefaultLockCraftingRecipeEnabled() && Settings.isLockItemEnabled() && Settings.getItemPlugin().equals(ItemPlugin.NONE)) {
-            plugin.getServer().addRecipe(getLockRecipe());
+            if (plugin.getServer().getRecipe(new NamespacedKey(BoltUX.getInstance(), "lock")) == null) {
+                plugin.getServer().addRecipe(getLockRecipe());
+            }
         }
     }
 
