@@ -68,6 +68,7 @@ public final class TrustListMenu extends AbstractGui {
         }
         BoltUtil.getTrustedGroups(player).forEach(trustedGroup -> gui.addItem(groupToRemovableTrustIcon(gui, protection, trustedGroup)));
         BoltUtil.getTrustedPlayers(player).forEach(trustedPlayer -> gui.addItem(playerToRemovableTrustIcon(gui, protection, Bukkit.getOfflinePlayer(trustedPlayer))));
+        gui.update();
     }
 
     private static GuiItem townToRemovableTrustIcon(PaginatedGui gui, Protection protection, Town town) {

@@ -65,6 +65,7 @@ public final class ProtectionAccessListMenu extends AbstractGui {
         }
         BoltUtil.getGroupAccessSet(protection).forEach(accessGroup -> gui.addItem(groupToRemovableAccessIcon(gui, protection, accessGroup)));
         BoltUtil.getPlayerAccessSet(protection).forEach(accessPlayer -> gui.addItem(playerToRemovableAccessIcon(gui, protection, Bukkit.getOfflinePlayer(accessPlayer))));
+        gui.update();
     }
 
     private static GuiItem townToRemovableAccessIcon(PaginatedGui gui, Protection protection, Town town) {

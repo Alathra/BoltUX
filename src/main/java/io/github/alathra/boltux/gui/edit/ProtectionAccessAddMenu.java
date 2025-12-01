@@ -78,6 +78,7 @@ public final class ProtectionAccessAddMenu extends AbstractGui {
         Set<UUID> playerSuggestions = new HashSet<>(GuiHelper.getSuggestedPlayers(player, protection.getOwner()));
         playerSuggestions.removeAll(BoltUtil.getPlayerAccessSet(protection));
         playerSuggestions.forEach(suggestedPlayer -> gui.addItem(playerToAddableAccessIcon(gui, protection, Bukkit.getOfflinePlayer(suggestedPlayer))));
+        gui.update();
     }
 
     private static GuiItem townToAddableAccessIcon(PaginatedGui gui, Protection protection, Town town) {

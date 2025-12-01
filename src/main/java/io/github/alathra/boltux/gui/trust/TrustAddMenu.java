@@ -89,6 +89,7 @@ public final class TrustAddMenu extends AbstractGui {
         Set<UUID> suggestedPlayers = new HashSet<>(GuiHelper.getSuggestedPlayers(player, protection.getOwner()));
         suggestedPlayers.removeAll(BoltUtil.getTrustedPlayers(player));
         suggestedPlayers.forEach(suggestedPlayer -> gui.addItem(playerToAddableTrustIcon(gui, protection, Bukkit.getOfflinePlayer(suggestedPlayer))));
+        gui.update();
     }
 
     private static GuiItem townToAddableTrustIcon(PaginatedGui gui, Protection protection, Town town) {
