@@ -1,9 +1,14 @@
 package io.github.alathra.boltux.hook.packetevents;
 
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import io.github.alathra.boltux.BoltUX;
 import io.github.alathra.boltux.hook.AbstractHook;
 import io.github.alathra.boltux.hook.Hook;
+import io.github.alathra.boltux.packets.GlowPacketListener;
+import io.github.alathra.boltux.packets.GlowingEntityTracker;
+import io.github.alathra.boltux.packets.TeamTracker;
+import io.github.alathra.boltux.packets.TeamsPacketListener;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.tofaa.entitylib.APIConfig;
 import me.tofaa.entitylib.EntityLib;
@@ -44,6 +49,8 @@ public final class PacketEventsHook extends AbstractHook {
             .tickTickables()
             .usePlatformLogger();
         EntityLib.init(platform, settings);
+        PacketEvents.getAPI().getEventManager().registerListener(new TeamsPacketListener(), PacketListenerPriority.NORMAL);
+        PacketEvents.getAPI().getEventManager().registerListener(new GlowPacketListener(), PacketListenerPriority.NORMAL);
     }
 
     @Override
@@ -52,6 +59,8 @@ public final class PacketEventsHook extends AbstractHook {
             return;
 
         PacketEvents.getAPI().terminate();
+        TeamTracker.getInstance().clear();
+        GlowingEntityTracker.getInstance().clear();
     }
 
     @Override
