@@ -6,6 +6,10 @@
     "update-failed": "<yellow>Failed to fetch latest version, error: <error>"
   },
   "commands": {
+    "help": [
+      "<yellow>BoltUX Commands:",
+      "<yellow>/boltux getlock <green>Spawn a lock item"
+    ],
     "translation": {
       "help": "\n<white>Translations subcommands:\n  <dark_gray>• <white>reload: <gray><i>Reloads the translation files.\n  <dark_gray>• <white>test <node>: <gray><i>Test a translation.\n",
       "reloaded": "<green>Successfully reloaded translations!",
@@ -22,5 +26,258 @@
       "failure": "<red>Failed to upload dump: <error>",
       "dumping": "<green>Gathering dump information and uploading to mclo.gs..."
     }
+  },
+  "gui": {
+    "buttons": {
+      "close": {
+        "name": "<red>Close",
+        "lore": []
+      },
+      "back": {
+        "name": "<red>Back",
+        "lore": [
+          "<!i><gray>Return to previous menu"
+        ]
+      },
+      "next": {
+        "name": "<yellow>Next Page",
+        "lore": []
+      },
+      "previous": {
+        "name": "<yellow>Previous Page",
+        "lore": []
+      }
+    },
+    "main": {
+      "title": "Protection Options",
+      "buttons": {
+        "access": {
+          "name": "<!i><green>Edit Access",
+          "lore": [
+            "<!i><gray>Edit access for players and groups",
+            "<!i><gray>Applies to this specific protection"
+          ]
+        },
+        "mode": {
+          "name": "<!i><light_purple>Change Mode",
+          "lore": [
+            "<!i><gray>Current: <yellow><mode_name>",
+            "<!i><gray><mode_description>",
+            "",
+            "<!i><gray>Applies to this specific protection",
+            "<!i><gray>Only applicable for containers"
+          ]
+        },
+        "trust": {
+          "name": "<!i><gold>Trust Settings",
+          "lore": [
+            "<!i><gray>Manage your trusted groups and players"
+          ]
+        },
+        "transfer": {
+          "name": "<!i><dark_purple>Transfer Ownership",
+          "lore": [
+            "<!i><gray>Transfer ownership to another player",
+            "<!i><gray>Applies to this specific protection"
+          ]
+        },
+        "delete": {
+          "name": "<!i><red>Unlock",
+          "lore": [
+            "<!i><gray>Delete this protection"
+          ]
+        }
+      },
+      "modes": {
+        "deposit": {
+          "name": "Deposit",
+          "description": "Items can be added but not removed"
+        },
+        "display": {
+          "name": "Display",
+          "description": "Items can viewed but not added or removed"
+        },
+        "private": {
+          "name": "Private",
+          "description": "Items cannot be viewed"
+        },
+        "public": {
+          "name": "Public",
+          "description": "Items can be added or removed"
+        },
+        "withdrawal": {
+          "name": "Withdrawal",
+          "description": "Items can be removed but not added"
+        }
+      }
+    },
+    "access": {
+      "title": "Access Options",
+      "buttons": {
+        "add": {
+          "name": "<!i><green>Add Access",
+          "lore": [
+            "<!i><gray>Grant new access to players and groups",
+            "<!i><gray>Applies to this specific protection"
+          ]
+        },
+        "list": {
+          "name": "<!i><yellow>List/Remove Access",
+          "lore": [
+            "<!i><gray>List or remove access for players and groups",
+            "<!i><gray>Applies to this specific protection"
+          ]
+        }
+      }
+    },
+    "access-add": {
+      "title": "Add Access",
+      "buttons": {
+        "player": {
+          "name": "<!i><green><name>",
+          "lore": [
+            "<!i><gray>Player",
+            "<!i><gray>Click to grant access"
+          ]
+        },
+        "group": {
+          "name": "<!i><blue><name>",
+          "lore": [
+            "<!i><gray>Group",
+            "<!i><gray>Owner: <owner>",
+            "<!i><gray>Members: <members>",
+            "<!i><gray>Click to grant access"
+          ]
+        },
+        "town": {
+          "name": "<!i><green><name>",
+          "lore": [
+            "<!i><gray>Town",
+            "<!i><gray>Click to grant access"
+          ]
+        }
+      }
+    },
+    "access-list": {
+      "title": "List/Remove Access",
+      "buttons": {
+        "player": {
+          "name": "<!i><green><name>",
+          "lore": [
+            "<!i><gray>Player",
+            "<!i><gray>Click to revoke access"
+          ]
+        },
+        "group": {
+          "name": "<!i><blue><name>",
+          "lore": [
+            "<!i><gray>Group",
+            "<!i><gray>Owner: <owner>",
+            "<!i><gray>Members: <members>",
+            "<!i><gray>Click to revoke access"
+          ]
+        },
+        "town": {
+          "name": "<!i><green><name>",
+          "lore": [
+            "<!i><gray>Town",
+            "<!i><gray>Click to revoke access"
+          ]
+        }
+      }
+    },
+    "trust": {
+      "title": "Trust Options",
+      "buttons": {
+        "add": {
+          "name": "<!i><green>Add Trusted",
+          "lore": [
+            "<!i><gray>Trust a new player or group",
+            "<!i><gray>Grants access to ALL of your protections"
+          ]
+        },
+        "list": {
+          "name": "<!i><yellow>List/Remove Trusted",
+          "lore": [
+            "<!i><gray>List or remove trust for players and groups",
+            "<!i><gray>Applies to ALL of your protections"
+          ]
+        }
+      }
+    },
+    "trust-add": {
+      "title": "Add Trusted",
+      "buttons": {
+        "player": {
+          "name": "<!i><green><name>",
+          "lore": [
+            "<!i><gray>Player",
+            "<!i><gray>Click to trust"
+          ]
+        },
+        "group": {
+          "name": "<!i><blue><name>",
+          "lore": [
+            "<!i><gray>Group",
+            "<!i><gray>Owner: <owner>",
+            "<!i><gray>Members: <members>",
+            "<!i><gray>Click to trust"
+          ]
+        },
+        "town": {
+          "name": "<!i><green><name>",
+          "lore": [
+            "<!i><gray>Town",
+            "<!i><gray>Click to trust"
+          ]
+        }
+      }
+    },
+    "trust-list": {
+      "title": "List/Remove Trusted",
+      "buttons": {
+        "player": {
+          "name": "<!i><green><name>",
+          "lore": [
+            "<!i><gray>Player",
+            "<!i><gray>Click to revoke trust"
+          ]
+        },
+        "group": {
+          "name": "<!i><blue><name>",
+          "lore": [
+            "<!i><gray>Group",
+            "<!i><gray>Owner: <owner>",
+            "<!i><gray>Members: <members>",
+            "<!i><gray>Click to revoke trust"
+          ]
+        },
+        "town": {
+          "name": "<!i><green><name>",
+          "lore": [
+            "<!i><gray>Town",
+            "<!i><gray>Click to revoke trust"
+          ]
+        }
+      }
+    },
+    "transfer": {
+      "title": "Transfer Ownership",
+      "buttons": {
+        "player": {
+          "name": "<!i><green><name>",
+          "lore": [
+            "<!i><gray>Player",
+            "<!i><gray>Click to transfer ownership"
+          ]
+        }
+      }
+    }
+  },
+  "lock": {
+    "permission": "<red>You do not have permission to use locks.",
+    "permission-location": "<red>You do not have permission to use locks here.",
+    "permission-shop": "<red>You cannot lock a shop.",
+    "success": "<green>Protection created."
   }
 }

@@ -7,6 +7,7 @@ import dev.jorel.commandapi.executors.CommandArguments;
 import io.github.alathra.boltux.api.BoltUXAPI;
 import io.github.alathra.boltux.data.Permissions;
 import io.github.milkdrinkers.colorparser.paper.ColorParser;
+import io.github.milkdrinkers.wordweaver.Translation;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -26,8 +27,9 @@ final class BoltUXCommand {
     }
 
     private void helpMenu(CommandSender sender, CommandArguments args) {
-        sender.sendMessage(ColorParser.of("<yellow>BoltUX Commands:").build());
-        sender.sendMessage(ColorParser.of("<yellow>/boltux getlock <green>Spawn a lock item").build());
+        sender.sendMessage(
+            ColorParser.of(String.join("", Translation.ofList("commands.help"))).build()
+        );
     }
 
     private CommandAPICommand getLockCommand() {

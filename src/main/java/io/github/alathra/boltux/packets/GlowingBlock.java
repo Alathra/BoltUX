@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GlowingBlock {
+public final class GlowingBlock {
     private final Block block;
     private final Player player;
     private final Set<WrapperEntity> entities = ConcurrentHashMap.newKeySet();

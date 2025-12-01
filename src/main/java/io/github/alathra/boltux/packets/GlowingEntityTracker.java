@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author darksaid98
  */
-public class GlowingEntityTracker {
+public final class GlowingEntityTracker {
     private static GlowingEntityTracker INSTANCE = null;
 
     public static GlowingEntityTracker getInstance() {

@@ -52,8 +52,8 @@ LockItem:
     customModelData: 8792
     displayName: "<gray><b>Iron Lock</b></gray>"
     lore:
-    - "<yellow>Shift-Right Click to Use</yellow>"
-    - "<yellow>Lockable Things: Containers, Doors, Gates, Trapdoors</yellow>"
+      - "<yellow>Shift-Right Click to Use</yellow>"
+      - "<yellow>Lockable Things: Containers, Doors, Gates, Trapdoors</yellow>"
 
 TownyCompatibility:
   # Disable locking in towns that a player is not a part of

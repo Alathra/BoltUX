@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Objects;
 
-public class GlowingEntity {
+public final class GlowingEntity {
     private final Entity entity;
     private final Player player;
     private final EntityMeta entityMeta;

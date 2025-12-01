@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
  *
  * @author darksaid98
  */
-public class TeamsPacketListener implements PacketListener {
+public final class TeamsPacketListener implements PacketListener {
     @Override
     public void onUserLogin(UserLoginEvent event) {
         final Player player = event.getPlayer();

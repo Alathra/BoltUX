@@ -12,7 +12,7 @@ public final class ListenerHandler implements Reloadable {
 
     @Override
     public void onEnable(BoltUX plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new LockUseListeners(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new LockUseListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new LockDropListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new LockCraftingListener(), plugin);
     }

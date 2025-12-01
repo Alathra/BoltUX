@@ -10,8 +10,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.popcraft.bolt.util.Group;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class GuiHelper {
     public static Set<UUID> getSuggestedPlayers(Player player, UUID owner) {
@@ -106,5 +108,13 @@ public final class GuiHelper {
             }
         }
         return suggestedTowns;
+    }
+
+    public static String getGroupMemberNames(Group group) {
+        return String.join(", ",
+            group.getMembers().stream()
+                .map(uuid -> Bukkit.getOfflinePlayer(uuid).getName())
+                .collect(Collectors.toSet())
+        );
     }
 }

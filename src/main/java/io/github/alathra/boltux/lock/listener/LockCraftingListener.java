@@ -2,7 +2,7 @@ package io.github.alathra.boltux.lock.listener;
 
 import io.github.alathra.boltux.data.Permissions;
 import io.github.alathra.boltux.lock.CraftingHandler;
-import io.github.milkdrinkers.colorparser.paper.ColorParser;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,7 +29,7 @@ public final class LockCraftingListener implements Listener {
             player = (Player) event.getWhoClicked();
             if (!player.hasPermission(Permissions.CRAFT_PERMISSION)) {
                 event.setCancelled(true);
-                player.sendMessage(ColorParser.of("<red>You do not have permission to craft locks").build());
+                player.sendMessage(Bukkit.permissionMessage());
             }
         }
     }

@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author darksaid98
  */
-public class TeamTracker {
+public final class TeamTracker {
     private static TeamTracker INSTANCE = null;
 
     public static TeamTracker getInstance() {
