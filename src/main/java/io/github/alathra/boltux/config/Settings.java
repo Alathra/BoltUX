@@ -19,12 +19,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Settings {
-    public static BoltUX plugin;
-
-    public static void init(BoltUX plugin) {
-        Settings.plugin = plugin;
-    }
-
     /**
      * @return The time in seconds a locked block/entity glows for when interact is denied
      */
@@ -138,5 +132,4 @@ public class Settings {
     public static boolean isQuickShopLockingDisabled() {
         return Cfg.get().getOrDefault("QuickShopCompatibility.disableLockingShops", true);
     }
-
 }

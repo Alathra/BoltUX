@@ -9,7 +9,6 @@ import io.papermc.paper.datacomponent.item.ItemLore;
 import org.bukkit.inventory.ItemStack;
 
 public class BoltUXAPI {
-
     /**
      * Get the lock item
      *
