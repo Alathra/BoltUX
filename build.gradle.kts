@@ -34,6 +34,9 @@ repositories {
         content { includeGroup("com.palmergames.bukkit.towny") }
     }
     maven("https://nexus.phoenixdevt.fr/repository/maven-public") // Phoenix Development (MMOItems)
+    maven("https://maven.pvphub.me/tofaa") { // EntityLib
+        content { includeGroup("io.github.tofaa2") }
+    }
     maven { url = uri("https://jitpack.io") }
 
 }
