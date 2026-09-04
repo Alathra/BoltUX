@@ -1,4 +1,10 @@
-<h1 style="text-align:center;">BoltUX - An Unofficial Bolt Expansion</h1>
+# NOTICE
+> [!IMPORTANT]
+> With the shutdown of the Alathra Minecraft server, active development on this plugin (*And others in the Alathra GitHub organization*) has ceased. Further development can be found in the new repository at: [https://github.com/milkdrinkers/BoltUX](https://github.com/milkdrinkers/BoltUX) 
+> 
+> Continued development for Alathra-related projects is happening in the [Milkdrinkers organisation](https://github.com/milkdrinkers/) (*Created and maintained by a former lead developer of Alathra, darksaid98*).
+
+<h1 style="text-align:center;"><s>BoltUX - An Unofficial Bolt Expansion</s></h1>
 <p style="text-align:center;">
     <img alt="GitHub License" src="https://img.shields.io/github/license/Alathra/BoltUX?style=for-the-badge&color=blue&labelColor=141417">
     <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/Alathra/BoltUX/total?style=for-the-badge&labelColor=141417">
